@@ -9,7 +9,7 @@
       <%= f.email_field :email, class: 'form-control' %>
 
       <%= f.label :パスワード %>
-      <%= link_to "(パスワードを忘れましたか？)", new_password_reset_path %>
+      <%= link_to "(パスワードを忘れたらこちら)", new_password_reset_path %>
       <%= f.password_field :password, class: 'form-control' %>
 
       <%= f.label :remember_me, class: "checkbox inline" do %>
@@ -20,6 +20,6 @@
       <%= f.submit "ログイン", class: "btn btn-primary" %>
     <% end %>
 
-    <p>アカウント作成はお済みですか？ <%= link_to "まだなら新規登録！", signup_path %></p>
+    <p>アカウント作成がまだなら <%= link_to "新規登録", signup_path %></p>
   </div>
 </div>

@@ -8,11 +8,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "title", "Progra:情報シェア"
   end
 
-  test "should get help" do
-    get help_path
-    assert_response :success
-    assert_select "title", "ヘルプ | Progra:情報シェア"
-  end
+  
 
   test "should get about" do
     get about_path
