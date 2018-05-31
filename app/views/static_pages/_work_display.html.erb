@@ -35,12 +35,12 @@
         <tr>
             <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/2&quot;}" data-sheets-numberformat="[null,1]">4/2</td>
             <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;月&quot;}">月</td>
-            <td><%=current_user.microposts.first.created_at.hour%></td>
-            <td><%=current_user.microposts.first.created_at.min%></td>
+            <td><%=@work.start_time.hour%></td>
+            <td><%=@work.start_time.min%></td>
             <td><%= link_to "出社", login_path, class: "btn btn-default btn-lg btn-block" %></td>
-            <td><%=current_user.microposts.last.created_at %></td>
-            <td><%=current_user.microposts.last.created_at %></td>
-            <td></td>
+            <td><%=@work.end_time.hour%></td>
+            <td><%=@work.end_time.min %></td>
+            <td><%= BigDecimal(((current_user.works.find(1).end_time-current_user.works.find(1).start_time)/60/60).to_s).floor(2).to_f %></td>
             <td></td>
         </tr>
         <tr class="color">
