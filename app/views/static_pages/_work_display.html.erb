@@ -35,11 +35,11 @@
         <tr>
             <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/2&quot;}" data-sheets-numberformat="[null,1]">4/2</td>
             <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;月&quot;}">月</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><%=current_user.microposts.first.created_at.hour%></td>
+            <td><%=current_user.microposts.first.created_at.min%></td>
+            <td><%= link_to "出社", login_path, class: "btn btn-default btn-lg btn-block" %></td>
+            <td><%=current_user.microposts.last.created_at %></td>
+            <td><%=current_user.microposts.last.created_at %></td>
             <td></td>
             <td></td>
         </tr>
