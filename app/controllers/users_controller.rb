@@ -3,6 +3,8 @@ class UsersController < ApplicationController
                                         :following, :followers]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
+  
+  include StaticPagesHelper
 
   def index
     @users = User.where(activated: true).paginate(page: params[:page]).search(params[:search])
