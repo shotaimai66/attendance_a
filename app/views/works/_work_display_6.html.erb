@@ -1,0 +1,59 @@
+6
+
+
+    <table class="table table-bordered">
+        <tr>
+            <td></td>
+            <td></td>
+            <td rowspan="1" colspan="3" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;出社&quot;}">出社</td>
+            <td rowspan="1" colspan="2" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;退社&quot;}">退社</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;日付&quot;}">日付</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;曜日&quot;}">曜日</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;時&quot;}">時</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;分&quot;}">分</td>
+            <td></td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;時&quot;}">時</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;分&quot;}">分</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;在社時間&quot;}">在社時間</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;備考&quot;}">備考</td>
+        </tr>
+        
+        
+        
+        
+        <% @days.each do |day| %>
+    <tr>
+  
+          <td><%=day.month%>/<%=day.day%></td>
+          <td><%= %w(日 月 火 水 木 金 土)[day.wday]%></td>
+          <td><%=start_time && start_time.hour%></td>
+          <td><%=start_time && start_time.min%></td>
+          <td><% if day==Date.today%><%= button_to "#{work_name}", :action => "create", class: "btn btn-default btn-lg btn-block"  %><% end %></td>
+          <td><%=end_time && end_time.hour%></td>
+          <td><%=end_time && end_time.min%></td>
+          <td><%=end_time && BigDecimal(((current_user.works.find(1).end_time - current_user.works.find(1).start_time)/60/60).to_s).floor(2).to_f %></td>
+          <td></td>
+      
+    </tr>
+  <% end %>
+        
+        
+        
+        
+        
+        <tr>
+            <td data-sheets-numberformat="[null,5,&quot;m/d&quot;,1]"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>

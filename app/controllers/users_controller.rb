@@ -64,6 +64,12 @@ class UsersController < ApplicationController
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
   end
+  
+  def test  
+    @id = params[:id] 
+    @month = params[:month]
+    
+  end
 
   private
 

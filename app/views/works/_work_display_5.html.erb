@@ -1,0 +1,365 @@
+5
+
+
+    <table class="table table-bordered">
+        <tr>
+            <td></td>
+            <td></td>
+            <td rowspan="1" colspan="3" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;出社&quot;}">出社</td>
+            <td rowspan="1" colspan="2" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;退社&quot;}">退社</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;日付&quot;}">日付</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;曜日&quot;}">曜日</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;時&quot;}">時</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;分&quot;}">分</td>
+            <td></td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;時&quot;}">時</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;分&quot;}">分</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;在社時間&quot;}">在社時間</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;備考&quot;}">備考</td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/1&quot;}" data-sheets-numberformat="[null,1]">4/1</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;日&quot;}">日</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/2&quot;}" data-sheets-numberformat="[null,1]">4/2</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;月&quot;}">月</td>
+            <td><%=start_time && start_time.hour%></td>
+            <td><%=start_time && start_time.min%></td>
+            <td><%= button_to "#{work_name}", :action => "create", class: "btn btn-default btn-lg btn-block"  %></td>
+            <td><%=end_time && end_time.hour%></td>
+            <td><%=end_time && end_time.min%></td>
+            <td><%=end_time && BigDecimal(((current_user.works.find(1).end_time - current_user.works.find(1).start_time)/60/60).to_s).floor(2).to_f %></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/3&quot;}" data-sheets-numberformat="[null,1]">4/3</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;火&quot;}">火</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/4&quot;}" data-sheets-numberformat="[null,1]">4/4</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;水&quot;}">水</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/5&quot;}" data-sheets-numberformat="[null,1]">4/5</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;木&quot;}">木</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/6&quot;}" data-sheets-numberformat="[null,1]">4/6</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;金&quot;}">金</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/7&quot;}" data-sheets-numberformat="[null,1]">4/7</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;土&quot;}">土</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/8&quot;}" data-sheets-numberformat="[null,1]">4/8</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;日&quot;}">日</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/9&quot;}" data-sheets-numberformat="[null,1]">4/9</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;月&quot;}">月</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/10&quot;}" data-sheets-numberformat="[null,1]">4/10</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;火&quot;}">火</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/11&quot;}" data-sheets-numberformat="[null,1]">4/11</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;水&quot;}">水</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/12&quot;}" data-sheets-numberformat="[null,1]">4/12</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;木&quot;}">木</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/13&quot;}" data-sheets-numberformat="[null,1]">4/13</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;金&quot;}">金</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/14&quot;}" data-sheets-numberformat="[null,1]">4/14</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;土&quot;}">土</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/15&quot;}" data-sheets-numberformat="[null,1]">4/15</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;日&quot;}">日</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/16&quot;}" data-sheets-numberformat="[null,1]">4/16</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;月&quot;}">月</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/17&quot;}" data-sheets-numberformat="[null,1]">4/17</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;火&quot;}">火</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/18&quot;}" data-sheets-numberformat="[null,1]">4/18</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;水&quot;}">水</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/19&quot;}" data-sheets-numberformat="[null,1]">4/19</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;木&quot;}">木</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/20&quot;}" data-sheets-numberformat="[null,1]">4/20</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;金&quot;}">金</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/21&quot;}" data-sheets-numberformat="[null,1]">4/21</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;土&quot;}">土</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/22&quot;}" data-sheets-numberformat="[null,1]">4/22</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;日&quot;}">日</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/23&quot;}" data-sheets-numberformat="[null,1]">4/23</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;月&quot;}">月</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/24&quot;}" data-sheets-numberformat="[null,1]">4/24</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;火&quot;}">火</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/25&quot;}" data-sheets-numberformat="[null,1]">4/25</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;水&quot;}">水</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/26&quot;}" data-sheets-numberformat="[null,1]">4/26</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;木&quot;}">木</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/27&quot;}" data-sheets-numberformat="[null,1]">4/27</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;金&quot;}">金</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/28&quot;}" data-sheets-numberformat="[null,1]">4/28</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;土&quot;}">土</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="color">
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/29&quot;}" data-sheets-numberformat="[null,1]">4/29</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;日&quot;}">日</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;4/30&quot;}" data-sheets-numberformat="[null,1]">4/30</td>
+            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;月&quot;}">月</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td data-sheets-numberformat="[null,5,&quot;m/d&quot;,1]"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>

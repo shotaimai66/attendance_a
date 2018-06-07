@@ -4,12 +4,13 @@ class SessionsController < ApplicationController
   end
 
   def create
+    month = Date.today.month
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       if user.activated?
         log_in user
         params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-        redirect_to root_url
+        redirect_to user_work_path(user,month)
         
       else
         message  = "アカウントが有効化されていません。 "

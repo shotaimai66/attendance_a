@@ -22,6 +22,14 @@ module StaticPagesHelper
       Work.find_by_id(1) && Work.find_by_id(1).end_time
     end
     
+    
+    def current_month_first
+      "#{Date.today.beginning_of_month.month} / #{Date.today.beginning_of_month.day}"
+    end
+    
+    def current_month_end
+      "#{Date.today.end_of_month.month} / #{Date.today.end_of_month.day}"
+    end
    
     
 end
