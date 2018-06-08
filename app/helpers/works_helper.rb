@@ -12,12 +12,12 @@ module WorksHelper
         end
     end
     
-    def start_time
-        Work.find_by_id(1) && Work.find_by_id(1).start_time
+    def start_time(a)
+        Work.find_by(day: a, user_id: current_user.id) && Work.find_by(day: a, user_id: current_user.id).start_time
     end
     
     
-    def end_time
-      Work.find_by_id(1) && Work.find_by_id(1).end_time
+    def end_time(a)
+      Work.find_by(day: a, user_id: current_user.id) && Work.find_by(day: a, user_id: current_user.id).end_time
     end
 end

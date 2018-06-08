@@ -10,6 +10,7 @@ require 'date'
       @feed_items = current_user.feed.paginate(page: params[:page]).search(params[:search])
       @month = Date.today.month
       @days = (Date.new(2018, 6, 1) .. Date.new(2018, 6, 30))
+      
     end
       
     

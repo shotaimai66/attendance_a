@@ -7,7 +7,7 @@
         <li><%= link_to "トップへ", root_path %></li>
         <% end %>
         <% if logged_in? %>
-          <li><%= link_to "トップへ", user_path(current_user) %></li>
+          <li><%= link_to "トップへ", user_work_path(current_user,@month) %></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               アカウント <b class="caret"></b>

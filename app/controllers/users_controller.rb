@@ -33,6 +33,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
+    @month = Date.today.month
   end
 
   def update
@@ -65,11 +66,7 @@ class UsersController < ApplicationController
     render 'show_follow'
   end
   
-  def test  
-    @id = params[:id] 
-    @month = params[:month]
-    
-  end
+  
 
   private
 
