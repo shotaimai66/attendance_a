@@ -24,7 +24,7 @@ module WorksHelper
     def total_time(y,m)
       days = (Date.new(y,m).all_month)
       days.map do |day|
-        if !start_time(day).nil?
+        if start_time(day)&&end_time(day)
           (end_time(day)-start_time(day))/60/60
         else
           0
