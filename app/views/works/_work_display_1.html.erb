@@ -1,3 +1,37 @@
+<% y = 2019 %>
+<% m = 1 %>
+<div>
+
+<table class="table table-bordered">
+        <tr>
+            <td>
+                <% unless m=="4" %>
+                <%= link_to "←", user_work_path(current_user,bbbb(m)), class: "btn btn-default btn-lg active" %>
+                <%end%>
+                <%= y %>年<%= m %>月の時間管理表
+                <% unless m=="3" %>
+                <%= link_to "→", user_work_path(current_user,aaaa(m)), class: "btn btn-default btn-lg active" %></td>
+                <%end%>
+            <td>指定勤務時間  8.00</td>
+            <td rowspan="1" colspan="3">7.50  基本時間</td>
+            <td>初日 <%= current_month_first %></td>
+        </tr>
+        <tr>
+            <td>所属 <%= current_user.team %></td>
+            <td>氏名 <%= current_user.name %></td>
+            <td>コード</td>
+            <td></td>
+            <td>出勤日数 <%= current_user.works.where(day: Time.new(y,m).all_month).select("end_time").count %>日</td>
+            <td>締め <%= current_month_end %></td>
+        </tr>
+    </table>
+    
+    <%= link_to "勤怠を編集", login_path, class: "btn btn-default btn-lg active" %>
+
+    
+    
+    
+ 
 
 
 
@@ -5,26 +39,26 @@
         <tr>
             <td></td>
             <td></td>
-            <td rowspan="1" colspan="3" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;出社&quot;}">出社</td>
-            <td rowspan="1" colspan="2" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;退社&quot;}">退社</td>
+            <td rowspan="1" colspan="3">出社</td>
+            <td rowspan="1" colspan="2">退社</td>
             <td></td>
             <td></td>
         </tr>
         <tr>
-            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;日付&quot;}">日付</td>
-            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;曜日&quot;}">曜日</td>
-            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;時&quot;}">時</td>
-            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;分&quot;}">分</td>
+            <td>日付</td>
+            <td>曜日</td>
+            <td>時</td>
+            <td>分</td>
             <td></td>
-            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;時&quot;}">時</td>
-            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;分&quot;}">分</td>
-            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;在社時間&quot;}">在社時間</td>
-            <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;備考&quot;}">備考</td>
+            <td>時</td>
+            <td>分</td>
+            <td>在社時間</td>
+            <td>備考</td>
         </tr>
         
         
         
-        <% @days = (Date.new(2019, 1, 1) .. Date.new(2019, 1, 31)) %>
+        <% @days = (Date.new(y,m).all_month) %>
         <% @days.each do |day| %>
     <tr>
   
@@ -46,14 +80,16 @@
         
         
         <tr>
+            
+            <td rowspan="1" colspan="2"><%= total_works_time(y,m) %></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><%=total_time(y,m).sum.floor(2)%></td>
             <td></td>
         </tr>
     </table>
+
+</div>

@@ -24,11 +24,11 @@ module StaticPagesHelper
     
     
     def current_month_first
-      "#{Date.today.beginning_of_month.month} / #{Date.today.beginning_of_month.day}"
+      "#{params[:id]} / #{Date.new(2018,params[:id].to_i(10),1).beginning_of_month.day}"
     end
     
     def current_month_end
-      "#{Date.today.end_of_month.month} / #{Date.today.end_of_month.day}"
+      "#{params[:id]} / #{Date.new(2018,params[:id].to_i(10),1).end_of_month.day}"
     end
    
     
