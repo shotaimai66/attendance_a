@@ -1,11 +1,11 @@
 module WorksHelper
     
     def work_name
-        if Work.find_by(day: Date.today).nil?
+        if select_user.works.find_by(day: Date.today).nil?
           @name = "出社"
-        elsif Work.find_by(day: Date.today).end_time
+        elsif select_user.works.find_by(day: Date.today).end_time
           @name = "----"
-        elsif Work.find_by(day: Date.today).start_time
+        elsif select_user.works.find_by(day: Date.today).start_time
           @name = "退社"
         else
           @name = "出社"
@@ -13,12 +13,12 @@ module WorksHelper
     end
     
     def start_time(a)
-        Work.find_by(day: a, user_id: current_user.id) && Work.find_by(day: a, user_id: current_user.id).start_time
+        Work.find_by(day: a, user_id: select_user.id) && Work.find_by(day: a, user_id: select_user.id).start_time
     end
     
     
     def end_time(a)
-      Work.find_by(day: a, user_id: current_user.id) && Work.find_by(day: a, user_id: current_user.id).end_time
+      Work.find_by(day: a, user_id: select_user.id) && Work.find_by(day: a, user_id: select_user.id).end_time
     end
     
     def total_time(y,m)
@@ -33,7 +33,7 @@ module WorksHelper
     end
     
     def total_works_time(y,m)
-      current_user.works.where(day: Time.new(y,m).all_month).select("end_time").count * 7.50
+      select_user.works.where(day: Time.new(y,m).all_month).select("end_time").count * 7.50
     end
     
     def aaaa(m)
@@ -52,8 +52,28 @@ module WorksHelper
       end
     end
     
+    def start_time_change(key)
+      if select_user.works.find_by(day: key)
+        select_user.works.find_by(day: key).start_time
+      end
+    end
     
+    def end_time_change(key)
+      if select_user.works.find_by(day: key)
+        select_user.works.find_by(day: key).end_time
+      end
+    end
     
+    def select_user
+      User.find(params[:user_id])
+    end
     
+    def specified_time
+      BigDecimal(((User.find(1).specified_work_time-User.find(1).specified_work_time.beginning_of_day)/60/60).to_s).floor(3).to_f
+    end
+    
+    def basic_time
+      BigDecimal(((User.find(1).basic_work_time-User.find(1).basic_work_time.beginning_of_day)/60/60).to_s).floor(3).to_f
+    end
     
 end

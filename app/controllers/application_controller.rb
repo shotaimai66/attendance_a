@@ -12,4 +12,14 @@ class ApplicationController < ActionController::Base
         redirect_to login_url
       end
     end
+    
+    def aa
+      unless current_user.admin? || current_user.id==params[:user_id]
+        store_location
+        flash[:danger] = "仕事しましょうo(｀ω´ )o"
+        redirect_to root_path
+      end
+    end
+    
+   
 end

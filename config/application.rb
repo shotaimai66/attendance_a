@@ -8,6 +8,8 @@ Bundler.require(*Rails.groups)
 
 
 
+
+
 module SampleApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -23,5 +25,8 @@ module SampleApp
     
     # タイムゾーンを東京(JST +9:00)に設定
     config.time_zone = 'Tokyo'
+    config.active_record.default_timezone = :local
+    
+    
   end
 end

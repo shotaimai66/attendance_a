@@ -1,0 +1,13 @@
+<%= form_for(current_user, :url => {:controller => :users, :action => :update_basic_info}) do |f| %>
+  <%= render 'shared/error_messages', object: current_user %>
+
+      <%= f.label :指定勤務時間 %>
+      <%= f.time_select :specified_work_time,{dfault: User.find(1).specified_work_time},{class: 'form-control'} %>
+
+      <%= f.label :基本勤務時間 %>
+      <%= f.time_select :basic_work_time, {dfault: User.find(1).basic_work_time},{class: 'form-control'} %>
+      
+      
+      
+  <%= f.submit yield(:button_text), class: "btn btn-primary" %>
+<% end %>

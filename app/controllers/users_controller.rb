@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy,
-                                        :following, :followers]
+                                        :edit_basic_info, :update_basic_info]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
   
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       flash[:success] = "プロフィールを更新しました！"
-      redirect_to @user
+      redirect_to user_work_path(current_user,Date.today)
     else
       render 'edit'
     end
@@ -50,6 +50,21 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash[:success] = "アカウントを削除しました。"
     redirect_to users_url
+  end
+  
+  def edit_basic_info
+    
+  end
+  
+  def update_basic_info
+   @user = User.find(1)
+    if @user.update_attributes(users_basic_params)
+      flash[:success] = "基本情報を更新しました。"
+      redirect_to user_work_path(current_user,Date.today)
+    else
+      render 'edit'
+    end
+    
   end
   
   def following
@@ -71,8 +86,12 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password,
+      params.require(:user).permit(:name, :email, :team, :password,
                                    :password_confirmation)
+    end
+    
+    def users_basic_params
+      params.require(:user).permit(:specified_work_time, :basic_work_time)
     end
 
     # beforeフィルター

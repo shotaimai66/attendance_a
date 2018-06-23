@@ -1,33 +1,33 @@
-<% y = 2018 %>
-<% m = 4 %>
-
+<% y = @date.year %>
+<% m = @date.month %>
 <div>
 
 <table class="table table-bordered">
         <tr>
             <td>
                 <% unless m=="4" %>
-                <%= link_to "←", user_work_path(current_user,bbbb(m)), class: "btn btn-default btn-lg active" %>
+                <%=  link_to "←", user_work_path(piyo: @date.prev_month), { :class => "btn btn-default btn-lg active" } %>
                 <%end%>
                 <%= y %>年<%= m %>月の時間管理表
                 <% unless m=="3" %>
-                <%= link_to "→", user_work_path(current_user,aaaa(m)), class: "btn btn-default btn-lg active" %></td>
+                <%=  link_to "→", user_work_path(piyo: @date.next_month), { :class => "btn btn-default btn-lg active" } %>
                 <%end%>
-            <td>指定勤務時間  8.00</td>
-            <td rowspan="1" colspan="3">7.50  基本時間</td>
-            <td>初日 <%= current_month_first %></td>
+            </td>
+            <td>指定勤務時間  <%=  specified_time  %></td>
+            <td rowspan="1" colspan="3"><%=  basic_time %>  基本時間</td>
+            <td>初日 <%= "#{@date.month} / #{@date.beginning_of_month.day}" %></td>
         </tr>
         <tr>
-            <td>所属 <%= current_user.team %></td>
-            <td>氏名 <%= current_user.name %></td>
+            <td>所属 <%= select_user.team %></td>
+            <td>氏名 <%= select_user.name %></td>
             <td>コード</td>
             <td></td>
-            <td>出勤日数 <%= current_user.works.where(day: Time.new(y,m).all_month).select("end_time").count %>日</td>
-            <td>締め <%= current_month_end %></td>
+            <td>出勤日数 <%= select_user.works.where(day: Time.new(y,m).all_month).select("end_time").count %>日</td>
+            <td>締め <%= "#{@date.month} / #{@date.end_of_month.day}" %></td>
         </tr>
     </table>
     
-    <%= link_to "勤怠を編集", login_path, class: "btn btn-default btn-lg active" %>
+    <%= link_to "勤怠を編集", edit_user_work_path(piyo: @date), class: "btn btn-default btn-lg active" %>
 
     
     
@@ -41,7 +41,7 @@
             <td></td>
             <td></td>
             <td rowspan="1" colspan="3">出社</td>
-            <td rowspan="1" colspan="2">退社</td>
+            <td rowspan="1" colspan="3">退社</td>
             <td></td>
             <td></td>
         </tr>
@@ -53,6 +53,7 @@
             <td></td>
             <td>時</td>
             <td>分</td>
+            <td></td>
             <td>在社時間</td>
             <td>備考</td>
         </tr>
@@ -70,14 +71,15 @@
           <td><%=start_time(key) && start_time(key).hour%></td>
           <td><%=start_time(key) && start_time(key).min%></td>
           <td>
-          <% if key==Date.today && current_user.works.find_by(day: Date.today) &&current_user.works.find_by(day: Date.today).end_time%>
-          <p>---</p>
+          <% if key==Date.today && select_user.works.find_by(day: Date.today) &&select_user.works.find_by(day: Date.today).end_time%>
+          <p>お疲れ様でした！</p>
           <% elsif key==Date.today%>
           <%= button_to "#{work_name}", :action => "create", class: "btn btn-default btn-lg btn-block"  %>
           <% end %>
           </td>
           <td><%=end_time(key) && end_time(key).hour%></td>
           <td><%=end_time(key) && end_time(key).min%></td>
+          <td></td>
           <td><%=end_time(key) && BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).floor(2).to_f %></td>
           <td></td>
       
@@ -91,6 +93,7 @@
         <tr>
             
             <td rowspan="1" colspan="2"><%= total_works_time(y,m) %></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
