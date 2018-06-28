@@ -15,30 +15,24 @@
         <% colors = ["a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a"] %>
         <% datas = Hash[*days.zip(colors).flatten(1)] %>
         <% datas.each do |key, value| %>
-        <% work = current_user.works.find_by(day: key) %>
-    <tr class="<%=value%>">
+            <% if current_user.works.find_by(day: key)%>
+                <% work = current_user.works.find_by(day: key) %>
+            <% else %>
+                <% work = Work.new %>
+            <% end %>
+         <tr class="<%=value%>">
   
           <td><%=key.month%>/<%=key.day%></td>
           <td><%= %w(日 月 火 水 木 金 土)[key.wday] %></td>
           <td>
-              
-              <% if current_user.works.find_by(day: key)&& current_user.works.find_by(day: key).start_time %>
                   <%= fields_for "works[]", work do |f| %>
-                      <%= f.time_select :start_time, {default: start_time(key)},{class: 'form-control'}  %>
+                      <%= f.time_field :start_time, {class: 'form-control'}  %>
                   <% end %>
-              <% else %>
-              :
-              <% end %>
           </td>
           <td>
-              <% if current_user.works.find_by(day: key) && current_user.works.find_by(day: key).end_time %>
                   <%= fields_for "works[]", work do |f| %>
-                      <%= f.time_select :end_time, {dfault: end_time(key)},{class: 'form-control'}  %>
+                      <%= f.time_field :end_time, {class: 'form-control'}  %>
                   <% end %>
-               <% else %>
-              :
-              <% end %>
-              
           </td>
           <td>
               <%=end_time(key) && BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).floor(2).to_f %>
@@ -55,7 +49,6 @@
         
         
         
-    <!--    
         <tr>
             
             <td rowspan="1" colspan="2"><%= total_works_time(y,m) %></td>
@@ -82,77 +75,3 @@
 
 
 
-<%= form_tag user_work_path, method: :put do %>
-<table class="table table-bordered">		
-        <tr>
-			<td>日付</td>
-			<td>曜日</td>
-			<td>出社</td>
-			<td>退社</td>
-			<td>在社時間</td>
-			<td>備考</td>
-		</tr>
-		
-		<% days = (Date.new(y,m).all_month) %>
-        <% colors = ["a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a"] %>
-        <% datas = Hash[*days.zip(colors).flatten(1)] %>
-        <% datas.each do |key, value| %>
-        <% work = current_user.works.find_by(day: key) %>
-    <tr class="<%=value%>">
-  
-          <td><%=key.month%>/<%=key.day%></td>
-          <td><%= %w(日 月 火 水 木 金 土)[key.wday] %></td>
-          <td>
-              
-              <% if current_user.works.find_by(day: key)&& current_user.works.find_by(day: key).start_time %>
-                  <%= fields_for "works[]", work do |f| %>
-                      <%= f.time_select :start_time, {default: start_time(key)},{class: 'form-control'}  %>
-                  <% end %>
-              <% else %>
-              :
-              <% end %>
-          </td>
-          <td>
-              <% if current_user.works.find_by(day: key) && current_user.works.find_by(day: key).end_time %>
-                  <%= fields_for "works[]", work do |f| %>
-                      <%= f.time_select :end_time, {dfault: end_time(key)},{class: 'form-control'}  %>
-                  <% end %>
-               <% else %>
-              :
-              <% end %>
-              
-          </td>
-          <td>
-              <%=end_time(key) && BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).floor(2).to_f %>
-          </td>
-          <td>
-              
-          </td>
-      
-    </tr>
-    <% end %>
-  
-  
-        
-        
-        
-        
-        
-        <tr>
-            
-            <td rowspan="1" colspan="2"><%= total_works_time(y,m) %></td>
-            <td></td>
-            <td></td>
-            <td><%=total_time(y,m).sum.floor(2)%></td>
-            <td>
-              
-            </td>
-            
-        </tr>
-    
-	</table>
-	<%= submit_tag %>
-  <% end %>
-
-
--->
