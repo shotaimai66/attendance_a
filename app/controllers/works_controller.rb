@@ -1,6 +1,6 @@
 class WorksController < ApplicationController
     before_action :logged_in_user, only: [:show, :edit, :create, :update]
-    before_action :aa, only: [:edit, :create, :update]
+    before_action :aa, only: [:show, :edit, :create, :update]
     include WorksHelper
     
     def show
@@ -23,13 +23,18 @@ class WorksController < ApplicationController
     
     def create
     work_name
-     if @name == "出社" 
-         @work = Work.create(user_id: select_user.id, 
-                         start_time: Time.now,
+     if @name == "出社"
+         if Work.find_by(user_id: select_user.id, day: Date.today)
+           Work.find_by(user_id: select_user.id, day: Date.today ).update(start_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
+           flash[:success] = "今日も一日頑張りましょう！"
+         else
+           @work = Work.create(user_id: select_user.id, 
+                         start_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00),
                          day: Time.now)
-    　　flash[:success] = "今日も一日頑張りましょう！"
+           flash[:success] = "今日も一日頑張りましょう！"
+         end
      elsif @name == "退社"
-         Work.find_by(user_id: select_user.id, day: Date.today ).update(end_time: Time.now)
+         Work.find_by(user_id: select_user.id, day: Date.today ).update(end_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
          flash[:success] = "お疲れ様でした！"
      elsif @name == "----"
      end
@@ -37,11 +42,32 @@ class WorksController < ApplicationController
       redirect_to user_work_path(select_user,Date.today)
     end
     
+    #フォームからのクリエイト
+    def create_form
+        if Work.find_by(user_id: params[:user_id], day: params[:work][:day]) && params[:work][:end_time]
+            work = Work.find_by(user_id: params[:user_id], day: params[:work][:day])
+            work.update(end_time: params[:work][:end_time])
+            flash[:success] = "更新しました。"
+        elsif Work.find_by(user_id: params[:user_id], day: params[:work][:day]) && params[:work][:start_time]
+            work = Work.find_by(user_id: params[:user_id], day: params[:work][:day])
+            work.update(start_time: params[:work][:start_time])
+            flash[:success] = "更新しました。"
+            
+        
+        else Work.create(user_id: params[:user_id], day: params[:work][:day].to_date, start_time: params[:work][:start_time],
+                        end_time: params[:work][:end_time])
+            flash[:success] = "sakuseiしました。"
+        end
+        
+         redirect_to user_work_path(select_user,params[:id])
+    end
+    
     def edit
         @user = User.find(params[:user_id])
         @id = params[:user_id] 
         @date = params[:piyo].to_datetime
-        @works = select_user.works.all       
+        @works = select_user.works.all  
+        @work = Work.new
     end
     
     def update
@@ -57,7 +83,7 @@ class WorksController < ApplicationController
     
     def works_params
         
-        params.require(:work).permit(:start_time, :end_time)
+        params.require(:work).permit(:start_time, :end_time, :day, :user_id)
     end
     
     def correct_user

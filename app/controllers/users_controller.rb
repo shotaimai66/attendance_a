@@ -1,8 +1,7 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy,
-                                        :edit_basic_info, :update_basic_info]
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only: :destroy
+  before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info]
   
   include StaticPagesHelper
 
@@ -24,7 +23,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       @user.send_activation_email
-      flash[:info] = "Progra:より送られてくるメールをご確認ください。"
+      flash[:info] = "認証メールを送信しました。ご確認ください。"
       redirect_to root_url
     else
       render 'new'
