@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :works, dependent: :destroy
+  accepts_nested_attributes_for :works
   has_many :microposts, dependent: :destroy
   has_many :active_relationships, class_name:  "Relationship",
                                   foreign_key: "follower_id",

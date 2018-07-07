@@ -1,5 +1,4 @@
 class Work < ApplicationRecord
-  belongs_to :user
-  include FriendlyId
-  friendly_id :day
+    belongs_to :user
+    #validates :note, length: { maximum: 20 }
 end

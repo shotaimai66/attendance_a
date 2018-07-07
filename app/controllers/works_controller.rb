@@ -9,7 +9,7 @@ class WorksController < ApplicationController
         if params[:piyo] == nil
             # params[:piyo]が存在しない(つまりデフォルト時)
             # ▼月初(今月の1日, 00:00:00)を取得します
-             @date = params[:id].to_datetime
+             @date = Date.today
         else
             # ▼params[:piyo]が存在する(つまり切り替えボタン押下時)
             #  paramsの中身は"文字列"で送られてくるので注意
@@ -23,73 +23,71 @@ class WorksController < ApplicationController
     
     def create
     work_name
-     if @name == "出社"
-         if Work.find_by(user_id: select_user.id, day: Date.today)
-           Work.find_by(user_id: select_user.id, day: Date.today ).update(start_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
-           flash[:success] = "今日も一日頑張りましょう！"
-         else
-           @work = Work.create(user_id: select_user.id, 
-                         start_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00),
-                         day: Time.now)
-           flash[:success] = "今日も一日頑張りましょう！"
-         end
-     elsif @name == "退社"
-         Work.find_by(user_id: select_user.id, day: Date.today ).update(end_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
-         flash[:success] = "お疲れ様でした！"
-     elsif @name == "----"
-     end
-     
-      redirect_to user_work_path(select_user,Date.today)
-    end
-    
-    #フォームからのクリエイト
-    def create_form
-        if Work.find_by(user_id: params[:user_id], day: params[:work][:day]) && params[:work][:end_time]
-            work = Work.find_by(user_id: params[:user_id], day: params[:work][:day])
-            work.update(end_time: params[:work][:end_time])
-            flash[:success] = "更新しました。"
-        elsif Work.find_by(user_id: params[:user_id], day: params[:work][:day]) && params[:work][:start_time]
-            work = Work.find_by(user_id: params[:user_id], day: params[:work][:day])
-            work.update(start_time: params[:work][:start_time])
-            flash[:success] = "更新しました。"
-            
-        
-        else Work.create(user_id: params[:user_id], day: params[:work][:day].to_date, start_time: params[:work][:start_time],
-                        end_time: params[:work][:end_time])
-            flash[:success] = "sakuseiしました。"
+        if @name == "出社"#出社ボタンが表示されている時
+            if Work.find_by(user_id: select_user.id, day: Date.today)
+            #(update)出社ボタン押下の日付のレコードが存在したら、それを更新
+            #秒以下を切り捨てるように更新設定
+                Work.find_by(user_id: select_user.id, day: Date.today ).update(start_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
+                flash[:success] = "今日も一日頑張りましょう！"
+            else
+            #（creata）存在しなければ、新しくレコード作成
+            #秒以下を切り捨てるように更新設定
+                @work = Work.create(user_id: select_user.id, 
+                        start_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00),
+                        day: Time.now)
+                flash[:success] = "今日も一日頑張りましょう！"
+            end
+        elsif @name == "退社"#退社ボタンが表示されている時
+            Work.find_by(user_id: select_user.id, day: Date.today ).update(end_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
+            flash[:success] = "お疲れ様でした！"
+        elsif @name == "----"
         end
-        
-         redirect_to user_work_path(select_user,params[:id])
+        #更新したワークのユーザーのトップページへ
+        redirect_to user_work_path(select_user,Date.today)
     end
     
     def edit
         @user = User.find(params[:user_id])
         @id = params[:user_id] 
         @date = params[:piyo].to_datetime
-        @works = select_user.works.all  
-        @work = Work.new
+        #表示する編集ページのユーザーの一月分のレコードが存在するか検証
+        #レコードが存在しない場合は新規作成（create）
+        days = (Date.new(@date.year,@date.month).all_month) 
+        days.each do |day|
+            unless select_user.works.find_by(day: day)
+                Work.create(user_id: params[:user_id], day: day)
+            end
+        end
+        
     end
     
     def update
-            work = select_user.works.find_by(day: params[:id])
-            work.update_attributes(works_params)
-            flash[:success] = "更新しました。"
-    redirect_to  user_work_path(select_user,params[:id])
-    
+        works_params.each do |id, item|
+            work = select_user.works.find(id)
+                #未来の情報は一般ユーザーは更新できないように設定（管理者のみ編集可能）
+                if work.day > Date.today && !current_user.admin?
+                #出社時間と退社時間の両方の存在を検証
+                elsif !work.start_time&&work.end_time
+                    flash[:warning] = '出社時間と退社時間は両方入力してください。'
+                else
+                    work.update_attributes(item)
+                    flash[:success] = "更新しました！なお本日以降の更新はできません。"
+                end
+        end
+    #セレクトユーザーの編集した月ページへ
+    redirect_to  user_work_path(select_user,params[:piyo])
     end
     
     
-    private
-    
+     private
     def works_params
-        
-        params.require(:work).permit(:start_time, :end_time, :day, :user_id)
+      params.permit(works: [:start_time, :end_time, :note])[:works]
     end
+
     
-    def correct_user
-      @user = User.find(params[:user_id])
-      redirect_to(root_url) unless current_user?(@user)
-    end
+    
+  
+    
 
    
    
