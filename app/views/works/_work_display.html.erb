@@ -76,6 +76,7 @@
         <td><%=start_time(key) && end_time(key) && end_time(key).hour%></td>
         <td><%=start_time(key) && end_time(key) && end_time(key).min%></td>
         <td></td>
+        　<!--時間の差を求める際、カラム型がtimeとdatetimeで違うので注意。基本的にdatetimeを選択した方が無難-->
         <td><%=end_time(key) && start_time(key) && BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).floor(2).to_f %></td>
         <td><%= select_user.works.find_by(day: key) && select_user.works.find_by(day: key).note %></td>
       

@@ -46,14 +46,14 @@ ActiveRecord::Schema.define(version: 20180701061621) do
     t.string "reset_digest"
     t.datetime "reset_sent_at"
     t.string "team"
-    t.time "specified_work_time"
-    t.time "basic_work_time"
+    t.datetime "specified_work_time"
+    t.datetime "basic_work_time"
   end
 
   create_table "works", force: :cascade do |t|
     t.date "day"
-    t.time "start_time"
-    t.time "end_time"
+    t.datetime "start_time"
+    t.datetime "end_time"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
