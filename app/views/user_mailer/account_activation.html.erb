@@ -1,10 +1,10 @@
-<h1>Progra:</h1>
+<h1>勤怠システム：アカウント有効化メール</h1>
 
 <p><%= @user.name %>さん<p>
 
 <p>
-ようこそ、Progra:へ。下のリンクからアカウントを有効化しましょう。
+下のリンクからアカウントを有効化しましょう。
 </p>
 
-<%= link_to "ここからProgra:へ！", edit_account_activation_url(@user.activation_token,
+<%= link_to "アカウント有効化", edit_account_activation_url(@user.activation_token,
                                                     email: @user.email) %>
