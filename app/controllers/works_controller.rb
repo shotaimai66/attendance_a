@@ -8,7 +8,6 @@ class WorksController < ApplicationController
         @id = params[:user_id]
         if params[:piyo] == nil
             # params[:piyo]が存在しない(つまりデフォルト時)
-            # ▼月初(今月の1日, 00:00:00)を取得します
              @date = Date.today
         else
             # ▼params[:piyo]が存在する(つまり切り替えボタン押下時)
@@ -66,8 +65,9 @@ class WorksController < ApplicationController
             work = select_user.works.find(id)
                 #未来の情報は一般ユーザーは更新できないように設定（管理者のみ編集可能）
                 if work.day > Date.today && !current_user.admin?
+                    
                 #出社時間と退社時間の両方の存在を検証
-                elsif !work.start_time&&work.end_time
+                elsif work.day!=Date.today && item["start_time"].blank? ^ item["end_time"].blank?
                     flash[:warning] = '出社時間と退社時間は両方入力してください。'
                 else
                     work.update_attributes(item)
