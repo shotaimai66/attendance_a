@@ -33,24 +33,10 @@ module WorksHelper
     end
     
     def total_works_time(y,m)
-      select_user.works.where(day: Time.new(y,m).all_month).select("end_time").count * 7.50
+      select_user.works.where(day: Time.new(y,m).all_month).select("end_time").count * basic_time
     end
     
-    def aaaa(m)
-      if m == 12
-        m - 11
-      else
-        m + 1
-      end
-    end  
-    
-    def bbbb(m)
-      if m == 1
-         m + 11
-      else
-         m - 1
-      end
-    end
+   
     
     def start_time_change(key)
       if select_user.works.find_by(day: key)

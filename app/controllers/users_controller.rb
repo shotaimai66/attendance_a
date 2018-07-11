@@ -11,8 +11,6 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    # 検索拡張機能として.search(params[:search])を追加    
-    @microposts = @user.microposts.paginate(page: params[:page]).search(params[:search])
   end
 
   def new
@@ -65,21 +63,7 @@ class UsersController < ApplicationController
     end
     
   end
-  
-  def following
-    @title = "フォロー"
-    @user  = User.find(params[:id])
-    @users = @user.following.paginate(page: params[:page])
-    render 'show_follow'
-  end
-
-  def followers
-    @title = "フォロワー"
-    @user  = User.find(params[:id])
-    @users = @user.followers.paginate(page: params[:page])
-    render 'show_follow'
-  end
-  
+ 
   
 
   private

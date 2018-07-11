@@ -5,9 +5,6 @@ require 'date'
 
    def home
     if logged_in?
-      @micropost  = current_user.microposts.build
-      # 検索拡張機能として.search(params[:search])を追加 
-      @feed_items = current_user.feed.paginate(page: params[:page]).search(params[:search])
       @month = Date.today.month
       @days = (Date.new(2018, 6, 1) .. Date.new(2018, 6, 30))
       
