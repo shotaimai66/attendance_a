@@ -18,14 +18,32 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-    if @user.save
-      @user.send_activation_email
-      flash[:info] = "認証メールを送信しました。ご確認ください。"
-      redirect_to root_url
+    if User.exists?
+    @user = User.new(name: params[:user][:name],
+             email: params[:user][:email],
+             team: params[:user][:email],
+             password:              params[:user][:password],
+             password_confirmation: params[:user][:password_confirmation],
+             activated: true,
+             activated_at: Time.zone.now)
     else
-      render 'new'
-    end
+    @user = User.new(name: params[:user][:name],
+             email: params[:user][:email],
+             team: params[:user][:email],
+             specified_work_time: Time.zone.local(2018, 6, 30, 8,0),
+             basic_work_time: Time.zone.local(2018, 6, 30, 7,30),
+             password:              params[:user][:password],
+             password_confirmation: params[:user][:password_confirmation],
+             activated: true,
+             activated_at: Time.zone.now,
+             admin: true)
+    end         
+      @user.save
+      log_in @user
+       flash[:info] = "アカウント登録が完了しました。"
+       redirect_to user_work_path(@user,Date.today)
+    
+    
   end
 
   def edit
