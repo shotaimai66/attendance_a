@@ -69,6 +69,9 @@ class WorksController < ApplicationController
                 #出社時間と退社時間の両方の存在を検証
                 elsif work.day!=Date.today && item["start_time"].blank? ^ item["end_time"].blank?
                     flash[:warning] = '出社時間と退社時間は両方入力してください。'
+                #出社時間より退社時間が遅いことを検証
+                elsif item["start_time"].to_s > item["end_time"].to_s
+                    flash[:warning] = '出社時間より退社時間が早い時間に入力されています。'
                 else
                     work.update_attributes(item)
                     flash[:success] = "更新しました！なお本日以降の更新はできません。"
