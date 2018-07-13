@@ -6,20 +6,14 @@ class WorksController < ApplicationController
     def show
         @user = User.find(params[:user_id])
         @id = params[:user_id]
-        if params[:id].to_datetime.month != Date.today.month
-            @date = params[:id].to_datetime
+        if params[:piyo]  
+           @date = params[:piyo].to_datetime
         
-        elsif params[:piyo] == nil  
-            # params[:piyo]が存在しない(つまりデフォルト時)
-             @date = Date.today
+        elsif params[:id].to_datetime.month != Date.today.month
+              @date = params[:id].to_datetime
+              
         else
-            # ▼params[:piyo]が存在する(つまり切り替えボタン押下時)
-            #  paramsの中身は"文字列"で送られてくるので注意
-            #  文字列を時間の型に直すときはparseメソッドを使うか、
-            #@date = Time.parse(params[:piyo])
-            #  もしくはto_datetimeメソッドとかで型を変えてあげるといいと思います
-            
-                @date = params[:piyo].to_datetime
+              @date = Date.today
             
         end
         
