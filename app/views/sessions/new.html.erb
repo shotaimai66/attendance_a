@@ -9,7 +9,7 @@
       <%= f.email_field :email, class: 'form-control' %>
 
       <%= f.label :パスワード %>
-      <%= link_to "(パスワードを忘れたらこちら)", new_password_reset_path %>
+      <!--<%= link_to "(パスワードを忘れたらこちら)", new_password_reset_path %>-->
       <%= f.password_field :password, class: 'form-control' %>
 
       <%= f.label :remember_me, class: "checkbox inline" do %>
@@ -17,7 +17,7 @@
         <span>パスワードをこのPCで記憶する</span>
       <% end %>
 
-      <%= f.submit "ログイン", class: "btn btn-primary" %>
+      <%= f.submit "Log in", class: "btn btn-primary" %>
     <% end %>
 
     <p>アカウント作成がまだなら <%= link_to "新規登録", new_user_path %></p>
