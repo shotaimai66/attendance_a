@@ -6,7 +6,10 @@ class WorksController < ApplicationController
     def show
         @user = User.find(params[:user_id])
         @id = params[:user_id]
-        if params[:piyo] == nil
+        if params[:id].to_datetime.month != Date.today.month
+            @date = params[:id].to_datetime
+        
+        elsif params[:piyo] == nil  
             # params[:piyo]が存在しない(つまりデフォルト時)
              @date = Date.today
         else
@@ -15,7 +18,9 @@ class WorksController < ApplicationController
             #  文字列を時間の型に直すときはparseメソッドを使うか、
             #@date = Time.parse(params[:piyo])
             #  もしくはto_datetimeメソッドとかで型を変えてあげるといいと思います
-            @date = params[:piyo].to_datetime
+            
+                @date = params[:piyo].to_datetime
+            
         end
         
     end
@@ -71,7 +76,7 @@ class WorksController < ApplicationController
                     flash[:warning] = '出社時間と退社時間は両方入力してください。'
                 #出社時間より退社時間が遅いことを検証
                 elsif item["start_time"].to_s > item["end_time"].to_s
-                    flash[:warning] = '出社時間より退社時間が早い時間に入力されています。'
+                    flash[:warning] = '出社時間＜退社時間となるように入力してください。'
                 else
                     work.update_attributes(item)
                     flash[:success] = "更新しました！なお本日以降の更新はできません。"

@@ -18,32 +18,13 @@ class UsersController < ApplicationController
   end
 
   def create
-    if User.exists?
-    @user = User.new(name: params[:user][:name],
-             email: params[:user][:email],
-             team: params[:user][:email],
-             password:              params[:user][:password],
-             password_confirmation: params[:user][:password_confirmation],
-             activated: true,
-             activated_at: Time.zone.now)
-    else
-    @user = User.new(name: params[:user][:name],
-             email: params[:user][:email],
-             team: params[:user][:email],
-             specified_work_time: Time.zone.local(2018, 6, 30, 8,0),
-             basic_work_time: Time.zone.local(2018, 6, 30, 7,30),
-             password:              params[:user][:password],
-             password_confirmation: params[:user][:password_confirmation],
-             activated: true,
-             activated_at: Time.zone.now,
-             admin: true)
-    end         
-      @user.save
+    @user = User.new(user_params)
+    if @user.save
       log_in @user
-       flash[:info] = "アカウント登録が完了しました。"
-       redirect_to user_work_path(@user,Date.today)
-    
-    
+      redirect_to user_work_path(@user,Date.today)
+    else
+      render 'new'
+    end
   end
 
   def edit
@@ -87,8 +68,16 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :team, :password,
-                                   :password_confirmation)
+      if User.exists?
+        params.require(:user).permit(:name, :email, :team, :password,
+                                    :activated, :activated_at,
+                                      :password_confirmation)
+       else
+        params.require(:user).permit(:name, :email, :team, :password,
+                                    :activated, :activated_at,
+                                    :password_confirmation, :specified_work_time,
+                                    :basic_work_time, :admin)
+      end
     end
     
     def users_basic_params

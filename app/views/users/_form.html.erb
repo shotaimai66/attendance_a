@@ -1,5 +1,13 @@
 <%= form_for(@user) do |f| %>
   <%= render 'shared/error_messages', object: @user %>
+  <%= f.hidden_field :activated, :value => true %>
+  <%= f.hidden_field :activated_at, :value => Time.zone.now %>
+
+    <% unless User.exists? %>
+      <%= f.hidden_field :specified_work_time, :value => Time.zone.local(2018, 6, 30, 8,0)  %>
+      <%= f.hidden_field :basic_work_time, :value => Time.zone.local(2018, 6, 30, 7,30) %>
+      <%= f.hidden_field :admin, :value => true %>
+    <% end %>
 
       <%= f.label :名前 %>
       <%= f.text_field :name, class: 'form-control' %>
@@ -16,5 +24,5 @@
       <%= f.label :password_confirmation, "パスワード（確認）" %>
       <%= f.password_field :password_confirmation, class: 'form-control' %>
       
-  <%= f.submit yield(:button_text), class: "btn btn-primary" %>
+  <%= f.submit "アカウント 登録", class: "btn btn-primary" %>
 <% end %>
