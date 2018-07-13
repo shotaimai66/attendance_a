@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
     #存在するユーザーかどうか検証
     def user_being
       unless User.exists?(id: params[:user_id])
-        flash[:danger] = "該当IDをもつユーザーは存在しません"
+        flash[:danger] = "該当IDをもつユーザーは存在しません。"
         redirect_to root_path
       end
     end
