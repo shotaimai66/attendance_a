@@ -67,15 +67,17 @@
         <td><%=start_time(key) && start_time(key).min%></td>
           <!--出社・退社・【お疲れ様でした】の条件表示-->
         <td>
-            <% if key==Date.today && select_user.works.find_by(day: Date.today) &&select_user.works.find_by(day: Date.today).end_time%>
-                <p>お疲れ様でした！</p>
-            <% elsif key==Date.today%>
-                <%= button_to "#{work_name}", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
-            <% end %>
+                <% if key==Date.today && select_user.works.find_by(day: Date.today).nil?  %>
+                <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                <% end %>
         </td>
         <td><%=start_time(key) && end_time(key) && end_time(key).hour%></td>
         <td><%=start_time(key) && end_time(key) && end_time(key).min%></td>
-        <td></td>
+        <td>
+            <% if key==Date.today && select_user.works.find_by(day: Date.today) && select_user.works.find_by(day: Date.today).start_time && select_user.works.find_by(day: Date.today).end_time.nil? %>
+                <%= button_to "退社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+            <% end %>
+        </td>
         　<!--時間の差を求める際、カラム型がtimeとdatetimeで違うので注意。基本的にdatetimeを選択した方が無難-->
         <td><%=end_time(key) && start_time(key) && sprintf("%.2f", BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).to_f ) %></td>
         <td><%= select_user.works.find_by(day: key) && select_user.works.find_by(day: key).note %></td>
