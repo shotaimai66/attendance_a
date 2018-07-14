@@ -12,9 +12,9 @@
                 <% unless m=="3" %>
                 <%=  link_to "→", user_work_path(piyo: @date.next_month), { :class => "btn btn-default btn-lg active" } %>
                 <%end%>
-            </td>
-            <td>指定勤務時間  <%=  specified_time  %></td>
-            <td rowspan="1" colspan="3"><%=  basic_time %>  基本時間</td>
+            </td>    
+            <td>指定勤務時間  <%=  sprintf("%.2f", specified_time ) %></td>
+            <td rowspan="1" colspan="3"><%=  sprintf("%.2f", basic_time ) %>  基本時間</td>
             <td>初日 <%= "#{@date.month} / #{@date.beginning_of_month.day}" %></td>
         </tr>
         <tr>
@@ -77,7 +77,7 @@
         <td><%=start_time(key) && end_time(key) && end_time(key).min%></td>
         <td></td>
         　<!--時間の差を求める際、カラム型がtimeとdatetimeで違うので注意。基本的にdatetimeを選択した方が無難-->
-        <td><%=end_time(key) && start_time(key) && BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).floor(2).to_f %></td>
+        <td><%=end_time(key) && start_time(key) && sprintf("%.2f", BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).to_f ) %></td>
         <td><%= select_user.works.find_by(day: key) && select_user.works.find_by(day: key).note %></td>
       
     </tr>
@@ -89,7 +89,7 @@
   <!-- 最後の一行 -->      
         <tr>
 　　　　　　<!-- 総合勤務時間の表示  --> 
-            <td rowspan="1" colspan="2"><%= total_works_time(y,m) %></td>
+            <td rowspan="1" colspan="2"><%= sprintf("%.2f", total_works_time(y,m)) %></td>
             <td></td>
             <td></td>
             <td></td>
@@ -97,7 +97,7 @@
             <td></td>
             <td></td>
             <!-- 在社時間の合計の表示  -->
-            <td><%=total_time(y,m).sum.floor(2)%></td>
+            <td><%=sprintf("%.2f", total_time(y,m).sum)%></td>
             <td></td>
         </tr>
     </table>

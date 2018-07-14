@@ -41,7 +41,7 @@
                     </td>
     <!-- 勤務時間の表示  -->
           　        <td>
-              　        <%=end_time(key) && start_time(key) && BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).floor(2).to_f %>
+              　        <%=end_time(key) && start_time(key) && sprintf("%.2f",  BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).to_f) %>
           　        </td>
     <!-- 備考のフォーム  -->
           　        <td>
@@ -59,10 +59,10 @@
         
         
                 <tr>
-                    <td rowspan="1" colspan="2"><%= total_works_time(y,m) %></td><!-- 総合勤務時間の表示  -->
+                    <td rowspan="1" colspan="2"><%= sprintf("%.2f", total_works_time(y,m)) %></td><!-- 総合勤務時間の表示  -->
                     <td></td>
                     <td></td>
-                    <td><%=total_time(y,m).sum.floor(2)%></td><!-- 在社時間の合計の表示  -->
+                    <td><%=sprintf("%.2f", total_time(y,m).sum)%></td><!-- 在社時間の合計の表示  -->
                     <td></td>
             
                 </tr>

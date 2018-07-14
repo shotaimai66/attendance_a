@@ -56,13 +56,13 @@ module WorksHelper
     
     def specified_time
       if User.find(1).specified_work_time
-        BigDecimal(((User.find(1).specified_work_time-User.find(1).specified_work_time.beginning_of_day)/60/60).to_s).floor(3).to_f
+        BigDecimal(((User.find(1).specified_work_time-User.find(1).specified_work_time.beginning_of_day)/60/60).to_s).round(3).to_f
       end
     end
     
     def basic_time
       if User.find(1).basic_work_time
-        BigDecimal(((User.find(1).basic_work_time-User.find(1).basic_work_time.beginning_of_day)/60/60).to_s).floor(3).to_f
+        BigDecimal(((User.find(1).basic_work_time-User.find(1).basic_work_time.beginning_of_day)/60/60).to_s).round(3).to_f
       end
     end
     
