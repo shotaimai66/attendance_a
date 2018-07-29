@@ -3,9 +3,11 @@
 
   <div class="row">
       
-
-     <%= render "works/work_display" %>
- 
+    <% if current_user.admin? %>
+       <%= render "works/leader_display" %>
+    <% else %>
+       <%= render "works/work_display" %>
+    <% end %>
     
     
     

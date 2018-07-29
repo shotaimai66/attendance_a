@@ -82,6 +82,9 @@ class WorksController < ApplicationController
     end
     
     
+    
+    
+    
      private
     def works_params
       params.permit(works: [:start_time, :end_time, :note])[:works]

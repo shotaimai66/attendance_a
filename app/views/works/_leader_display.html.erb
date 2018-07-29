@@ -1,16 +1,16 @@
 <% y = @date.year %>
 <% m = @date.month %>
 <div>
-　<!-- ヘッドのテーブル部分 -->
+<!-- ヘッドのテーブル部分 -->
                 <table class="table table-bordered">
                     <tr>
                         <td>
                             <% unless m=="4" %>
-                            <%=  link_to "←", user_work_path(piyo: @date.prev_month), { :class => "btn btn-primary" } %>
+                            <%=  link_to "←", user_work_path(piyo: @date.prev_month), { :class => "btn btn-default" } %>
                             <%end%>
                             <%= y %>年<%= m %>月の時間管理表
                             <% unless m=="3" %>
-                            <%=  link_to "→", user_work_path(piyo: @date.next_month), { :class => "btn btn-primary" } %>
+                            <%=  link_to "→", user_work_path(piyo: @date.next_month), { :class => "btn btn-default" } %>
                             <%end%>
                         </td>    
                         <td>指定勤務時間  <%=  sprintf("%.2f", specified_time ) %></td>
@@ -26,37 +26,33 @@
                         <td>締め <%= "#{@date.month} / #{@date.end_of_month.day}" %></td>
                     </tr>
                 </table>
-                
-                
-                
 <!-- 勤怠編集ボタン    -->
-                <%= link_to "勤怠を編集", edit_user_work_path(piyo: @date), class: "btn btn-primary" %>
-                <%= link_to "csv出力",user_csv_output_path(format: :csv), class: "btn btn-primary" %>
-                <br>
-<!--修正ログ表示ボタン-->
-                <%= link_to "勤怠修正ログ（承認済）", edit_user_work_path(piyo: @date), class: "btn btn-primary" %>
-                
-                
-                
+                <%= link_to "勤怠を編集", edit_user_work_path(piyo: @date), class: "btn btn-default active" %>
+                <%= link_to "残業申請", edit_user_work_path(piyo: @date), class: "btn btn-default active" %>
+                <%= link_to "csv出力",user_csv_output_path(format: :csv), class: "btn btn-default active" %>
 <!-- 最初の一行目    -->
                 <table class="table table-bordered">
                     
+                   
                     <tr>
-                        <td rowspan="3" colspan="1" >残業申請</td>
-                        <td rowspan="3" colspan="1">日付</td>
+                        <td rowspan="3" colspan="1" >日付</td>
                         <td rowspan="3" colspan="1" >曜日</td>
-                        <td rowspan="1" colspan="8" >【実績】</td>
-                        <td rowspan="1" colspan="5" >所定外勤務</td>
+                        <td rowspan="1" colspan="3" >【実績】</td>
+                        <td rowspan="1" colspan="7" >所定外勤務</td>
+                        <td rowspan="1" colspan="7" >【実績】</td>
                     </tr>
                     <tr>
-                        <td rowspan="1" colspan="3">出社</td>
+                        <td rowspan="1" colspan="3" >出社</td>
+                        <td rowspan="1" colspan="2" >終了予定時刻</td>
+                        <td rowspan="2" colspan="1" >業務処理内容</td>
+                        <td rowspan="1" colspan="2" >終了指示時刻</td>
+                        <td rowspan="2" colspan="1" >指示者確認</td>
+                        <td rowspan="2" colspan="1" >時間外時間</td>
                         <td rowspan="1" colspan="3" >退社</td>
                         <td rowspan="2" colspan="1" >在社時間</td>
                         <td rowspan="2" colspan="1" >備考</td>
-                        <td rowspan="1" colspan="2" >終了予定時刻</td>
-                        <td rowspan="2" colspan="1" >時間外時間</td>
-                        <td rowspan="2" colspan="1" >業務処理内容</td>
-                        <td cellpadding="bottom" align="right" rowspan="2" colspan="1">指示者確認印</td>
+                        <td rowspan="2" colspan="1" >残業指示</td>
+                        <td rowspan="2" colspan="1" >指示者</td>
                     </tr>
                     <tr>
                         <td >時</td>
@@ -64,28 +60,23 @@
                         <td></td>
                         <td >時</td>
                         <td >分</td>
-                        <td></td>
                         <td >時</td>
-                        <td >分</td> 
+                        <td >分</td>
+                        <td >時</td>
+                        <td >分</td>
+                        <td></td>
                     </tr>
-    
-        
+                    
         
         
 <!-- レコード表示部分 each文 -->
-                <% days = (Date.new(y,m).all_month) %>
+                    <% days = (Date.new(y,m).all_month) %>
                 　<!-- キーがdaysで値がcolorsの配列を作成し、CSSで各行の色分けをする  -->
                     <% colors = ["a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a"] %>
                     <% datas = Hash[*days.zip(colors).flatten(1)] %>
                     <% datas.each do |key, value| %>
-                <tr class="<%=value%>">
-                    <!--モーダルウィンドウ（残業申請）-->
-                        <td>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal-sample">
-                                残業申請
-                            </button>
-                            <%= render 'works/modal' %>
-                        </td>
+                    
+                    <tr class="<%=value%>">
                     <!--日付-->
                         <td><%=key.month%>/<%=key.day%></td>
                     <!--曜日-->
@@ -95,10 +86,22 @@
                         <td><%=start_time(key) && start_time(key).min%></td>
                     <!--出社ボタン-->
                         <td>
-                            <% if key==Date.today && select_user.works.find_by(day: Date.today).blank?  %>
+                            <% if key==Date.today && select_user.works.find_by(day: Date.today).nil?  %>
                                 <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
                             <% end %>
                         </td>
+                    <!--終了予定時刻-->
+                        <td></td>
+                        <td></td>
+                    <!--業務処理内容-->
+                        <td></td>
+                    <!--終了指示時刻-->
+                        <td></td>
+                        <td></td>
+                    <!--指示者確認印-->
+                        <td></td>
+                    <!--時間外時間-->
+                        <td></td>
                     <!--退社時間-->
                         <td><%=start_time(key) && end_time(key) && end_time(key).hour%></td>
                         <td><%=start_time(key) && end_time(key) && end_time(key).min%></td>
@@ -108,26 +111,36 @@
                                 <%= button_to "退社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
                             <% end %>
                         </td>
-                    <!--在社時間：(時間の差を求める際、カラム型がtimeとdatetimeで違うので注意。基本的にdatetimeを選択した方が無難)-->
+                    <!--在社時間(時間の差を求める際、カラム型がtimeとdatetimeで違うので注意。基本的にdatetimeを選択した方が無難)-->
                         <td><%=end_time(key) && start_time(key) && sprintf("%.2f", BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).to_f ) %></td>
-                    <!--備考-->
+                    <!--備考    -->
                         <td><%= select_user.works.find_by(day: key) && select_user.works.find_by(day: key).note %></td>
+                    <!--残業指示-->
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                    <!--指示者-->
                         <td></td>
                     </tr>
-                <% end %>
+                
+            
+                    <% end %>
+        
+        
+    
         
         
         
         
- <!-- 最後の一行 -->
+ <!-- 最後の一行 -->      
                     <tr>
             　　　　　　<!-- 総合勤務時間の表示  --> 
-            　　　　　　<td></td>
                         <td rowspan="1" colspan="2"><%= sprintf("%.2f", total_works_time(y,m)) %></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -136,9 +149,6 @@
                         <td></td>
                         <!-- 在社時間の合計の表示  -->
                         <td><%=sprintf("%.2f", total_time(y,m).sum)%></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

@@ -62,7 +62,13 @@ class UsersController < ApplicationController
     end
     
   end
- 
+  
+
+  def csv_output
+    @works = current_user.works
+    send_data render_to_string, filename: "user.csv", type: :csv
+  end
+
   
 
   private

@@ -11,9 +11,10 @@ Rails.application.routes.draw do
   get    '/edit_basic_info' , to: 'users#edit_basic_info'
   patch  '/update_basic_info' , to: 'users#update_basic_info'
   post   '/users/:user_id/works/:id/create_form' , to: 'works#create_form'
-  
+
   resources :users do
     resources :works
+      get 'csv_output'
   end
   
   resources :account_activations, only: [:edit]
