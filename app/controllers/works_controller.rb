@@ -7,6 +7,15 @@ class WorksController < ApplicationController
     def show
         @user = User.find(params[:user_id])
         @id = params[:user_id]
+        @date = params[:id].to_datetime
+        #表示する編集ページのユーザーの一月分のレコードが存在するか検証
+        #レコードが存在しない場合は新規作成（create）
+        days = (Date.new(@date.year,@date.month).all_month) 
+        days.each do |day|
+            unless select_user.works.find_by(day: day)
+                Work.create(user_id: params[:user_id], day: day)
+            end
+        end
         if params[:piyo]  
            @date = params[:piyo].to_datetime
         
