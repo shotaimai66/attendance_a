@@ -29,7 +29,7 @@
 <!-- 勤怠編集ボタン    -->
                 <%= link_to "勤怠を編集", edit_user_work_path(piyo: @date), class: "btn btn-default active" %>
                 <%= link_to "残業申請", edit_user_work_path(piyo: @date), class: "btn btn-default active" %>
-                <%= link_to "csv出力",user_csv_output_path(format: :csv), class: "btn btn-default active" %>
+                <%= link_to "csv出力",user_csv_output_path(format: :csv, date: @date), class: "btn btn-primary" %>
 <!-- 最初の一行目    -->
                 <table class="table table-bordered">
                     

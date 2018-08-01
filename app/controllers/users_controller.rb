@@ -65,7 +65,8 @@ class UsersController < ApplicationController
   
 
   def csv_output
-    @works = current_user.works
+    date=params[:date].to_datetime
+    @works = current_user.works.where(day: date.beginning_of_month..date.end_of_month )
     send_data render_to_string, filename: "user.csv", type: :csv
   end
 

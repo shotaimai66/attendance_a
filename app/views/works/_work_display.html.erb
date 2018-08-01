@@ -42,7 +42,7 @@
                 
 <!-- 勤怠編集ボタン    -->
                 <%= link_to "勤怠を編集", edit_user_work_path(piyo: @date), class: "btn btn-primary" %>
-                <%= link_to "csv出力",user_csv_output_path(format: :csv), class: "btn btn-primary" %>
+                <%= link_to "csv出力",user_csv_output_path(format: :csv, date: @date), class: "btn btn-primary" %>
                 <br>
 <!--修正ログ表示ボタン-->
                 <%= link_to "勤怠修正ログ（承認済）", edit_user_work_path(piyo: @date), class: "btn btn-primary" %>
@@ -92,7 +92,7 @@
                 <tr class="<%=value%>">
                     <!--モーダルウィンドウ（残業申請）-->
                         <td>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal-sample" data-recipient="<%=key.year%>-<%=key.month%>-<%=key.day%>">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal-sample" data-date="<%=key.month%>/<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
                                 残業申請
                             </button>
                             <%= render 'works/modal' %>

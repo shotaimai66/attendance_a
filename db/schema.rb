@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180701061621) do
+ActiveRecord::Schema.define(version: 20180731113037) do
 
   create_table "microposts", force: :cascade do |t|
     t.text "content"
@@ -50,15 +50,7 @@ ActiveRecord::Schema.define(version: 20180701061621) do
     t.datetime "basic_work_time"
   end
 
-  create_table "works", force: :cascade do |t|
-    t.date "day"
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "note"
-    t.index ["user_id"], name: "index_works_on_user_id"
-  end
+# Could not dump table "works" because of following StandardError
+#   Unknown type 'name' for column 'checker'
 
 end
