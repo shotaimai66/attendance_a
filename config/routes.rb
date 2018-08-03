@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   get    '/edit_basic_info' , to: 'users#edit_basic_info'
   patch  '/update_basic_info' , to: 'users#update_basic_info'
   post   '/users/:user_id/works/:id/create_form' , to: 'works#create_form'
+  patch  '/users/:user_id/works/:id/update_detail' , to: 'works#update_detail'
+  
+  
+
 
   resources :users do
     resources :works

@@ -1,12 +1,3 @@
-<script>
-	$('#modal-sample').on('show.bs.modal', function (event) {
-		var button = $(event.relatedTarget);
-		var recipient = button.data('recipient');
-		var modal = $(this);
-		modal.find('.modal-title').text(recipient + 'へのメッセージ');
-	});
-</script>
-
 
 
 <% y = @date.year %>
@@ -92,7 +83,7 @@
                 <tr class="<%=value%>">
                     <!--モーダルウィンドウ（残業申請）-->
                         <td>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal-sample" data-date="<%=key.month%>/<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal-sample" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
                                 残業申請
                             </button>
                             <%= render 'works/modal' %>
@@ -157,3 +148,7 @@
                 </table>
 
 </div>
+
+
+
+

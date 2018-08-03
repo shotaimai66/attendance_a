@@ -5,6 +5,7 @@ class WorksController < ApplicationController
     include WorksHelper
     
     def show
+        @work = Work.find(1)
         @user = User.find(params[:user_id])
         @id = params[:user_id]
         @date = params[:id].to_datetime
@@ -91,12 +92,24 @@ class WorksController < ApplicationController
     end
     
     
+    def update_detail
+        work=select_user.works.find_by(day: params[:work][:day])
+        work.update_attributes(work_detail_params)
+        flash[:success] = "申請しました！"
+        redirect_to  user_work_path(select_user,Date.today)
+    end
+    
+    
     
     
     
      private
     def works_params
       params.permit(works: [:start_time, :end_time, :note])[:works]
+    end
+    
+    def work_detail_params
+        params.require(:work).permit(:endtime_plan, :work_content, :checker, :day)
     end
 
     

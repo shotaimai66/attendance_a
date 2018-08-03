@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    if @user.save
+    if @use.save
       log_in @user
       redirect_to user_work_path(@user,Date.today)
     else
@@ -69,6 +69,19 @@ class UsersController < ApplicationController
     @works = current_user.works.where(day: date.beginning_of_month..date.end_of_month )
     send_data render_to_string, filename: "user.csv", type: :csv
   end
+  
+                
+                
+                
+                
+                
+                def sample
+                end
+                
+                def change_session_year
+                 session[:year] = 2013
+                 render nothing: true
+                end
 
   
 

@@ -4,7 +4,8 @@
     <div class="modal-dialog">
 
         <!-- 3.モーダルのコンテンツ -->
-        <%= form_tag user_work_path,  method: :put do %>>
+        <%= form_for @work, :url => { :controller => :works, :action => :update_detail },method: :patch do %>
+        
         <div class="modal-content">
             <!-- 4.モーダルのヘッダ -->
             <div class="modal-header">
@@ -28,11 +29,31 @@
                     <tr>
                         <td id="modal-date"></td>
                         <td id="modal-day"></td>
-                        <td><%= time_field :endtime_plan,{class: 'form-control'} %></td>
-                        <td><%= text_field :work_content,{class: 'form-control'} %></td>
-                        <td><%= time_field :endtime_plan,{class: 'form-control'} %></td>
-                        <td><%= text_field :checker,{class: 'form-control'} %></td>
+                        <td>
+                            <%= fields_for  @work do |fi| %>
+                                <%= fi.time_field :endtime_plan, {class: 'form-control'}  %>
+                            <% end %>
+                        </td>
+                        <td>
+                            <%= fields_for  @work do |fi| %>
+                                <%= fi.text_field :work_content, {class: 'form-control'}  %>
+                            <% end %>
+                        </td>
+                        <td>
+                            <%= fields_for  @work do |fi| %>
+                                <%= fi.time_field :endtime_plan, {class: 'form-control'}  %>
+                            <% end %>
+                        </td>
+                        <td>
+                            <%= fields_for  @work do |fi| %>
+                                <%= fi.text_field :checker, {class: 'form-control'}  %>
+                            <% end %>
+                        </td>
                         
+                            <%= fields_for  @work do |fi| %>
+                                <%= fi.hidden_field :day, :value => "",:id => "test" %>
+                            <% end %>
+                
                     </tr>
                 
                 </table>
@@ -41,7 +62,7 @@
             <!-- 6.モーダルのフッタ -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-                <%= submit_tag "更新", class: "btn btn-primary" %>
+                <%= submit_tag "更新", class: "btn btn-primary test" %>
             </div>
         </div>
         <% end %>
@@ -53,6 +74,7 @@
   var button = $(event.relatedTarget) //モーダルを呼び出すときに使われたボタンを取得
   var date = button.data('date') //data-date の値を取得
   var day = button.data('day') //data-day の値を取得
+  var date_1 = button.data('date_1') //data-date_1 の値を取得
   
   //Ajaxの処理はここに
 
@@ -60,5 +82,21 @@
   modal.find('#modal-date').text(date) //モーダルの日付に値を表示
   modal.find('#modal-day').text(day) //モーダルの曜日に値を表示
   
-})  
+  var date_1= date_1
+   $(document).ready(function(){
+        $('#test').val(date_1);
+   });
+  
+})
+
+// var my_email= "12"
+//   $(document).ready(function(){
+//         $("#email_field").val(my_email);
+//   });
+   
+   
 </script>
+
+
+
+
