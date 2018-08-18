@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180731113037) do
+ActiveRecord::Schema.define(version: 20180807103615) do
 
   create_table "microposts", force: :cascade do |t|
     t.text "content"
@@ -20,6 +20,15 @@ ActiveRecord::Schema.define(version: 20180731113037) do
     t.string "picture"
     t.index ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_microposts_on_user_id"
+  end
+
+  create_table "months", force: :cascade do |t|
+    t.date "month"
+    t.string "checker"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_months_on_user_id"
   end
 
   create_table "relationships", force: :cascade do |t|
@@ -46,8 +55,10 @@ ActiveRecord::Schema.define(version: 20180731113037) do
     t.string "reset_digest"
     t.datetime "reset_sent_at"
     t.string "team"
-    t.datetime "specified_work_time"
+    t.datetime "d_start_worktime"
+    t.datetime "d_end_worktime"
     t.datetime "basic_work_time"
+    t.text "working"
   end
 
 # Could not dump table "works" because of following StandardError

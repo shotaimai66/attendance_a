@@ -3,10 +3,16 @@
 <% provide(:path, users_path) %>
 <h1>全てのユーザー</h1>
 
+<%= form_tag '/fileuploads', method: 'post', multipart: true do %>
+	    <%= file_field :fileupload, :file, class: 'filestyle', "data-buttonText": "ファイル選択" %>	
+	    <%= submit_tag 'CSVをインポート', class: "btn btn-primary csv_submit" %>
+<% end %>
+
+
+
 <%= will_paginate %>
 
 <ul class="users">
-  <%= render 'users/search' %> 　<!-- searchパーシャル呼出 -->
   <%= render @users %>
 </ul>
 

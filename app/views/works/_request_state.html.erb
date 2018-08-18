@@ -1,0 +1,35 @@
+<% @name=current_user.name %>
+
+<% if Work.find_by(checker: @name) %>
+    <% request_state_count=Work.where(checker: @name).count %>
+        <a id="red" data-toggle="modal" data-target="#modal-overwork" >
+            <%= "【残業申請のお知らせ】 #{request_state_count}件 " %>
+        </a><br>
+        <%= render 'works/modal_s_overwork' %>
+       
+<% else %>
+        <div id="blue">
+            <%= "【残業申請のお知らせ】" %>
+        </div>
+<% end %>
+
+<% if Work.find_by(month_check: @name) %>
+    <% request_state_count=Work.where(month_check: @name).count %>
+        <a id="red" data-toggle="modal" data-target="#modal-monthwork" >
+            <%= "【所属長承認申請のお知らせ】 #{request_state_count}件 " %>
+        </a><br>
+        <%= render 'works/modal_s_monthwork' %>
+       
+<% else %>
+        <div id="blue">
+            <%= "【残業申請のお知らせ】" %>
+        </div>
+<% end %>
+        
+
+
+
+
+
+
+

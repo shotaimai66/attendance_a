@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     # 管理者もしくはカレントユーザー以外の人の処理
     def aa
       #paramsは文字列で帰ってくることを忘れない（数値にして比較）
-      if current_user.id != params[:user_id].to_i && !current_user.admin? 
+      if current_user.id != params[:user_id].to_i && !current_user.admin?
         store_location
         flash[:danger] = "他のユーザー情報は閲覧できません。"
         redirect_to root_path

@@ -70,19 +70,12 @@ class UsersController < ApplicationController
     send_data render_to_string, filename: "user.csv", type: :csv
   end
   
-                
-                
-                
-                
-                
-                def sample
-                end
-                
-                def change_session_year
-                 session[:year] = 2013
-                 render nothing: true
-                end
-
+  
+  def working_users
+    @users = User.where(activated: true, working: "出社中").paginate(page: params[:page]).search(params[:search])
+  end
+  
+  
   
 
   private

@@ -1,5 +1,5 @@
 
-
+<%= render 'shared/error_messages', object: @work %>
 <% y = @date.year %>
 <% m = @date.month %>
 <div>
@@ -15,7 +15,8 @@
                             <%=  link_to "→", user_work_path(piyo: @date.next_month), { :class => "btn btn-primary" } %>
                             <%end%>
                         </td>    
-                        <td>指定勤務時間  <%=  sprintf("%.2f", specified_time ) %></td>
+                        <td>指定勤務開始時間  <%= "#{select_user.d_start_worktime.strftime("%H")}:#{select_user.d_start_worktime.strftime("%M")}" %><br>
+                            指定勤務終了時間  <%= "#{select_user.d_end_worktime.strftime("%H")}:#{select_user.d_end_worktime.strftime("%M")}" %></td>
                         <td rowspan="1" colspan="3"><%=  sprintf("%.2f", basic_time ) %>  基本時間</td>
                         <td>初日 <%= "#{@date.month} / #{@date.beginning_of_month.day}" %></td>
                     </tr>
@@ -29,7 +30,10 @@
                     </tr>
                 </table>
                 
-                
+<!--【各種申請のお知らせ】表示-->
+                <% if current_user.admin? %>
+                    <%= render 'works/request_state' %>   
+                <% end %>
                 
 <!-- 勤怠編集ボタン    -->
                 <%= link_to "勤怠を編集", edit_user_work_path(piyo: @date), class: "btn btn-primary" %>
@@ -80,13 +84,14 @@
                     <% colors = ["a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a"] %>
                     <% datas = Hash[*days.zip(colors).flatten(1)] %>
                     <% datas.each do |key, value| %>
+                    <% work = select_user.works.find_by(day: key) %>
                 <tr class="<%=value%>">
                     <!--モーダルウィンドウ（残業申請）-->
                         <td>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal-sample" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
                                 残業申請
                             </button>
-                            <%= render 'works/modal' %>
+                            <%= render 'works/modal_r_overwork' %>
                         </td>
                     <!--日付-->
                         <td><%=key.month%>/<%=key.day%></td>
@@ -114,11 +119,15 @@
                         <td><%=end_time(key) && start_time(key) && sprintf("%.2f", BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).to_f ) %></td>
                     <!--備考-->
                         <td><%= select_user.works.find_by(day: key) && select_user.works.find_by(day: key).note %></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                    <!--終了予定時刻-->
+                        <td><%=endtime_plan(key) && endtime_plan(key).strftime("%H")%></td>
+                        <td><%=endtime_plan(key) && endtime_plan(key).strftime("%M")%></td>
+                    <!--時間外時間-->
+                        <td><%=sprintf("%.2f", overwork_time(work)) if work.endtime_plan %></td>
+                    <!--業務処理内容-->
+                        <td><%=work_content(key)%></td>
+                    <!--指示者確認-->
+                        <td><%=checker(key)%></td>
                     </tr>
                 <% end %>
         
@@ -143,7 +152,24 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <!--所属長承認　月ごと-->
+                        <td>
+                            所属長承認  <%= month_check_window %><br>
+                            <%= form_for @work, :url => { :controller => :works, :action => :create_monthwork },method: :post do %>
+                            
+                                <%= fields_for "work", @month_work do |fi| %>
+                                    <%= fi.select :month_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"]], {prompt: ""} %>
+                                <% end %>
+                                
+                                <%= fields_for "work", @month_work do |fi| %>
+                                    <%= fi.hidden_field :piyo, :value => params[:piyo] %>
+                                <% end %>
+                                
+                                
+                                <%= submit_tag "申請", class: "btn btn-primary" %>
+                                
+                            <% end %>
+                        </td>
                     </tr>
                 </table>
 

@@ -1,0 +1,13 @@
+<% provide(:title, '出社中ユーザー') %>
+<% provide(:search_name, 'ユーザー検索') %>
+<% provide(:path, users_path) %>
+<h1>出社中のユーザー</h1>
+
+<%= will_paginate %>
+
+<ul class="users">
+  <%= render 'users/search' %> 　<!-- searchパーシャル呼出 -->
+  <%= render @users %>
+</ul>
+
+<%= will_paginate %>

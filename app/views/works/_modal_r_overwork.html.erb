@@ -1,10 +1,11 @@
 
 <!-- 2.モーダルの配置 -->
-<div class="modal" id="modal-sample" tabindex="-1">
+<div class="modal" id="modal" tabindex="-1">
     <div class="modal-dialog">
 
         <!-- 3.モーダルのコンテンツ -->
-        <%= form_for @work, :url => { :controller => :works, :action => :update_detail },method: :patch do %>
+         <%= form_tag({:controller => 'works', :action => 'create_overwork'}, {:method => :patch}) do %>
+         <% @work=Work.new %>
         
         <div class="modal-content">
             <!-- 4.モーダルのヘッダ -->
@@ -22,9 +23,10 @@
                         <td>日付</td>
                         <td>曜日</td>
                         <td>終了予定時刻</td>
+                        <td>翌日</td>
                         <td>業務処理内容</td>
-                        <td>終了指示時刻</td>
                         <td>指示者確認印</td>
+                        
                     </tr>
                     <tr>
                         <td id="modal-date"></td>
@@ -34,23 +36,24 @@
                                 <%= fi.time_field :endtime_plan, {class: 'form-control'}  %>
                             <% end %>
                         </td>
+                        <td class="center">
+                            <%= fields_for @work do |fi| %>
+                                <%= fi.check_box :check_box,{},checked_value = "true",unchecked_value = "false" %>
+                            <% end %>
+                        </td>
                         <td>
                             <%= fields_for  @work do |fi| %>
                                 <%= fi.text_field :work_content, {class: 'form-control'}  %>
                             <% end %>
                         </td>
                         <td>
-                            <%= fields_for  @work do |fi| %>
-                                <%= fi.time_field :endtime_plan, {class: 'form-control'}  %>
+                            <%= fields_for @work do |fi| %>
+                                <%= fi.select :checker, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"]], {prompt: ""} %>
                             <% end %>
                         </td>
-                        <td>
-                            <%= fields_for  @work do |fi| %>
-                                <%= fi.text_field :checker, {class: 'form-control'}  %>
-                            <% end %>
-                        </td>
+
                         
-                            <%= fields_for  @work do |fi| %>
+                            <%= fields_for @work do |fi| %>
                                 <%= fi.hidden_field :day, :value => "",:id => "test" %>
                             <% end %>
                 
@@ -61,8 +64,8 @@
             </div>
             <!-- 6.モーダルのフッタ -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-                <%= submit_tag "更新", class: "btn btn-primary test" %>
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>-->
+                <%= submit_tag "申請", class: "btn btn-primary test" %>
             </div>
         </div>
         <% end %>
@@ -70,7 +73,7 @@
 </div>
 
 <script>
-  $('#modal-sample').on('show.bs.modal', function (event) {
+  $('#modal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) //モーダルを呼び出すときに使われたボタンを取得
   var date = button.data('date') //data-date の値を取得
   var day = button.data('day') //data-day の値を取得
@@ -81,11 +84,8 @@
   var modal = $(this)  //モーダルを取得
   modal.find('#modal-date').text(date) //モーダルの日付に値を表示
   modal.find('#modal-day').text(day) //モーダルの曜日に値を表示
+  modal.find('#test').val(date_1)
   
-  var date_1= date_1
-   $(document).ready(function(){
-        $('#test').val(date_1);
-   });
   
 })
 

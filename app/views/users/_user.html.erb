@@ -1,8 +1,10 @@
 <li>
-  <%= gravatar_for user, size: 50 %>
-  <%= link_to user.name, user_work_path(user, Date.today) %>
+  <%= user.name %><br>
   <% if current_user.admin? && !current_user?(user) %>
-    | <%= link_to "アカウント削除", user, method: :delete,
+    | <%= link_to "削除", user, class: "btn btn-primary", method: :delete,
                                   data: { confirm: "本当に削除してもいいですか？" } %>
+      <div class="well">
+        <%= link_to "編集", user, class: "btn btn-primary btn-lg" %>
+      </div>
   <% end %>
 </li>

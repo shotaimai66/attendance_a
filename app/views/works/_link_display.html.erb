@@ -5,13 +5,9 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>
-                            <% unless m=="4" %>
-                            <%=  link_to "←", user_work_path(piyo: @date.prev_month), { :class => "btn btn-default" } %>
-                            <%end%>
-                            <%= y %>年<%= m %>月の時間管理表
-                            <% unless m=="3" %>
-                            <%=  link_to "→", user_work_path(piyo: @date.next_month), { :class => "btn btn-default" } %>
-                            <%end%>
+                            
+                                    <%= y %>年<%= m %>月の時間管理表
+                           
                         </td>    
                         <td>指定勤務時間  <%=  sprintf("%.2f", specified_time ) %></td>
                         <td rowspan="1" colspan="3"><%=  sprintf("%.2f", basic_time ) %>  基本時間</td>
@@ -26,10 +22,10 @@
                         <td>締め <%= "#{@date.month} / #{@date.end_of_month.day}" %></td>
                     </tr>
                 </table>
-<!-- 勤怠編集ボタン    -->
-                <%= link_to "勤怠を編集", edit_user_work_path(piyo: @date), class: "btn btn-default active" %>
-                <%= link_to "残業申請", edit_user_work_path(piyo: @date), class: "btn btn-default active" %>
-                <%= link_to "csv出力",user_csv_output_path(format: :csv, date: @date), class: "btn btn-primary" %>
+                
+
+                
+
 <!-- 最初の一行目    -->
                 <table class="table table-bordered">
                     

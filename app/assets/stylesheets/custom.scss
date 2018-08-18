@@ -231,6 +231,21 @@ input {
   margin-left: 0;
 }
 
+
+input[type="file"] {
+        width: 300px;
+        height: 40px;
+    }
+
+.csv_submit  {
+        width: 300px;
+        height: 40px;
+    }
+    
+
+    
+    
+
 /* Users index */
 
 .users {
@@ -293,7 +308,7 @@ span.picture {
 /* テーブル */
 
 .a {
-  background-color: #ECF0E3;
+  background-color: #F1FAFA;
 }
 
 td {
@@ -306,4 +321,45 @@ td {
   height: 100%;
 }
 
+.btn-submit {
+  width:  40%;
+}
 
+.modal-footer {
+  text-align: center;
+}
+
+
+/* 【申請のお知らせ】表示  */
+#red {
+  color: red;
+}
+
+#blue {
+  color: blue;
+}
+
+
+/*モーダル表示*/ 
+.modal-content {
+  text-align: center;
+}
+
+.close {
+  padding: 10px!important;
+}
+
+.top td {
+  vertical-align: top!important;
+}
+
+input[type="checkbox"] {
+      width: 12px;
+}
+
+
+
+/*モーダル　残業表示*/ 
+.over_work {
+  width: 1000px;
+}

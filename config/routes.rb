@@ -11,7 +11,11 @@ Rails.application.routes.draw do
   get    '/edit_basic_info' , to: 'users#edit_basic_info'
   patch  '/update_basic_info' , to: 'users#update_basic_info'
   post   '/users/:user_id/works/:id/create_form' , to: 'works#create_form'
-  patch  '/users/:user_id/works/:id/update_detail' , to: 'works#update_detail'
+  patch  '/users/:user_id/works/:id/create_overwork' , to: 'works#create_overwork'
+  get    '/users/working_users'
+  post   '/users/:user_id/works/:id/create_monthwork' , to: 'works#create_monthwork'
+  patch  '/users/:user_id/works/:id/update_monthwork' , to: 'works#update_monthwork'
+  patch  '/users/:user_id/works/:id/update_overwork' , to: 'works#update_overwork'
   
   
 

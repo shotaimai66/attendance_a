@@ -1,9 +1,33 @@
 # ユーザー
-User.create!(name:  "Example User",
-             email: "example@railstutorial.org",
-             team: "kannrisya",
-             specified_work_time: Time.zone.local(2018, 6, 30, 8,0),
+User.create!(name:  "上長A",
+             email: "examplea@railstutorial.org",
+             team: "管理者",
+             d_start_worktime: Time.zone.local(2018, 6, 30, 8,0),
+             d_end_worktime: Time.zone.local(2018, 6, 30, 19,0),
              basic_work_time: Time.zone.local(2018, 6, 30, 7,30),
+             password:              "foobar",
+             password_confirmation: "foobar",
+             admin:     true,
+             activated: true,
+             activated_at: Time.zone.now)
+
+User.create!(name:  "上長B",
+             email: "exampleb@railstutorial.org",
+             team: "管理者",
+             d_start_worktime: Time.zone.local(2018, 6, 30, 8,0),
+             d_end_worktime: Time.zone.local(2018, 6, 30, 19,0),
+             basic_work_time: Time.zone.local(2018, 6, 30, 7,30),
+             password:              "foobar",
+             password_confirmation: "foobar",
+             admin:     true,
+             activated: true,
+             activated_at: Time.zone.now)
+
+User.create!(name:  "上長C",
+             email: "examplec@railstutorial.org",
+             team: "管理者",
+             d_start_worktime: Time.zone.local(2018, 6, 30, 8,0),
+             d_end_worktime: Time.zone.local(2018, 6, 30, 19,0),
              password:              "foobar",
              password_confirmation: "foobar",
              admin:     true,
@@ -22,7 +46,9 @@ User.create!(name:  "Example User",
                password:              password,
                password_confirmation: password,
                activated: true,
-               activated_at: Time.zone.now)
+               activated_at: Time.zone.now,
+               d_start_worktime: Time.zone.local(2018, 6, 30, 8,0),
+               d_end_worktime: Time.zone.local(2018, 6, 30, 19,0))
 end
 
 # works

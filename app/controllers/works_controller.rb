@@ -5,10 +5,16 @@ class WorksController < ApplicationController
     include WorksHelper
     
     def show
-        @work = Work.find(1)
+        @work = Work.new
+        @month_work = select_user.works.find_by(day: params[:id])
+        @works = Work.where(checker: current_user.name)
         @user = User.find(params[:user_id])
         @id = params[:user_id]
-        @date = params[:id].to_datetime
+        if params[:piyo]
+            @date = params[:piyo].to_datetime
+        else
+            @date = params[:id].to_datetime
+        end
         #表示する編集ページのユーザーの一月分のレコードが存在するか検証
         #レコードが存在しない場合は新規作成（create）
         days = (Date.new(@date.year,@date.month).all_month) 
@@ -37,6 +43,7 @@ class WorksController < ApplicationController
             #(update)出社ボタン押下の日付のレコードが存在したら、それを更新
             #秒以下を切り捨てるように更新設定
                 Work.find_by(user_id: select_user.id, day: Date.today ).update(start_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
+                select_user.update(working:"出社中")
                 flash[:success] = "今日も一日頑張りましょう！"
             else
             #（creata）存在しなければ、新しくレコード作成
@@ -48,6 +55,7 @@ class WorksController < ApplicationController
             end
         elsif @name == "退社"#退社ボタンが表示されている時
             Work.find_by(user_id: select_user.id, day: Date.today ).update(end_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
+            select_user.update(working:"")
             flash[:success] = "お疲れ様でした！"
         elsif @name == "----"
         end
@@ -92,12 +100,59 @@ class WorksController < ApplicationController
     end
     
     
-    def update_detail
-        work=select_user.works.find_by(day: params[:work][:day])
-        work.update_attributes(work_detail_params)
+    def create_overwork
+        @work=select_user.works.find_by(day: params[:work][:day])
+        if params[:work][:check_box]=="true"
+            date_tomorrow=time_change.tomorrow - 9.hours
+            @work.update_attributes(create_overwork_params)
+            @work.update(endtime_plan: date_tomorrow)
+        else
+            @work.update_attributes(create_overwork_params)
+            @work.update(endtime_plan: time_change-9.hours)
+        end
         flash[:success] = "申請しました！"
         redirect_to  user_work_path(select_user,Date.today)
+        
     end
+    
+    def update_overwork
+        update_overwork_params.each do |id, item|
+            work = Work.find(id)
+            if item.fetch("check_box")=="true"
+                work.update_attributes(checker: item.fetch("checker"))  
+            end
+        end
+        flash[:success] = "申請を更新しました!(残業申請)"
+        #セレクトユーザーの編集した月ページへ
+        redirect_to  user_work_path(current_user,Date.today)
+        
+    end
+    
+    def create_monthwork
+        if params[:work]&&!params[:work][:piyo].blank?
+            @date = params[:work][:piyo].to_datetime
+        else
+            @date = params[:id].to_datetime
+        end
+        day = Date.new(@date.year,@date.month)
+                current_user.works.find_by(day: day).update(month_check: params[:work][:month_check])
+        flash[:success] = "申請しました!(１ヶ月分)"
+        redirect_to  user_work_path(select_user,Date.today)
+    end
+    
+    def update_monthwork
+        update_monthwork_params.each do |id, item|
+            work = Work.find(id)
+            if item.fetch("check_box")=="true"
+                work.update_attributes(month_check: item.fetch("month_check"))  
+            end
+        end
+        flash[:success] = "申請を更新しました!(１ヶ月分)"
+    #セレクトユーザーの編集した月ページへ
+    redirect_to  user_work_path(current_user,Date.today)
+    
+    end
+    
     
     
     
@@ -105,14 +160,26 @@ class WorksController < ApplicationController
     
      private
     def works_params
-      params.permit(works: [:start_time, :end_time, :note])[:works]
+        params.permit(works: [:start_time, :end_time, :note])[:works]
     end
     
-    def work_detail_params
+    def create_overwork_params
         params.require(:work).permit(:endtime_plan, :work_content, :checker, :day)
     end
-
     
+    def update_monthwork_params
+        params.permit(works: [:month_check, :check_box])[:works]
+    end
+    
+    def update_overwork_params
+        params.permit(works: [:checker, :check_box])[:works]
+    end
+    
+    def time_change
+        day=params[:work][:day].to_datetime
+        time=params[:work][:endtime_plan].to_datetime
+        Time.new(day.year,day.month,day.day,time.hour,time.min,time.sec)
+    end
     
   
     

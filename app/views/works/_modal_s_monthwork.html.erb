@@ -1,0 +1,109 @@
+<% @name=current_user.name %>
+
+<% month_check_users=Work.where(month_check: @name).pluck(:user_id).uniq %>
+
+<!-- 2.モーダルの配置 -->
+<div class="modal" id="modal-monthwork" tabindex="-1">
+    <div class="modal-dialog">
+        
+        <!-- 3.モーダルのコンテンツ -->
+                 
+        
+        <%= form_tag({:controller => 'works', :action => 'update_monthwork'}, {:method => :patch}) do %>
+        
+        
+        <div class="modal-content">
+    <!-- 閉じるボタン-->
+            <button class="close" type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+            </button>
+    <!--ユーザー毎表示-->
+        <% month_check_users.each do |m_user| %>
+            <% user_work_months=User.find(m_user).works.where(month_check: @name).pluck(:day).sort %>
+            <!-- 4.モーダルのヘッダ -->
+            <div class="modal-header">
+                
+                <h4 class="modal-title" id="modal-label"><%= "【#{User.find(m_user).name}からの１ヵ月分勤怠申請】" %></h4>
+            </div>
+            <!-- 5.モーダルのボディ -->
+            <div class="modal-body">
+                
+                <table class="table table-bordered">
+                    <tr>
+                        <td>月</td>
+                        <td>指示者確認</td>
+                        <td>変更</td>
+                        <td>勤怠を確認する</td>
+                        
+                    </tr>
+        <!--月ごと表示-->
+                            <% colors = ["a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a"] %>
+                            <% datas = Hash[*user_work_months.zip(colors).flatten(1)] %>
+                            <% datas.each do |date, value| %>
+                            <% @month_work = User.find(m_user).works.find_by(day: date) %>
+                                <tr class="<%=value%> top">
+                                    <td id="modal-date"><%= "#{@month_work.day.month}月"  %> </td>
+                
+                                    <td>
+                                        <%= fields_for "works[]",  @month_work do |fi| %>
+                                            <%= fi.select :month_check, [["なし", "なし"],["申請中", "#{@name}"],["承認", "#{@name}から承認済"],["否認", "否認"]], {prompt: ""}, { class: 'form-control'} %>
+                                        <% end %>
+                                    </td>
+                                    <td class="center">
+                                        <%= fields_for "works[]",  @month_work do |fi| %>
+                                            <%= fi.check_box :check_box,{},checked_value = "true",unchecked_value = "false" %>
+                                        <% end %>
+                                    </td>
+                                    
+                                    <td>
+                                      <%= link_to "確認", user_work_path(User.find_by(id: @month_work.user_id),@month_work.day), {class: 'btn btn-primary'} %>  
+                                    </td>
+            
+            
+                                    
+                                        
+                            
+                                </tr>
+                        <% end %>
+                </table>
+            
+            </div>
+            <% end %>
+            <!-- 6.モーダルのフッタ -->
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>-->
+                <%= submit_tag "変更を送信する", class: "btn btn-primary btn-submit" %>
+            </div>
+        </div>
+        <% end %>
+        
+    </div>
+</div>
+
+<script>
+  $('#modal-sample').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) //モーダルを呼び出すときに使われたボタンを取得
+  var date = button.data('date') //data-date の値を取得
+  var day = button.data('day') //data-day の値を取得
+  var date_1 = button.data('date_1') //data-date_1 の値を取得
+  
+  //Ajaxの処理はここに
+
+  var modal = $(this)  //モーダルを取得
+  modal.find('#modal-date').text(date) //モーダルの日付に値を表示
+  modal.find('#modal-day').text(day) //モーダルの曜日に値を表示
+  
+  var date_1= date_1
+   $(document).ready(function(){
+        $('#test').val(date_1);
+   });
+  
+})
+
+// var my_email= "12"
+//   $(document).ready(function(){
+//         $("#email_field").val(my_email);
+//   });
+   
+   
+</script>
