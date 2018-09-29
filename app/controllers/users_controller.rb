@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
-  before_action :correct_user,   only: [:edit, :update]
+  # before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info]
   
   include StaticPagesHelper
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       flash[:success] = "アカウントを更新しました。"
-      redirect_to user_work_path(current_user,Date.today)
+      redirect_to users_url
     else
       render 'edit'
     end
@@ -84,7 +84,12 @@ class UsersController < ApplicationController
       if User.exists?
         params.require(:user).permit(:name, :email, :team, :password,
                                     :activated, :activated_at,
-                                      :password_confirmation)
+                                      :password_confirmation,
+                                      :worker_number,
+                                      :worker_id,
+                                      :basic_work_time,
+                                      :d_start_worktime,
+                                      :d_end_worktime)
        else
         params.require(:user).permit(:name, :email, :team, :password,
                                     :activated, :activated_at,

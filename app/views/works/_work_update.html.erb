@@ -9,8 +9,10 @@
 			<td>曜日</td>
 			<td>出社</td>
 			<td>退社</td>
+			<td>翌日</td>
 			<td>在社時間</td>
 			<td>備考</td>
+			<td>指示者確認㊞</td>
 		</tr>
 		
     <!-- キーがdaysで値がcolorsの配列を作成し、CSSで各行の色分けをする  -->
@@ -39,16 +41,29 @@
                             <%= fi.time_field :end_time, {class: 'form-control'}  %>
                         <% end %>
                     </td>
+    <!--翌日のチェックボックス-->
+                    <td class="center">
+                            <%= fields_for "works[]", work do |fi| %>
+                                <%= fi.check_box :check_tomorrow,{},checked_value = "true",unchecked_value = "false" %>
+                            <% end %>
+                    </td>
     <!-- 勤務時間の表示  -->
-          　        <td>
+          　         <td>
               　        <%=end_time(key) && start_time(key) && sprintf("%.2f",  BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).to_f) %>
-          　        </td>
+              　       <br><%= tomorrow?(key)%>
+          　         </td>
     <!-- 備考のフォーム  -->
-          　        <td>
+          　         <td>
                         <%= fields_for "works[]", work do |fi| %>
                             <%= fi.text_field :note, {class: 'form-control', maxlength: 30}  %>
                         <% end %>
-          　        </td>
+          　         </td>
+    <!-- 承認確認㊞ -->
+          　         <td>
+                        <%= fields_for "works[]", work do |fi| %>
+                            <%= fi.select :work_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"],["承認済み", "承認"]], {prompt: ""} %>
+                        <% end %>
+                    </td>
       
                 </tr>
             <% end %>
@@ -62,13 +77,18 @@
                     <td rowspan="1" colspan="2"><%= sprintf("%.2f", total_works_time(y,m)) %></td><!-- 総合勤務時間の表示  -->
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td><%=sprintf("%.2f", total_time(y,m).sum)%></td><!-- 在社時間の合計の表示  -->
+                    <td></td>
                     <td></td>
             
                 </tr>
     
 	    </table>
-    <%= submit_tag "更新", :class => "btn btn-primary test" %>
+	<div style="text-align: center;">
+        <%= link_to "キャンセル", user_work_path(current_user), {class: "btn btn-primary", type: "button" } %>
+        <%= submit_tag "変更を保存する", :class => "btn btn-primary test" %>
+    </div>
 <% end %>
 
 

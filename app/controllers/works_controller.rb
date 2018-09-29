@@ -79,22 +79,28 @@ class WorksController < ApplicationController
     end
     
     def update
+        # require 'ruby-debug'; debugger; true;
         works_params.each do |id, item|
-            work = select_user.works.find(id)
-                #未来の情報は一般ユーザーは更新できないように設定（管理者のみ編集可能）
-                if work.day > Date.today && !current_user.admin?
-                    
-                #出社時間と退社時間の両方の存在を検証
-                elsif work.day!=Date.today && item["start_time"].blank? ^ item["end_time"].blank?
-                    flash[:warning] = '出社時間と退社時間は両方入力してください。'
-                #出社時間より退社時間が遅いことを検証
-                elsif item["start_time"].to_s > item["end_time"].to_s
-                    flash[:warning] = '出社時間＜退社時間となるように入力してください。'
+            work = Work.find_by(id: id)
+            if item.fetch("start_time").present?
+                start_time = Time.parse("#{work.day} #{item.fetch("start_time")}") - 9.hour
+            else
+                start_time = nil
+            end
+            if item.fetch("end_time").present?
+                if item[:check_tomorrow] == "true"
+                    end_time = Time.parse("#{work.day} #{item.fetch("end_time")}").tomorrow - 9.hour
                 else
-                    work.update_attributes(item)
-                    flash[:success] = "更新しました！なお本日以降の更新はできません。"
+                    end_time = Time.parse("#{work.day} #{item.fetch("end_time")}") - 9.hour 
                 end
+            else
+                end_time = nil
+            end
+            
+            work.update(starttime_change: start_time, endtime_change: end_time, note: item[:note], work_check: item[:work_check], check_tomorrow: item[:check_tomorrow])
         end
+        flash[:success] = "勤怠変更を申請しました！"
+        
     #セレクトユーザーの編集した月ページへ
     redirect_to  user_work_path(select_user,params[:piyo])
     end
@@ -119,7 +125,7 @@ class WorksController < ApplicationController
         update_overwork_params.each do |id, item|
             work = Work.find(id)
             if item.fetch("check_box")=="true"
-                work.update_attributes(checker: item.fetch("checker"))  
+                work.update_attributes(over_check: item.fetch("over_check"))  
             end
         end
         flash[:success] = "申請を更新しました!(残業申請)"
@@ -153,6 +159,21 @@ class WorksController < ApplicationController
     
     end
     
+    def update_changework
+        update_changework_params.each do |id, item|
+            work = Work.find_by(id: id)
+            if item[:work_check] == "承認" && item.fetch("check_box")=="true"
+                work.update(work_check: item[:work_check], start_time: work.starttime_change, end_time: work.endtime_change)
+            elsif item.fetch("check_box")=="true"
+                work.update(item).update(check_box: "false")
+            end
+        end
+        flash[:success] = "申請を更新しました!（勤怠変更）"
+    #セレクトユーザーの編集した月ページへ
+    redirect_to  user_work_path(current_user,Date.today)
+    
+    end
+    
     
     
     
@@ -160,11 +181,11 @@ class WorksController < ApplicationController
     
      private
     def works_params
-        params.permit(works: [:start_time, :end_time, :note])[:works]
+        params.permit(works: [:start_time, :end_time, :note, :work_check, :check_tomorrow])[:works]
     end
     
     def create_overwork_params
-        params.require(:work).permit(:endtime_plan, :work_content, :checker, :day)
+        params.require(:work).permit(:endtime_plan, :work_content, :over_check, :day)
     end
     
     def update_monthwork_params
@@ -172,10 +193,20 @@ class WorksController < ApplicationController
     end
     
     def update_overwork_params
-        params.permit(works: [:checker, :check_box])[:works]
+        params.permit(works: [:over_check, :check_box])[:works]
+    end
+    
+    def update_changework_params
+        params.permit(works: [:work_check, :check_box])[:works]
     end
     
     def time_change
+        day=params[:work][:day].to_datetime
+        time=params[:work][:endtime_plan].to_datetime
+        Time.new(day.year,day.month,day.day,time.hour,time.min,time.sec)
+    end
+    
+    def time_change_work
         day=params[:work][:day].to_datetime
         time=params[:work][:endtime_plan].to_datetime
         Time.new(day.year,day.month,day.day,time.hour,time.min,time.sec)

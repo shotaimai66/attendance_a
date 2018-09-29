@@ -25,7 +25,7 @@
                         <td>終了予定時刻</td>
                         <td>翌日</td>
                         <td>業務処理内容</td>
-                        <td>指示者確認印</td>
+                        <td>指示者確認㊞</td>
                         
                     </tr>
                     <tr>
@@ -33,7 +33,7 @@
                         <td id="modal-day"></td>
                         <td>
                             <%= fields_for  @work do |fi| %>
-                                <%= fi.time_field :endtime_plan, {class: 'form-control'}  %>
+                                <%= fi.time_field :endtime_plan, {class: 'form-control', required: true}  %>
                             <% end %>
                         </td>
                         <td class="center">
@@ -48,7 +48,7 @@
                         </td>
                         <td>
                             <%= fields_for @work do |fi| %>
-                                <%= fi.select :checker, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"]], {prompt: ""} %>
+                                <%= fi.select :over_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"]], {prompt: ""},{required: true} %>
                             <% end %>
                         </td>
 

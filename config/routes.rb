@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   post   '/users/:user_id/works/:id/create_monthwork' , to: 'works#create_monthwork'
   patch  '/users/:user_id/works/:id/update_monthwork' , to: 'works#update_monthwork'
   patch  '/users/:user_id/works/:id/update_overwork' , to: 'works#update_overwork'
+  patch  '/users/:user_id/works/:id/update_changework' , to: 'works#update_changework'
   
   
 

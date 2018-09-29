@@ -1,0 +1,133 @@
+<% @name=current_user.name %>
+<% changework_users=Work.where(work_check: @name).pluck(:user_id).uniq %>
+
+<!-- 2.モーダルの配置 -->
+<div class="modal" id="modal-changework" tabindex="-1">
+    <div class="modal-dialog over_work">
+
+        <!-- 3.モーダルのコンテンツ -->
+        <%= form_tag({:controller => 'works', :action => 'update_changework'}, {:method => :patch}) do %>
+
+        
+        
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <% changework_users.each do |m_user| %>
+            <% user_changeworks=User.find(m_user).works.where(work_check: @name).pluck(:day).sort %>
+            <!-- 4.モーダルのヘッダ -->
+            <div class="modal-header">
+                
+                <h4 class="modal-title" id="modal-label"><%= "【#{User.find(m_user).name}からの残業申請】" %></h4>
+            </div>
+            <!-- 5.モーダルのボディ -->
+            <div class="modal-body">
+                
+                
+    <table class="table table-bordered">
+        <tr>
+            <td rowspan="3" colspan="1" >日付</td>
+            <td rowspan="3" colspan="1">曜日</td>
+            <td rowspan="1" colspan="4">変更前</td>
+            <td rowspan="1" colspan="4">変更後</td>
+            <td rowspan="3" colspan="1">備考</td>
+            <td rowspan="3" colspan="1">指示者確認</td>
+            <td rowspan="3" colspan="1">変更</td>
+            <td rowspan="3" colspan="1">勤怠を確認する</td>
+        </tr>
+        <tr>
+            <td rowspan="1" colspan="2">出社</td>
+            <td rowspan="1" colspan="2">退社</td>
+            <td rowspan="1" colspan="2">出社</td>
+            <td rowspan="1" colspan="2">退社</td>
+        </tr>
+        <tr>
+            <td>時</td>
+            <td>分</td>
+            <td>時</td>
+            <td>分</td>
+            <td>時</td>
+            <td>分</td>
+            <td>時</td>
+            <td>分</td>
+        </tr>
+        
+
+            <% colors = ["a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a"] %>
+            <% datas = Hash[*user_changeworks.zip(colors).flatten(1)] %>
+            <% datas.each do |date, value| %>
+            <% @work = User.find(m_user).works.find_by(day: date) %>
+            <!---->
+            
+        <tr class="<%=value%> top">
+            <td id="modal-date"><%= "#{@work.day.month}/#{@work.day.day}"  %> </td><!--日付-->
+            <td id="modal-day"><%= %w(日 月 火 水 木 金 土)[@work.day.wday] %> </td><!--曜日-->
+            <td><%= @work.start_time.hour %></td><!--出社：時-->
+            <td><%= @work.start_time.min %></td><!--分-->
+            <td><%= @work.end_time.hour %></td><!--退社：時-->
+            <td><%= @work.end_time.min %></td><!--分-->
+            <td><%= @work.starttime_change.hour %></td><!--出社：時-->
+            <td><%= @work.starttime_change.min %></td><!--分-->
+            <td><%= @work.endtime_change.hour %><br><%= change_tomorrow?(@work.day) %></td><!--退社：時-->
+            <td><%= @work.endtime_change.min %></td><!--分-->
+            <td><%= @work.note %></td><!--備考-->
+            <td>
+                <%= fields_for "works[]", @work do |fi| %>
+                    <%= fi.select :work_check, [["なし", "なし"],["申請中", "#{current_user.name}"],["承認", "承認"],["否認", "否認"]], {prompt: ""}, { class: 'form-control'} %>
+                <% end %>
+            </td>
+            <td class="center">
+                <%= fields_for "works[]", @work do |fi| %>
+                    <%= fi.check_box :check_box,{},checked_value = "true",unchecked_value = "false" %>
+                <% end %>
+            </td>
+            <td>
+              <%= link_to "確認", user_work_path(User.find_by(id: @work.user_id),@work.day), {class: 'btn btn-primary'} %>  
+            </td>
+        </tr>
+    </table>
+
+            
+                    
+        <% end %>
+            
+            </div>
+            <% end %>
+            <!-- 6.モーダルのフッタ -->
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>-->
+                <%= submit_tag "変更を送信する", class: "btn btn-primary btn-submit" %>
+            </div>
+        </div>
+        <% end %>
+    </div>
+</div>
+
+<script>
+  $('#modal-sample').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) //モーダルを呼び出すときに使われたボタンを取得
+  var date = button.data('date') //data-date の値を取得
+  var day = button.data('day') //data-day の値を取得
+  var date_1 = button.data('date_1') //data-date_1 の値を取得
+  
+  //Ajaxの処理はここに
+
+  var modal = $(this)  //モーダルを取得
+  modal.find('#modal-date').text(date) //モーダルの日付に値を表示
+  modal.find('#modal-day').text(day) //モーダルの曜日に値を表示
+  
+  var date_1= date_1
+   $(document).ready(function(){
+        $('#test').val(date_1);
+   });
+  
+})
+
+// var my_email= "12"
+//   $(document).ready(function(){
+//         $("#email_field").val(my_email);
+//   });
+   
+   
+</script>

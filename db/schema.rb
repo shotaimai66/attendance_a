@@ -58,10 +58,12 @@ ActiveRecord::Schema.define(version: 20180807103615) do
     t.datetime "d_start_worktime"
     t.datetime "d_end_worktime"
     t.datetime "basic_work_time"
+    t.integer "worker_number"
+    t.integer "worker_id"
     t.text "working"
   end
 
 # Could not dump table "works" because of following StandardError
-#   Unknown type 'name' for column 'checker'
+#   Unknown type 'name' for column 'over_check'
 
 end

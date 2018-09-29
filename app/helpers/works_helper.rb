@@ -29,22 +29,52 @@ module WorksHelper
       Work.find_by(day: a, user_id: select_user.id) && Work.find_by(day: a, user_id: select_user.id).endtime_plan
     end
     
+    # 翌日判定
+    def tomorrow?(a)
+      if end_time(a) && end_time(a).day == a.tomorrow.day
+        return "(翌日)"
+      end
+    end
+    
+    # 勤怠変更　翌日判定
+    def change_tomorrow?(a)
+      if Work.find_by(user_id: select_user.id, day: a) && Work.find_by(user_id: select_user.id, day: a).endtime_change.day == a.tomorrow.day
+        return "(翌日)"
+      end
+    end
+    
+    
     # 業務処理内容
     def work_content(a)
       Work.find_by(day: a, user_id: select_user.id) && Work.find_by(day: a, user_id: select_user.id).work_content
     end
     
     # 申請状況（指示者確認）
-    def checker(a)
+    def over_check(a)
       if Work.find_by(day: a, user_id: select_user.id)
         work=Work.find_by(day: a, user_id: select_user.id) 
-        work && work.checker
-        if work.checker=="上長A" || work.checker=="上長B" || work.checker=="上長C"
-          "#{work.checker}に申請中"
-        elsif work.checker=="否認"
+        work && work.over_check
+        if work.over_check=="上長A" || work.over_check=="上長B" || work.over_check=="上長C"
+          "残業を#{work.over_check}に申請中"
+        elsif work.over_check=="否認"
           "残業否認"
-        elsif work.checker=="承認"
+        elsif work.over_check=="承認"
           "残業承認済"
+        end
+      end
+    end
+    
+    # 勤怠変更　申請状況（指示者確認）
+    def work_check(a)
+      if Work.find_by(day: a, user_id: select_user.id)
+        work=Work.find_by(day: a, user_id: select_user.id) 
+        work && work.work_check
+        if work.work_check=="上長A" || work.work_check=="上長B" || work.work_check=="上長C"
+          "勤怠変更を#{work.work_check}に申請中"
+        elsif work.work_check=="否認"
+          "勤怠変更否認"
+        elsif work.work_check=="承認"
+          "勤怠変更承認済"
         end
       end
     end
