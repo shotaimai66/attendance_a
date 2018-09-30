@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20180807103615) do
     t.datetime "d_end_worktime"
     t.datetime "basic_work_time"
     t.integer "worker_number"
-    t.integer "worker_id"
+    t.string "worker_id"
     t.text "working"
   end
 
