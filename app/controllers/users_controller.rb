@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   # before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info]
-  
+  require 'csv'
   include StaticPagesHelper
 
   def index
@@ -18,12 +18,17 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-    if @use.save
-      log_in @user
-      redirect_to user_work_path(@user,Date.today)
+    if params[:commit] == "CSVをインポート"
+      registered_count = import_users
+      redirect_to users_url, notice: "#{registered_count}件登録しました"
     else
-      render 'new'
+      @user = User.new(user_params)
+      if @use.save
+        log_in @user
+        redirect_to user_work_path(@user,Date.today)
+      else
+        render 'new'
+      end
     end
   end
 
@@ -79,6 +84,21 @@ class UsersController < ApplicationController
   
 
   private
+    # CSVインポート
+    def import_users
+      # 登録処理前のレコード数
+      current_user_count = ::User.count
+      users = []
+      # windowsで作られたファイルに対応するので、encoding: "SJIS"を付けている
+      CSV.foreach(params[:users_file].path, headers: true) do |row|
+        users << ::User.new({ name: row["name"], email: row["email"], team: row["team"], worker_number: row["worker_number"], worker_id: row["worker_id"], basic_work_time: row["basic_work_time"], 
+                              d_start_worktime: row["d_start_worktime"], d_end_worktime: row["d_end_worktime"], sv: row["sv"], admin: row["admin"], password: row["password"], activated: row["activated"]})
+      end
+      # importメソッドでバルクインサートできる
+      ::User.import(users)
+      # 何レコード登録できたかを返す
+      ::User.count - current_user_count
+    end
 
     def user_params
       if User.exists?

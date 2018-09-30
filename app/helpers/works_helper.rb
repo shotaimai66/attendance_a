@@ -2,11 +2,11 @@ module WorksHelper
   
     # 出社と退社ボタンの切替
     def work_name
-        if select_user.works.find_by(day: Date.today).nil?
+        if select_user.works.find_by(day: Time.now + 9.hour).nil?
           @name = "出社"
-        elsif select_user.works.find_by(day: Date.today).end_time
+        elsif select_user.works.find_by(day: Time.now + 9.hour).end_time
           @name = "----"
-        elsif select_user.works.find_by(day: Date.today).start_time
+        elsif select_user.works.find_by(day: Time.now + 9.hour).start_time
           @name = "退社"
         else
           @name = "出社"

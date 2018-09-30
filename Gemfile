@@ -18,6 +18,8 @@ gem 'jbuilder',     '2.7.0'
 gem 'rails-i18n'
 gem 'rinku'
 gem 'friendly_id'
+# bulk insert
+gem 'activerecord-import'
 
 
 group :development, :test do

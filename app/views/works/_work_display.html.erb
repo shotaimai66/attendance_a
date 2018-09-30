@@ -31,7 +31,7 @@
                 </table>
                 
 <!--【各種申請のお知らせ】表示-->
-                <% if current_user.admin? %>
+                <% if current_user.sv == true %>
                     <%= render 'works/request_state' %>   
                 <% end %>
                 

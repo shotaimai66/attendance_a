@@ -1,12 +1,9 @@
 <div class="center jumbotron">
     <h1>勤怠システム</h1>
-
-
-    <%= link_to "ログイン", login_path, class: "btn btn-lg btn-primary" %>
-    
-    
-    
-    <p>アカウント作成は<%= link_to "こちら", new_user_path, class: "" %>から</p>
+    <% unless logged_in? %>
+        <%= link_to "ログイン", login_path, class: "btn btn-lg btn-primary" %>
+        <p>アカウント作成は<%= link_to "こちら", new_user_path, class: "" %>から</p>
+    <% end %>
   </div>
 
   

@@ -78,6 +78,24 @@ p {
   }
 }
 
+#admin {
+  color: red;
+}
+
+#supervisor {
+  color: blue;
+}
+
+#user {
+  color: green;
+}
+
+.plete {
+  float: left;
+  margin-right: 10px;
+  padding-top: 15px;
+}
+
 /* footer */
 
 footer {
@@ -303,6 +321,11 @@ span.picture {
   input {
     border: 0;
   }
+}
+
+/* 出社中社員一覧 */
+.working-table,th {
+  text-align: center;
 }
 
 /* テーブル */

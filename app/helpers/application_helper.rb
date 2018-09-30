@@ -11,4 +11,18 @@ module ApplicationHelper
       page_title + " | " + base_title                 # 文字列の結合
     end
   end
+  
+  def user_name_plete
+    if logged_in?
+      if current_user.admin?
+        "admin"
+      elsif current_user.sv?
+        "supervisor"
+      else
+        "user"
+      end
+    end
+  end
+
+  
 end

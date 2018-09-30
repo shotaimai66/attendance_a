@@ -11,8 +11,11 @@ class SessionsController < ApplicationController
         log_in user
         params[:session][:remember_me] == '1' ? remember(user) : forget(user)
         params[:month] = Date.today.month
-        redirect_to user_work_path(user,month)
-        
+        if current_user.admin?
+          redirect_to root_url
+        else
+          redirect_to user_work_url(user,month)
+        end
       else
         message  = "アカウントが有効化されていません。 "
         message += "Prograから送られてきたメールのリンクをご確認ください！"
