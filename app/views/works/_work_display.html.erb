@@ -101,7 +101,7 @@
                         <td><%=start_time(key) && start_time(key).min%></td>
                     <!--出社ボタン-->
                         <td>
-                            <% if key==Date.today && select_user.works.find_by(day: Date.today).start_time.blank?  %>
+                            <% if key.day==Time.current.day && select_user.works.find_by(day: Time.current).start_time.blank?  %>
                                 <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
                             <% end %>
                         </td>
@@ -110,7 +110,7 @@
                         <td><%=start_time(key) && end_time(key) && end_time(key).min%></td>
                     <!--退社ボタン-->
                         <td>
-                            <% if key==Date.today && select_user.works.find_by(day: Date.today) && select_user.works.find_by(day: Date.today).start_time && select_user.works.find_by(day: Date.today).end_time.nil? %>
+                            <% if key.day==Time.current.day && select_user.works.find_by(day: Time.current) && select_user.works.find_by(day: Time.current).start_time && select_user.works.find_by(day: Time.current).end_time.nil? %>
                                 <%= button_to "退社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
                             <% end %>
                         </td>

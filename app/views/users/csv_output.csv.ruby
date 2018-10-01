@@ -6,8 +6,12 @@ CSV.generate do |csv|
   @works.each do |work|
     csv_column_values = [
       work.day,
-      work.start_time,
-      work.end_time,
+      if work.start_time
+        work.start_time.strftime("%R")
+      end,
+      if work.end_time
+        work.end_time.strftime("%R")
+      end,
       work.note,
     ]
     csv << csv_column_values

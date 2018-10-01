@@ -47,7 +47,7 @@
                         <td id="modal-day"><%= %w(日 月 火 水 木 金 土)[@over_work.day.wday] %> </td>
                         <td>
                             <%= "#{@over_work.endtime_plan.strftime("%H")}:#{@over_work.endtime_plan.strftime("%M")}"  %><br>
-                            <%= "(翌日)" unless @over_work.endtime_plan.day == date %>
+                            <%= "(翌日)" unless @over_work.endtime_plan.day == date.day %>
                         </td>
                         <td>
                             <%= "#{select_user.d_end_worktime.strftime("%H")}:#{select_user.d_end_worktime.strftime("%M")}" %>

@@ -10,12 +10,15 @@
 <% end %>
 
 <%= form_tag users_path, method: 'post', multipart: true do %>
-    <div class="search_item">
-      <%= text_field_tag 'filename',"", id: "filename", disabled: true %>
-      <%= file_field_tag 'users_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));" %>
-      <%= button_tag 'ファイル選択', class: %i(btn-primary csv_input_btn), type: 'button', onclick: "$('#file_input').click();" %>
-    </div>
-    <%= submit_tag 'CSVをインポート', class: "btn btn-primary csv_submit" %>
+  <div class="input-group" style="width: 300px;">
+    <span class="input-group-btn">
+      <%= button_tag 'ファイル選択', class: %i(btn btn-default csv_input_btn), type: 'button', onclick: "$('#file_input').click();" %>
+    </span>
+    <%= file_field_tag 'users_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));" %>
+    <%= text_field_tag 'filename',"", id: "filename", disabled: true, class:"form-control" %>
+  </div>
+  <br>
+  <%= submit_tag 'CSVをインポート', class: "btn btn-primary csv_submit" %>
 <% end %>
 
 
