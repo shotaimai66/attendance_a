@@ -7,13 +7,17 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>
-                            <% unless m=="4" %>
-                            <%=  link_to "←", user_work_path(piyo: @date.prev_month), { :class => "btn btn-primary" } %>
-                            <%end%>
+                            <% unless params[:authority] %>
+                                <% unless m=="4" %>
+                                <%=  link_to "←", user_work_path(piyo: @date.prev_month), { :class => "btn btn-primary" } %>
+                                <% end %>
+                            <% end %>
                             <%= y %>年<%= m %>月の時間管理表
-                            <% unless m=="3" %>
-                            <%=  link_to "→", user_work_path(piyo: @date.next_month), { :class => "btn btn-primary" } %>
-                            <%end%>
+                            <% unless params[:authority] %>
+                                <% unless m=="3" %>
+                                <%=  link_to "→", user_work_path(piyo: @date.next_month), { :class => "btn btn-primary" } %>
+                                <% end %>
+                            <% end %>
                         </td>    
                         <td>指定勤務開始時間  <%= "#{select_user.d_start_worktime.strftime("%H")}:#{select_user.d_start_worktime.strftime("%M")}" %><br>
                             指定勤務終了時間  <%= "#{select_user.d_end_worktime.strftime("%H")}:#{select_user.d_end_worktime.strftime("%M")}" %></td>
@@ -29,7 +33,8 @@
                         <td>締め <%= "#{@date.month} / #{@date.end_of_month.day}" %></td>
                     </tr>
                 </table>
-                
+
+            <% unless params[:authority] %>
 <!--【各種申請のお知らせ】表示-->
                 <% if current_user.sv == true %>
                     <%= render 'works/request_state' %>   
@@ -40,12 +45,12 @@
                 <%= link_to "csv出力",user_csv_output_path(format: :csv, date: @date), class: "btn btn-primary" %>
 <!--修正ログ表示ボタン-->
                 <%= link_to "勤怠修正ログ（承認済）", edit_user_work_path(piyo: @date), class: "btn btn-primary" %>
-                
+            <% end %>    
                 
                 
 <!-- 最初の一行目    -->
-                <table class="table table-bordered">
-                    
+                <table class="table table-bordered table-striped">
+                    <thead>
                     <tr>
                         <td rowspan="3" colspan="1" >残業申請</td>
                         <td rowspan="3" colspan="1">日付</td>
@@ -73,66 +78,110 @@
                         <td >時</td>
                         <td >分</td> 
                     </tr>
-    
+                    </thead>
         
         
         
 <!-- レコード表示部分 each文 -->
                 <% days = (Date.new(y,m).all_month) %>
-                　<!-- キーがdaysで値がcolorsの配列を作成し、CSSで各行の色分けをする  -->
-                    <% colors = ["a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a"] %>
-                    <% datas = Hash[*days.zip(colors).flatten(1)] %>
-                    <% datas.each do |key, value| %>
-                    <% work = select_user.works.find_by(day: key) %>
-                <tr class="<%=value%>">
-                    <!--モーダルウィンドウ（残業申請）-->
-                        <td>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
-                                残業申請
-                            </button>
-                            <%= render 'works/modal_r_overwork' %>
-                        </td>
-                    <!--日付-->
-                        <td><%=key.month%>/<%=key.day%></td>
-                    <!--曜日-->
-                        <td><%= %w(日 月 火 水 木 金 土)[key.wday]%></td>
-                    <!--出社時間-->
-                        <td><%=start_time(key) && start_time(key).hour%></td>
-                        <td><%=start_time(key) && start_time(key).min%></td>
-                    <!--出社ボタン-->
-                        <td>
-                            <% if key.day==Time.current.day && select_user.works.find_by(day: Time.current).start_time.blank?  %>
-                                <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
-                            <% end %>
-                        </td>
-                    <!--退社時間-->
-                        <td><%=start_time(key) && end_time(key) && end_time(key).hour%><br><%= tomorrow?(key) %></td>
-                        <td><%=start_time(key) && end_time(key) && end_time(key).min%></td>
-                    <!--退社ボタン-->
-                        <td>
-                            <% if key.day==Time.current.day && select_user.works.find_by(day: Time.current) && select_user.works.find_by(day: Time.current).start_time && select_user.works.find_by(day: Time.current).end_time.nil? %>
-                                <%= button_to "退社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
-                            <% end %>
-                        </td>
-                    <!--在社時間：(時間の差を求める際、カラム型がtimeとdatetimeで違うので注意。基本的にdatetimeを選択した方が無難)-->
-                        <td><%=end_time(key) && start_time(key) && sprintf("%.2f", BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).to_f ) %></td>
-                    <!--備考-->
-                        <td><%= select_user.works.find_by(day: key) && select_user.works.find_by(day: key).note %></td>
-                    <!--終了予定時刻-->
-                        <td><%=endtime_plan(key) && endtime_plan(key).strftime("%H")%></td>
-                        <td><%=endtime_plan(key) && endtime_plan(key).strftime("%M")%></td>
-                    <!--時間外時間-->
-                        <td><%=sprintf("%.2f", overwork_time(work)) if work.endtime_plan %></td>
-                    <!--業務処理内容-->
-                        <td><%=work_content(key)%></td>
-                    <!--指示者確認㊞-->
-                        <td>
-                            <%=over_check(key)%><br>
-                            <%= work_check(key) %>
-                        </td>
-                    </tr>
+                <% datas = Hash[*days.zip(@work_array).flatten(1)] %>
+                <% datas.each do |key, work| %>
+                        <% if work == nil %>
+                        <tr>
+                            <!--モーダルウィンドウ（残業申請）-->
+                                <td>
+                                    <% unless params[:authority] %>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#modal" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
+                                            残業申請
+                                        </button>
+                                        <%= render 'works/modal_r_overwork' %>
+                                    <% end %>
+                                </td>
+                            <!--日付-->
+                                <td><%=key.month%>/<%=key.day%></td>
+                            <!--曜日-->
+                                <td><%= %w(日 月 火 水 木 金 土)[key.wday]%></td>
+                            <!--出社時間-->
+                                <td></td>
+                                <td></td>
+                            <!--出社ボタン-->
+                                <td>
+                                    <% if key.strftime("%F")==Time.current.strftime("%F") %>
+                                        <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                                    <% end %>
+                                </td>
+                                </td>
+                            <!--退社時間-->
+                                <td></td>
+                                <td></td>
+                            <!--退社ボタン-->
+                                <td></td>
+                            <!--在社時間：(時間の差を求める際、カラム型がtimeとdatetimeで違うので注意。基本的にdatetimeを選択した方が無難)-->
+                                <td></td>
+                            <!--備考-->
+                                <td></td>
+                            <!--終了予定時刻-->
+                                <td></td>
+                                <td></td>
+                            <!--時間外時間-->
+                                <td></td>
+                            <!--業務処理内容-->
+                                <td></td>
+                            <!--指示者確認㊞-->
+                                <td></td>
+                            </tr>
+                        <% else %>
+                        <tr>
+                            <!--モーダルウィンドウ（残業申請）-->
+                                <td>
+                                    <% unless params[:authority] %>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#modal" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
+                                            残業申請
+                                        </button>
+                                        <%= render 'works/modal_r_overwork' %>
+                                     <% end %>
+                                </td>
+                            <!--日付-->
+                                <td><%=key.month%>/<%=key.day%></td>
+                            <!--曜日-->
+                                <td><%= %w(日 月 火 水 木 金 土)[key.wday]%></td>
+                            <!--出社時間-->
+                                <td><%= work.start_time.hour if work.start_time %></td>
+                                <td><%= work.start_time.min if work.start_time %></td>
+                            <!--出社ボタン-->
+                                <td>
+                                    <% if key.strftime("%F")==Time.current.strftime("%F") && work.start_time.blank?  %>
+                                        <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                                    <% end %>
+                                </td>
+                            <!--退社時間-->
+                                <td><%= work.end_time.hour if work.end_time %><br><%= tomorrow?(work, key) %></td>
+                                <td><%= work.end_time.min if work.end_time %></td>
+                            <!--退社ボタン-->
+                                <td>
+                                    <% if key.strftime("%F")==Time.current.strftime("%F") && work.start_time && work.end_time.nil? %>
+                                        <%= button_to "退社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                                    <% end %>
+                                </td>
+                            <!--在社時間：(時間の差を求める際、カラム型がtimeとdatetimeで違うので注意。基本的にdatetimeを選択した方が無難)-->
+                                <td><%=work.end_time && work.start_time && sprintf("%.2f", BigDecimal(((work.end_time - work.start_time)/60/60).to_s).to_f ) %></td>
+                            <!--備考-->
+                                <td><%= work.note %></td>
+                            <!--終了予定時刻-->
+                                <td><%= work.endtime_plan.strftime("%H") if work.endtime_plan %></td>
+                                <td><%= work.endtime_plan.strftime("%M") if work.endtime_plan %></td>
+                            <!--時間外時間-->
+                                <td><%=sprintf("%.2f", overwork_time(work)) if work.endtime_plan %></td>
+                            <!--業務処理内容-->
+                                <td><%= work.work_content %></td>
+                            <!--指示者確認㊞-->
+                                <td>
+                                    <%=over_check(work)%><br>
+                                    <%= work_check(work) %>
+                                </td>
+                            </tr>
+                        <% end %>
                 <% end %>
-        
         
         
         
@@ -157,23 +206,26 @@
                         <!--所属長承認　月ごと-->
                         <td>
                             所属長承認  <%= month_check_window %><br>
-                            <%= form_for @work, :url => { :controller => :works, :action => :create_monthwork },method: :post do %>
-                            
-                                <%= fields_for "work", @month_work do |fi| %>
-                                    <%= fi.select :month_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"]], {prompt: ""},{required: true} %>
+                            <% unless params[:authority] %>
+                                <%= form_for @work, :url => { :controller => :works, :action => :create_monthwork },method: :post do %>
+                                
+                                    <%= fields_for "work", @month_work do |fi| %>
+                                        <%= fi.select :month_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"]], {prompt: ""},{required: true} %>
+                                    <% end %>
+                                    
+                                    <%= fields_for "work", @month_work do |fi| %>
+                                        <%= fi.hidden_field :piyo, :value => params[:piyo] %>
+                                    <% end %>
+                                    
+                                    
+                                    <%= submit_tag "申請", class: "btn btn-primary" %>
+                                    
                                 <% end %>
-                                
-                                <%= fields_for "work", @month_work do |fi| %>
-                                    <%= fi.hidden_field :piyo, :value => params[:piyo] %>
-                                <% end %>
-                                
-                                
-                                <%= submit_tag "申請", class: "btn btn-primary" %>
-                                
                             <% end %>
                         </td>
                     </tr>
                 </table>
+
 
 </div>
 

@@ -83,7 +83,7 @@
                 <% end %>
             </td>
             <td>
-              <%= link_to "確認", user_work_path(User.find_by(id: @work.user_id),@work.day), {class: 'btn btn-primary'} %>  
+              <%= link_to "確認", user_work_path(User.find_by(id: @work.user_id),@work.day, authority: "super"), {class: 'btn btn-primary'} %>  
             </td>
         </tr>
     </table>

@@ -30,8 +30,8 @@ module WorksHelper
     end
     
     # 翌日判定
-    def tomorrow?(a)
-      if end_time(a) && end_time(a).day == a.tomorrow.day
+    def tomorrow?(work, day)
+      if work.end_time && work.end_time == day.tomorrow
         return "(翌日)"
       end
     end
@@ -50,9 +50,8 @@ module WorksHelper
     end
     
     # 申請状況（指示者確認）
-    def over_check(a)
-      if Work.find_by(day: a, user_id: select_user.id)
-        work=Work.find_by(day: a, user_id: select_user.id) 
+    def over_check(work)
+      if work
         work && work.over_check
         if work.over_check=="上長A" || work.over_check=="上長B" || work.over_check=="上長C"
           "残業を#{work.over_check}に申請中"
@@ -65,9 +64,8 @@ module WorksHelper
     end
     
     # 勤怠変更　申請状況（指示者確認）
-    def work_check(a)
-      if Work.find_by(day: a, user_id: select_user.id)
-        work=Work.find_by(day: a, user_id: select_user.id) 
+    def work_check(work)
+      if work
         work && work.work_check
         if work.work_check=="上長A" || work.work_check=="上長B" || work.work_check=="上長C"
           "勤怠変更を#{work.work_check}に申請中"
@@ -82,9 +80,10 @@ module WorksHelper
     # 在社時間の合計
     def total_time(y,m)
       days = (Date.new(y,m).all_month)
-      days.map do |day|
-        if start_time(day)&&end_time(day)
-          (end_time(day)-start_time(day))/60/60
+      works = Work.where(user_id: select_user.id, day: days)
+      works.map do |work|
+        if work.start_time && work.end_time
+          (work.end_time - work.start_time)/60/60
         else
           0
         end
@@ -125,7 +124,7 @@ module WorksHelper
       else
         day = params[:id].to_datetime.beginning_of_month
       end
-      if current_user.works.find_by(day: day).month_check.nil?
+      if current_user.works.find_by(day: day).nil? || current_user.works.find_by(day: day).month_check.nil?
         "未"
       else
          current_user.works.find_by(day: day).month_check

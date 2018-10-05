@@ -1,10 +1,11 @@
 class WorksController < ApplicationController
     before_action :logged_in_user, only: [:show, :edit, :create, :update]
-    before_action :aa, only: [:show, :edit, :create, :update]
+    before_action :aa, only: [:edit, :create, :update]
     before_action :user_being, only: [:show, :edit, :create, :update]
     include WorksHelper
     
     def show
+        @shops = User.order(:id)
         @work = Work.new
         @month_work = select_user.works.find_by(day: params[:id])
         @works = Work.where(checker: current_user.name)
@@ -15,52 +16,50 @@ class WorksController < ApplicationController
         else
             @date = params[:id].to_datetime
         end
-        #表示する編集ページのユーザーの一月分のレコードが存在するか検証
-        #レコードが存在しない場合は新規作成（create）
-        days = (Date.new(@date.year,@date.month).all_month) 
-        days.each do |day|
-            unless select_user.works.find_by(day: day)
-                Work.create(user_id: params[:user_id], day: day)
+        @works_list = Work.where(user_id: select_user.id, day: @date.all_month)
+        @work_array = []
+        @works_list.each do |work|
+            @work_array << work
+        end
+        n = 0
+        @date.all_month.each do |date|
+            if @work_array[n] == nil
+                @work_array.insert(n, nil)
+            elsif @work_array[n].day.strftime("%F") != date.strftime("%F")
+                @work_array.insert(n, nil)
             end
+                n = n+1
         end
-        if params[:piyo]  
-           @date = params[:piyo].to_datetime
-        
-        elsif params[:id].to_datetime.month != Date.today.month
-              @date = params[:id].to_datetime
-              
-        else
-              @date = Date.today
-            
-        end
-        
     end
     
     def create
     work_name
+        time = Time.new.strftime("%Y-%-m-%-d,%-H:%-M").to_time
         if @name == "出社"#出社ボタンが表示されている時
-            if Work.find_by(user_id: select_user.id, day: Date.today)
+            # カラムに保存するデータは秒を０にする
+            if Work.find_by(user_id: select_user.id, day: Time.current)
             #(update)出社ボタン押下の日付のレコードが存在したら、それを更新
             #秒以下を切り捨てるように更新設定
-                Work.find_by(user_id: select_user.id, day: Date.today ).update(start_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
+                Work.find_by(user_id: select_user.id, day: Time.current ).update(start_time: time)
                 select_user.update(working:"出社中")
                 flash[:success] = "今日も一日頑張りましょう！"
             else
             #（creata）存在しなければ、新しくレコード作成
             #秒以下を切り捨てるように更新設定
                 @work = Work.create(user_id: select_user.id, 
-                        start_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00),
-                        day: Time.now)
+                        start_time: time,
+                        day: Time.current)
                 flash[:success] = "今日も一日頑張りましょう！"
             end
         elsif @name == "退社"#退社ボタンが表示されている時
-            Work.find_by(user_id: select_user.id, day: Date.today ).update(end_time: Time.new(Time.now.year,Time.now.month,Time.now.day,Time.new.hour,Time.now.min,00))
+            Work.find_by(user_id: select_user.id, day: Time.current ).update(end_time: time)
             select_user.update(working:"")
+             
             flash[:success] = "お疲れ様でした！"
         elsif @name == "----"
         end
         #更新したワークのユーザーのトップページへ
-        redirect_to user_work_path(select_user,Date.today)
+        redirect_to user_work_path(select_user,Time.current)
     end
     
     def edit
@@ -69,18 +68,25 @@ class WorksController < ApplicationController
         @date = params[:piyo].to_datetime
         #表示する編集ページのユーザーの一月分のレコードが存在するか検証
         #レコードが存在しない場合は新規作成（create）
-        days = (Date.new(@date.year,@date.month).all_month) 
-        days.each do |day|
-            unless select_user.works.find_by(day: day)
-                Work.create(user_id: params[:user_id], day: day)
+        days = (Date.new(@date.year,@date.month).all_month)
+        if Work.where(user_id: @id, day: days).count < days.count
+            days.each do |day|
+                unless select_user.works.find_by(day: day)
+                    Work.create(user_id: select_user.id, day: day)
+                end
             end
+        end
+        @works_list = Work.where(user_id: @id, day: @date.all_month)
+        @work_array = []
+        @works_list.each do |work|
+            @work_array << work
         end
         
     end
     
     def update
-        # require 'ruby-debug'; debugger; true;
-        works_params.each do |id, item|
+        work_params.each do |id, item|
+            
             work = Work.find_by(id: id)
             if item.fetch("start_time").present?
                 start_time = Time.parse("#{work.day} #{item.fetch("start_time")}") - 9.hour
@@ -211,11 +217,5 @@ class WorksController < ApplicationController
         time=params[:work][:endtime_plan].to_datetime
         Time.new(day.year,day.month,day.day,time.hour,time.min,time.sec)
     end
-    
-  
-    
-
-   
-   
     
 end

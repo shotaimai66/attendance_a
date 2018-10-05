@@ -3,7 +3,7 @@
 <%= form_tag user_work_path,  method: :put do %>
 <!-- 更新したレダイレクト先に編集した月のページを表示させるため、paramsを維持させる  -->
 <%= hidden_field_tag :piyo, params[:piyo] %>
-<table class="table table-bordered">		
+<table class="table table-bordered table-striped">		
         <tr>
 			<td>日付</td>
 			<td>曜日</td>
@@ -16,18 +16,20 @@
 		</tr>
 		
     <!-- キーがdaysで値がcolorsの配列を作成し、CSSで各行の色分けをする  -->
-		<% days = (Date.new(y,m).all_month) %>
-        <% colors = ["a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a"] %>
-        <% datas = Hash[*days.zip(colors).flatten(1)] %>
-        
-        <% datas.each do |key, value| %>
+    
+		        <% days = (Date.new(y,m).all_month) %>
+                <% datas = Hash[*days.zip(@work_array).flatten(1)] %>
+                <% datas.each do |key, work| %>
+
 	<!-- workに日付ごとのレコード情報を代入し、time_fieldsのデフォルト時間を表示させる  -->
-            <% work = select_user.works.find_by(day: key) %>
-    　　
-                <tr class="<%=value%>">
+    　　              <tr>
+  
   
                     <td><%=key.month%>/<%=key.day%></td>
-                    <td><%= %w(日 月 火 水 木 金 土)[key.wday] %></td>
+                    
+    <!--曜日-->
+                    <td><%= %w(日 月 火 水 木 金 土)[key.wday]%></td>
+            
             
     <!-- 出勤時間のフォーム  -->
                     <td>
@@ -49,8 +51,8 @@
                     </td>
     <!-- 勤務時間の表示  -->
           　         <td>
-              　        <%=end_time(key) && start_time(key) && sprintf("%.2f",  BigDecimal(((end_time(key) - start_time(key))/60/60).to_s).to_f) %>
-              　       <br><%= tomorrow?(key)%>
+                      <%=work.end_time && work.start_time && sprintf("%.2f" , BigDecimal(((work.end_time - work.start_time)/60/60).to_s).to_f) %>
+              　       <br><%= tomorrow?(work, key)%>
           　         </td>
     <!-- 備考のフォーム  -->
           　         <td>
