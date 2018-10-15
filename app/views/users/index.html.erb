@@ -14,8 +14,8 @@
     <span class="input-group-btn">
       <%= button_tag 'ファイル選択', class: %i(btn btn-default csv_input_btn), type: 'button', onclick: "$('#file_input').click();" %>
     </span>
-    <%= file_field_tag 'users_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));" %>
-    <%= text_field_tag 'filename',"", id: "filename", disabled: true, class:"form-control" %>
+    <%= file_field_tag 'users_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));" , required: "required" %>
+    <%= text_field_tag 'filename',"", id: "filename", disabled: true, class:"form-control", placeholder: 'CSVファイルを選択' %>
   </div>
   <br>
   <%= submit_tag 'CSVをインポート', class: "btn btn-primary csv_submit" %>

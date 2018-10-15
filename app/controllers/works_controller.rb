@@ -16,7 +16,7 @@ class WorksController < ApplicationController
         else
             @date = params[:id].to_datetime
         end
-        @works_list = Work.where(user_id: select_user.id, day: @date.all_month)
+        @works_list = Work.where(user_id: select_user.id, day: @date.all_month).order(:day)
         @work_array = []
         @works_list.each do |work|
             @work_array << work
@@ -76,7 +76,7 @@ class WorksController < ApplicationController
                 end
             end
         end
-        @works_list = Work.where(user_id: @id, day: @date.all_month)
+        @works_list = Work.where(user_id: @id, day: @date.all_month).order(:day)
         @work_array = []
         @works_list.each do |work|
             @work_array << work
@@ -85,7 +85,7 @@ class WorksController < ApplicationController
     end
     
     def update
-        work_params.each do |id, item|
+        works_params.each do |id, item|
             
             work = Work.find_by(id: id)
             if item.fetch("start_time").present?

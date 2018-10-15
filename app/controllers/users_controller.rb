@@ -20,15 +20,19 @@ class UsersController < ApplicationController
   def create
     # admin　ユーザー一覧からのCSVインポート
     if params[:commit] == "CSVをインポート"
-      registered_count = import_users
-      unless @errors.count == 0
-        flash[:danger] = "#{@errors.count}件登録に失敗しました"
+      if params[:users_file].content_type == "text/csv"
+          registered_count = import_users
+          unless @errors.count == 0
+            flash[:danger] = "#{@errors.count}件登録に失敗しました"
+          end
+          unless registered_count == 0
+            flash[:success] = "#{registered_count}件登録しました"
+          end
+          redirect_to users_url(error_users: @errors)
+      else
+        flash[:danger] = "CSVファイルのみ有効です"
+        redirect_to users_url
       end
-      unless registered_count == 0
-        flash[:success] = "#{registered_count}件登録しました"
-      end
-      redirect_to users_url(error_users: @errors)
-      
     else
       @user = User.new(user_params)
       if @use.save
@@ -102,8 +106,8 @@ class UsersController < ApplicationController
       CSV.foreach(params[:users_file].path, headers: true) do |row|
         user = User.new({ id: row["id"], name: row["name"], email: row["email"], team: row["team"], worker_number: row["worker_number"], worker_id: row["worker_id"], basic_work_time: row["basic_work_time"], 
                               d_start_worktime: row["d_start_worktime"], d_end_worktime: row["d_end_worktime"], sv: row["sv"], admin: row["admin"], password: row["password"], activated: "true"})
-        if user.valid?                      
-          users << ::User.new({id: row["id"], name: row["name"], email: row["email"], team: row["team"], worker_number: row["worker_number"], worker_id: row["worker_id"], basic_work_time: row["basic_work_time"], 
+        if user.valid?
+            users << ::User.new({id: row["id"], name: row["name"], email: row["email"], team: row["team"], worker_number: row["worker_number"], worker_id: row["worker_id"], basic_work_time: row["basic_work_time"], 
                               d_start_worktime: row["d_start_worktime"], d_end_worktime: row["d_end_worktime"], sv: row["sv"], admin: row["admin"], password: row["password"], activated: "true"})
         else
           @errors << user.errors.inspect

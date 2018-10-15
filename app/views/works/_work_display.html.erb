@@ -45,6 +45,8 @@
                 <%= link_to "csv出力",user_csv_output_path(format: :csv, date: @date), class: "btn btn-primary" %>
 <!--修正ログ表示ボタン-->
                 <%= link_to "勤怠修正ログ（承認済）", edit_user_work_path(piyo: @date), class: "btn btn-primary" %>
+            <% else %>
+                <h3><span class="label label-success">確認:  <%= "#{select_user.name}/#{y}年#{m}月" %></span></h3>
             <% end %>    
                 
                 
@@ -106,8 +108,10 @@
                                 <td></td>
                             <!--出社ボタン-->
                                 <td>
-                                    <% if key.strftime("%F")==Time.current.strftime("%F") %>
-                                        <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                                    <% unless params[:authority] %>
+                                        <% if key.strftime("%F")==Time.current.strftime("%F") %>
+                                            <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                                        <% end %>
                                     <% end %>
                                 </td>
                                 </td>
@@ -150,8 +154,10 @@
                                 <td><%= work.start_time.min if work.start_time %></td>
                             <!--出社ボタン-->
                                 <td>
-                                    <% if key.strftime("%F")==Time.current.strftime("%F") && work.start_time.blank?  %>
-                                        <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                                    <% unless params[:authority] %>
+                                        <% if key.strftime("%F")==Time.current.strftime("%F") && work.start_time.blank?  %>
+                                            <%= button_to "出社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                                        <% end %>
                                     <% end %>
                                 </td>
                             <!--退社時間-->
@@ -159,8 +165,10 @@
                                 <td><%= work.end_time.min if work.end_time %></td>
                             <!--退社ボタン-->
                                 <td>
-                                    <% if key.strftime("%F")==Time.current.strftime("%F") && work.start_time && work.end_time.nil? %>
-                                        <%= button_to "退社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                                    <% unless params[:authority] %>
+                                        <% if key.strftime("%F")==Time.current.strftime("%F") && work.start_time && work.end_time.nil? %>
+                                            <%= button_to "退社", {:action => "create"},{ class: "btn btn-default btn-lg btn-block"}  %>
+                                        <% end %>
                                     <% end %>
                                 </td>
                             <!--在社時間：(時間の差を求める際、カラム型がtimeとdatetimeで違うので注意。基本的にdatetimeを選択した方が無難)-->

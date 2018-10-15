@@ -1,99 +1,101 @@
+<!--現在の決済権者の名前-->
 <% @name=current_user.name %>
+<!--現在の決済権者の名前が入った、workのレコード-->
 <% overwork_users=Work.where(over_check: @name).pluck(:user_id).uniq %>
 
-<!-- 2.モーダルの配置 -->
-<div class="modal" id="modal-overwork" tabindex="-1">
-    <div class="modal-dialog over_work">
-
-        <!-- 3.モーダルのコンテンツ -->
-        <%= form_tag({:controller => 'works', :action => 'update_overwork'}, {:method => :patch}) do %>
-
+        <!-- 2.モーダルの配置 -->
+        <div class="modal" id="modal-overwork" tabindex="-1">
+            <div class="modal-dialog over_work">
         
-        
-        <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <% overwork_users.each do |m_user| %>
-            <% user_overworks=User.find(m_user).works.where(over_check: @name).pluck(:day).sort %>
-            <!-- 4.モーダルのヘッダ -->
-            <div class="modal-header">
-                
-                <h4 class="modal-title" id="modal-label"><%= "【#{User.find(m_user).name}からの残業申請】" %></h4>
-            </div>
-            <!-- 5.モーダルのボディ -->
-            <div class="modal-body">
-                
-                <table class="table table-bordered">
-                    <tr>
-                        <td>日付</td>
-                        <td>曜日</td>
-                        <td>終了予定時間</td>
-                        <td>指定勤務終了時間</td>
-                        <td>時間外時間</td>
-                        <td>業務処理内容</td>
-                        <td>指示者確認㊞</td>
-                        <td>変更</td>
-                        <td>勤怠を確認</td>
-                        
-                    </tr>
-            <% colors = ["a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a","b","a"] %>
-            <% datas = Hash[*user_overworks.zip(colors).flatten(1)] %>
-            <% datas.each do |date, value| %>
-            <% @over_work = User.find(m_user).works.find_by(day: date) %>
-            
-                    <tr class="<%=value%> top" >
-                        <td id="modal-date"><%= "#{@over_work.day.month}/#{@over_work.day.day}"  %> </td>
-                        <td id="modal-day"><%= %w(日 月 火 水 木 金 土)[@over_work.day.wday] %> </td>
-                        <td>
-                            <%= "#{@over_work.endtime_plan.strftime("%H")}:#{@over_work.endtime_plan.strftime("%M")}"  %><br>
-                            <%= "(翌日)" unless @over_work.endtime_plan.day == date.day %>
-                        </td>
-                        <td>
-                            <%= "#{select_user.d_end_worktime.strftime("%H")}:#{select_user.d_end_worktime.strftime("%M")}" %>
-                        </td>
-                        <td>
-                            <%= sprintf("%.2f", overwork_time(@over_work) ) %>
-                        </td>
-                        <td>
-                                <%= @over_work.work_content  %>
-                        </td>
-                        <td>
-                            <%= fields_for "works[]", @over_work do |fi| %>
-                                <%= fi.select :over_check, [["なし", "なし"],["申請中", "#{current_user.name}"],["承認", "承認"],["否認", "否認"]], {prompt: ""}, { class: 'form-control'} %>
-                            <% end %>
-                        </td>
-                        <td class="center">
-                            <%= fields_for "works[]", @over_work do |fi| %>
-                                <%= fi.check_box :check_box,{},checked_value = "true",unchecked_value = "false" %>
-                            <% end %>
-                        </td>
-                        <td>
-                          <%= link_to "確認", user_work_path(User.find_by(id: @over_work.user_id),@over_work.day, authority: "super"),  {class: 'btn btn-primary'} %>  
-                        </td>
+                <!-- 3.モーダルのコンテンツ -->
+                <%= form_tag({:controller => 'works', :action => 'update_overwork'}, {:method => :patch}) do %>
+                <div class="modal-content">
+                    <!--モーダル閉じるボタン×-->
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    
+                    <% overwork_users.each do |m_user| %>
+                        <% user_overworks = Work.where(user_id: m_user, over_check: @name).order(:day) %>
+                        <!-- 4.モーダルのヘッダ -->
+                        <div class="modal-header">
+                            
+                            <h4 class="modal-title" id="modal-label"><%= "【#{User.find(m_user).name}からの残業申請】" %></h4>
+                        </div>
+                        <!-- 5.モーダルのボディ -->
+                        <div class="modal-body">
+                            
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <td>日付</td>
+                                    <td>曜日</td>
+                                    <td>終了予定時間</td>
+                                    <td>指定勤務終了時間</td>
+                                    <td>時間外時間</td>
+                                    <td>業務処理内容</td>
+                                    <td>指示者確認㊞</td>
+                                    <td>変更</td>
+                                    <td>勤怠を確認</td>
+                                    
+                                </tr>
+                                <% user_overworks.each do |work| %>
 
-
+                                    <tr class="top" >
+                                        <td id="modal-date"><%= "#{work.day.month}/#{work.day.day}"  %> </td>
+                                        <td id="modal-day"><%= %w(日 月 火 水 木 金 土)[work.day.wday] %> </td>
+                                        <!--終了予定時間-->
+                                        <td>
+                                            <%= "#{work.endtime_plan.strftime("%H")}:#{work.endtime_plan.strftime("%M")}"  %><br>
+                                            <%= "(翌日)" if work.endtime_plan.day == work.day.tomorrow.day %>
+                                        </td>
+                                        <!--指定勤務終了時間-->
+                                        <td>
+                                            <%= "#{select_user.d_end_worktime.strftime("%H")}:#{select_user.d_end_worktime.strftime("%M")}" %>
+                                        </td>
+                                        <!--時間外時間-->
+                                        <td>
+                                            <%= sprintf("%.2f", overwork_time(work) ) %>
+                                        </td>
+                                        <!--業務処理内容-->
+                                        <td>
+                                                <%= work.work_content  %>
+                                        </td>
+                                        <!--指示者確認印-->
+                                        <td>
+                                            <%= fields_for "works[]", work do |fi| %>
+                                                <%= fi.select :over_check, [["なし", "なし"],["申請中", "#{current_user.name}"],["承認", "承認"],["否認", "否認"]], {prompt: ""}, { class: 'form-control'} %>
+                                            <% end %>
+                                        </td>
+                                        <!--変更-->
+                                        <td class="center">
+                                            <%= fields_for "works[]", work do |fi| %>
+                                                <%= fi.check_box :check_box,{},checked_value = "true",unchecked_value = "false" %>
+                                            <% end %>
+                                        </td>
+                                        <!--勤怠を確認 -->
+                                        <td>
+                                          <%= link_to "確認", user_work_path(User.find_by(id: work.user_id), work.day, authority: "super"),  {class: 'btn btn-primary'} %>  
+                                        </td>
+                                        <!--日付のパラメーターを送るhidden-->
+                                            <%= fields_for "works[]", work do |fi| %>
+                                                <%= fi.hidden_field :day, :value => "",:id => "test" %>
+                                            <% end %>
+                                
+                                    </tr>
+                        <% end %><!---->
+                            </table>
                         
-                            <%= fields_for "works[]", @over_work do |fi| %>
-                                <%= fi.hidden_field :day, :value => "",:id => "test" %>
-                            <% end %>
-                
-                    </tr>
-        <% end %>
-                
-                </table>
-            
-            </div>
-            <% end %>
-            <!-- 6.モーダルのフッタ -->
-            <div class="modal-footer">
-                <!--<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>-->
-                <%= submit_tag "変更を送信する", class: "btn btn-primary btn-submit" %>
+                        </div>
+                    <% end %><!---->
+                    <!-- 6.モーダルのフッタ -->
+                    <div class="modal-footer">
+                        <!--<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>-->
+                        <%= submit_tag "変更を送信する", class: "btn btn-primary btn-submit" %>
+                    </div>
+                </div>
+                <% end %>
             </div>
         </div>
-        <% end %>
-    </div>
-</div>
 
 <script>
   $('#modal-sample').on('show.bs.modal', function (event) {
@@ -115,10 +117,5 @@
   
 })
 
-// var my_email= "12"
-//   $(document).ready(function(){
-//         $("#email_field").val(my_email);
-//   });
-   
    
 </script>
