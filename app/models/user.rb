@@ -14,6 +14,11 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   #validates :team,  presence: true
   validates :worker_id, format: { with: /[a-zA-Z0-9]/ }
+  
+  # スコープ
+  scope :activated, -> { where(activated: true) }
+  scope :working, -> { where(working: "出社中") }
+  
 
 
   # 渡された文字列のハッシュ値を返す

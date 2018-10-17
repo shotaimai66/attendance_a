@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   include StaticPagesHelper
 
   def index
-    @users = User.where(activated: true).paginate(page: params[:page]).search(params[:search])
+    @users = User.activated.paginate(page: params[:page]).search(params[:search])
   end
 
   def show
@@ -89,7 +89,7 @@ class UsersController < ApplicationController
   
   
   def working_users
-    @users = User.where(activated: true, working: "出社中").paginate(page: params[:page]).search(params[:search])
+    @users = User.activated.working.paginate(page: params[:page]).search(params[:search])
   end
   
   
