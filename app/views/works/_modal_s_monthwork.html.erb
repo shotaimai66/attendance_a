@@ -54,7 +54,7 @@
                                             </td>
                                             <!--勤怠を変更する-->
                                             <td>
-                                              <%= link_to "確認", user_work_path(User.find_by(id: month_work.user_id), month_work.day, authority: "super"), {class: 'btn btn-primary'} %>  
+                                              <%= link_to "確認", user_work_path(User.find_by(id: month_work.user_id), month_work.day, authority: "super", modal: "month"), {class: 'btn btn-primary'} %>  
                                             </td>
                                         </tr>
                                     <% end %>

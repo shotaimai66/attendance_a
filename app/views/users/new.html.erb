@@ -33,24 +33,3 @@
       <% end %>
   </div>
 </div>
-<div id="test_a">
-  22222222
-</div>
-
-<script>
-    $(".test").click(function(){
-  $.ajax({
-    url: " /users",
-    type: "POST",
-    data: {content : $("div#test_a").text()},
-    datatype: "html",
-    success: function(data) {
-                alert("success");
-            },
-            error: function(data) {
-                alert("errror");
-            }
-  });
-});
-    
-</script>

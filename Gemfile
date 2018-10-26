@@ -13,13 +13,14 @@ gem 'sass-rails',   '5.0.6'
 gem 'uglifier',     '3.2.0'
 gem 'coffee-rails', '4.2.2'
 gem 'jquery-rails', '4.3.1'
-gem 'turbolinks',   '5.0.1'
+# gem 'turbolinks',   '5.0.1'
 gem 'jbuilder',     '2.7.0'
 gem 'rails-i18n'
 gem 'rinku'
 gem 'friendly_id'
 # bulk insert
 gem 'activerecord-import'
+
 
 
 
@@ -35,6 +36,7 @@ group :development do
   gem 'spring-watcher-listen', '2.0.1'
   gem 'rack-mini-profiler'
   gem 'bullet'
+  gem 'rails-erd'
 end
 
 group :test do

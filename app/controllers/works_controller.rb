@@ -16,6 +16,16 @@ class WorksController < ApplicationController
         else
             @date = params[:id].to_datetime
         end
+        #表示する編集ページのユーザーの一月分のレコードが存在するか検証
+        #レコードが存在しない場合は新規作成（create）
+        days = (Date.new(@date.year,@date.month).all_month)
+        if Work.where(user_id: @id, day: days).count < days.count
+            days.each do |day|
+                unless select_user.works.find_by(day: day)
+                    Work.create(user_id: select_user.id, day: day)
+                end
+            end
+        end
         @works_list = Work.select_user(select_user.id).month_all(@date.all_month).order(:day)
         @work_array = []
         @works_list.each do |work|
@@ -68,14 +78,14 @@ class WorksController < ApplicationController
         @date = params[:piyo].to_datetime
         #表示する編集ページのユーザーの一月分のレコードが存在するか検証
         #レコードが存在しない場合は新規作成（create）
-        days = (Date.new(@date.year,@date.month).all_month)
-        if Work.where(user_id: @id, day: days).count < days.count
-            days.each do |day|
-                unless select_user.works.find_by(day: day)
-                    Work.create(user_id: select_user.id, day: day)
-                end
-            end
-        end
+        # days = (Date.new(@date.year,@date.month).all_month)
+        # if Work.where(user_id: @id, day: days).count < days.count
+        #     days.each do |day|
+        #         unless select_user.works.find_by(day: day)
+        #             Work.create(user_id: select_user.id, day: day)
+        #         end
+        #     end
+        # end
         @works_list = Work.select_user(@id).month_all(@date.all_month).order(:day)
         @work_array = []
         @works_list.each do |work|
@@ -103,7 +113,11 @@ class WorksController < ApplicationController
                 end_time = nil
             end
             
-            work.update(starttime_change: start_time, endtime_change: end_time, note: item[:note], work_check: item[:work_check], check_tomorrow: item[:check_tomorrow])
+            work.update(starttime_change: start_time,
+                        endtime_change: end_time, 
+                        note: item[:note], 
+                        work_check: item[:work_check], 
+                        check_tomorrow: item[:check_tomorrow])
         end
         flash[:success] = "勤怠変更を申請しました！"
         

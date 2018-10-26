@@ -16,3 +16,50 @@ $('#modal').on('show.bs.modal', function (event) {
   
 })
 });
+
+
+
+// ユーザーの勤怠確認後、リンクバック後の該当勤怠のモーダル再表示
+$(document).ready(function() {
+    $(window).load(function () {
+    // 実行したい処理
+    var arg  = new Object;
+ url = location.search.substring(1).split('&');
+ 
+for(i=0; url[i]; i++) {
+    var k = url[i].split('=');
+    arg[k[0]] = k[1];
+}
+ 
+var params = arg.modal
+console.log(params)
+    if(params=="over_work"){
+ //条件に合う時の処理
+     $('#over_work')[0].click();
+ }
+    if(params=="month"){
+ //条件に合う時の処理
+     $('#month')[0].click();
+ }
+    if(params=="change_work"){
+ //条件に合う時の処理
+     $('#change_work')[0].click();
+ }
+    });
+});
+
+
+$(document).ready(function() {
+    // 実行したい処理
+    var arg  = new Object;
+ url = location.search.substring(1).split('&');
+ 
+for(i=0; url[i]; i++) {
+    var k = url[i].split('=');
+    arg[k[0]] = k[1];
+}
+var params = arg.work_day
+console.log(params)
+ //条件に合う時の処理
+     $('#'+ params).attr('class', 'warning');
+    });

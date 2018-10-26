@@ -65,10 +65,10 @@
             <td><%= work.start_time.min if work.start_time %></td><!--分-->
             <td><%= work.end_time.hour if work.end_time %></td><!--退社：時-->
             <td><%= work.end_time.min if work.end_time %></td><!--分-->
-            <td><%= work.starttime_change.hour %></td><!--出社：時-->
-            <td><%= work.starttime_change.min %></td><!--分-->
-            <td><%= work.endtime_change.hour %><br><%= change_tomorrow?(work.day) %></td><!--退社：時-->
-            <td><%= work.endtime_change.min %></td><!--分-->
+            <td><%= work.starttime_change.hour if work.starttime_change %></td><!--出社：時-->
+            <td><%= work.starttime_change.min if work.starttime_change %></td><!--分-->
+            <td><%= work.endtime_change.hour if work.endtime_change %><br><%= change_tomorrow?(work.day) if work.endtime_change %></td><!--退社：時-->
+            <td><%= work.endtime_change.min if work.endtime_change %></td><!--分-->
             <td><%= work.note %></td><!--備考-->
             <td>
                 <%= fields_for "works[]", work do |fi| %>
@@ -81,24 +81,22 @@
                 <% end %>
             </td>
             <td>
-              <%= link_to "確認", user_work_path(User.find_by(id: work.user_id), work.day, authority: "super"), {class: 'btn btn-primary'} %>  
+              <%= link_to "確認", user_work_path(User.find_by(id: work.user_id), work.day, authority: "super", modal: "change_work", work_day: work.day), {class: 'btn btn-primary'} %>  
             </td>
         </tr>
+        <% end %>
     </table>
 
             
-                    
-        <% end %>
-            
             </div>
-            <% end %>
+            <% end %> <!--user_changeworks each-->    
             <!-- 6.モーダルのフッタ -->
             <div class="modal-footer">
                 <!--<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>-->
                 <%= submit_tag "変更を送信する", class: "btn btn-primary btn-submit" %>
             </div>
         </div>
-        <% end %>
+        <% end %> <!--form_tag-->
     </div>
 </div>
 

@@ -35,7 +35,7 @@ class UsersController < ApplicationController
       end
     else
       @user = User.new(user_params)
-      if @use.save
+      if @user.save
         log_in @user
         redirect_to user_work_path(@user,Date.today)
       else
