@@ -63,7 +63,7 @@
     <!-- 承認確認㊞ -->
           　         <td>
                         <%= fields_for "works[]", work do |fi| %>
-                            <%= fi.select :work_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"],["承認済み", "承認"]], {prompt: ""} %>
+                            <%= fi.select :work_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"], {prompt: ""} %>
                         <% end %>
                     </td>
       

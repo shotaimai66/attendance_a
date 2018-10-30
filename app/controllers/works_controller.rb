@@ -182,10 +182,11 @@ class WorksController < ApplicationController
     def update_changework
         update_changework_params.each do |id, item|
             work = Work.find_by(id: id)
-            if item[:work_check] == "承認" && item.fetch("check_box")=="true"
+            if item[:work_check] == "承認" && item.fetch("check_box") == "true"
                 work.update(work_check: item[:work_check], start_time: work.starttime_change, end_time: work.endtime_change)
-            elsif item.fetch("check_box")=="true"
-                work.update(item).update(check_box: "false")
+            elsif item.fetch("check_box") == "true"
+                work.update(item)
+                work.update(check_box: "false")
             end
         end
         flash[:success] = "申請を更新しました!（勤怠変更）"

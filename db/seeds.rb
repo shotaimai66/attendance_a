@@ -1,10 +1,4 @@
 # ユーザー
-Admin.create!(name:  "管理者",
-             email: "admin@railstutorial.org",
-             basic_work_time: Time.zone.local(2018, 6, 30, 7,30),
-             password:              "foobar",
-             password_confirmation: "foobar"
-             )
 User.create!(name:  "admin",
              email: "admin@railstutorial.org",
              team: "管理者",
