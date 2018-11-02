@@ -27,6 +27,8 @@ gem 'activerecord-import'
 group :development, :test do
   gem 'sqlite3', '1.3.13'
   gem 'byebug',  '9.0.6', platform: :mri
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :development do
@@ -35,7 +37,7 @@ group :development do
   gem 'spring',                '2.0.2'
   gem 'spring-watcher-listen', '2.0.1'
   gem 'rack-mini-profiler'
-  gem 'bullet'
+  # gem 'bullet'
   gem 'rails-erd'
 end
 
@@ -44,6 +46,7 @@ group :test do
   gem 'minitest-reporters',       '1.1.14'
   gem 'guard',                    '2.13.0'
   gem 'guard-minitest',           '2.4.4'
+  gem 'rubocop', require: false
 end
 
 group :production do

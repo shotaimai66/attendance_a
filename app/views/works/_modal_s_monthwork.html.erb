@@ -36,40 +36,50 @@
                                 
                             </tr>
                 <!--月ごと表示-->
-                                    <% user_work_months.each do |month_work| %>
+                                    <% user_work_months.each do |work| %>
+                                    <% if params[:status] && params[:status][:"#{work.id}"] %>
+                                       <% work.attributes = {  month_check: params[:status][:"#{work.id}"][:month_check], check_box: params[:status][:"#{work.id}"][:check_box] } if params[:status] %>
+                                    <% end %>
                                         <tr class="top">
                                             <!--月-->
-                                            <td id="modal-date"><%= "#{month_work.day.month}月"  %> </td>
+                                            <td id="modal-date"><%= "#{work.day.month}月"  %> </td>
                                             <!--指示者確認㊞-->
                                             <td>
-                                                <%= fields_for "works[]", month_work do |fi| %>
+                                                <%= fields_for "works[]", work do |fi| %>
                                                     <%= fi.select :month_check, [["なし", "なし"],["申請中", "#{@name}"],["承認", "#{@name}から承認済"],["否認", "否認"]], {prompt: ""}, { class: 'form-control'} %>
                                                 <% end %>
                                             </td>
                                             <!--変更-->
                                             <td class="center">
-                                                <%= fields_for "works[]", month_work do |fi| %>
+                                                <%= fields_for "works[]", work do |fi| %>
                                                     <%= fi.check_box :check_box,{},checked_value = "true",unchecked_value = "false" %>
                                                 <% end %>
                                             </td>
                                             <!--勤怠を変更する-->
                                             <td>
-                                              <%= link_to "確認", user_work_path(User.find_by(id: month_work.user_id), month_work.day, authority: "super", modal: "month"), {class: 'btn btn-primary'} %>  
+                                              <%= submit_tag "確認", {class: "btn btn-primary check_btn", actionURL: "/users/#{work.user_id}/works/#{work.day}/update_monthwork"} %>
                                             </td>
                                         </tr>
                                     <% end %>
                         </table>
-                    
+                        <%= hidden_field_tag :authority, "super" %>
+                        <%= hidden_field_tag :modal, "month" %>
                     </div>
                 <% end %>
                 <!-- 6.モーダルのフッタ -->
                 <div class="modal-footer">
                     <!--<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>-->
-                    <%= submit_tag "変更を送信する", class: "btn btn-primary btn-submit" %>
+                    <%= submit_tag "変更を送信する", class: "btn btn-primary" %>
                 </div>
             </div>
         <% end %>
         
     </div>
 </div>
-
+<script>
+$('[actionURL]').click(function(){
+    if($(this).attr('actionURL') != ""){
+      $('form').attr('action', $(this).attr('actionURL'));
+    }
+  });
+</script>

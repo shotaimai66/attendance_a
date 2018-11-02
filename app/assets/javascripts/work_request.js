@@ -1,6 +1,6 @@
 // 勤怠申請モーダルの値渡し
     $(document).ready(function() {
-    $('#modal').on('show.bs.modal', function (event) {
+    $('#modal1').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget) //モーダルを呼び出すときに使われたボタンを取得
       var date = button.data('date') //data-date の値を取得
       var day = button.data('day') //data-day の値を取得

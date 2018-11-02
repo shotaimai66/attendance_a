@@ -43,7 +43,7 @@
 <!--修正ログ表示ボタン-->
                 <%= link_to "勤怠修正ログ（承認済）", edit_user_work_path(piyo: @date), class: "btn btn-primary" %>
             <% else %>
-                <%= link_to '戻る', user_work_path(current_user, @date, modal: params[:modal]), class: "btn btn-primary" %> 
+                <%= link_to '戻る', user_work_path(current_user, @date, modal: params[:modal], status: params.permit(status: [:over_check, :month_check, :check_box, :work_check])[:status]), class: "btn btn-primary" %> 
                 <h3><span class="label label-success">確認:  <%= "#{select_user.name}/#{y}年#{m}月" %></span></h3>
             <% end %>    
                 
@@ -91,7 +91,7 @@
                             <!--モーダルウィンドウ（残業申請）-->
                                 <td>
                                     <% unless params[:authority] %>
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#modal" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
+                                        <button class="btn btn-primary" data-toggle="modal1" data-target="#modal" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
                                             残業申請
                                         </button>
                                         <%= render 'works/modal_r_overwork' %>
@@ -137,7 +137,7 @@
                             <!--モーダルウィンドウ（残業申請）-->
                                 <td>
                                     <% unless params[:authority] %>
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#modal" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#modal1" data-date="<%=key.month%>/<%=key.day%>" data-date_1="<%=key.year%>-<%=key.month%>-<%=key.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[key.wday]%>">
                                             残業申請
                                         </button>
                                         <%= render 'works/modal_r_overwork' %>

@@ -142,6 +142,14 @@ class WorksController < ApplicationController
     end
     
     def update_overwork
+        if params[:commit] == "確認"
+            redirect_to user_work_path(User.find_by(id: params[:user_id]), params[:id], 
+                                       authority: params[:authority], 
+                                       modal: params[:modal], 
+                                       work_day: params[:id],
+                                       status: update_overwork_params)
+            return
+        end
         update_overwork_params.each do |id, item|
             work = Work.find(id)
             if item.fetch("check_box")=="true"
@@ -167,6 +175,13 @@ class WorksController < ApplicationController
     end
     
     def update_monthwork
+        if params[:commit] == "確認"
+            redirect_to user_work_path(User.find_by(id: params[:user_id]), params[:id], 
+                                       authority: params[:authority], 
+                                       modal: params[:modal], 
+                                       status: update_monthwork_params)
+            return
+        end
         update_monthwork_params.each do |id, item|
             work = Work.find(id)
             if item.fetch("check_box")=="true"
@@ -180,6 +195,14 @@ class WorksController < ApplicationController
     end
     
     def update_changework
+        if params[:commit] == "確認"
+            redirect_to user_work_path(User.find_by(id: params[:user_id]), params[:id], 
+                                       authority: params[:authority], 
+                                       modal: params[:modal], 
+                                       work_day: params[:id],
+                                       status: update_changework_params)
+            return
+        end
         update_changework_params.each do |id, item|
             work = Work.find_by(id: id)
             if item[:work_check] == "承認" && item.fetch("check_box") == "true"
