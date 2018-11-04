@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180804215635) do
+ActiveRecord::Schema.define(version: 20181104114522) do
 
   create_table "users", force: :cascade do |t|
     t.string "name"
@@ -33,6 +33,20 @@ ActiveRecord::Schema.define(version: 20180804215635) do
     t.integer "worker_number"
     t.string "worker_id"
     t.text "working"
+  end
+
+  create_table "work_logs", force: :cascade do |t|
+    t.integer "user_id"
+    t.date "day"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.datetime "starttime_change"
+    t.datetime "endtime_change"
+    t.string "work_check"
+    t.integer "work_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["work_id"], name: "index_work_logs_on_work_id"
   end
 
   create_table "works", force: :cascade do |t|

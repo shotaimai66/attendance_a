@@ -94,6 +94,10 @@ class WorksController < ApplicationController
         
     end
     
+    def work_log  
+        
+    end
+    
     def update
         works_params.each do |id, item|
             
@@ -206,6 +210,8 @@ class WorksController < ApplicationController
         update_changework_params.each do |id, item|
             work = Work.find_by(id: id)
             if item[:work_check] == "承認" && item.fetch("check_box") == "true"
+                WorkLog.create(day: work.day, start_time: work.start_time, end_time: work.end_time,
+                                starttime_change: work.starttime_change, endtime_change: work.endtime_change, work_check: work.work_check )
                 work.update(work_check: item[:work_check], start_time: work.starttime_change, end_time: work.endtime_change)
             elsif item.fetch("check_box") == "true"
                 work.update(item)
