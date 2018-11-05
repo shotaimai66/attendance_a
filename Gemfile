@@ -41,6 +41,7 @@ group :development do
   gem 'rack-mini-profiler'
   # gem 'bullet'
   gem 'rails-erd'
+  gem "awesome_print"
 end
 
 group :test do
