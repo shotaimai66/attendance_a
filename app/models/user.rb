@@ -13,13 +13,12 @@ class User < ApplicationRecord
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   #validates :team,  presence: true
-  validates :worker_id, format: { with: /[a-zA-Z0-9]/ }
+  validates :worker_id, format: { with: /[a-zA-Z0-9]/ }, :allow_blank => true
   
   # スコープ
   scope :activated, -> { where(activated: true) }
   scope :working, -> { where(working: "出社中") }
   
-
 
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
