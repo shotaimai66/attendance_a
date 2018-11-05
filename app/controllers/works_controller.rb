@@ -94,8 +94,10 @@ class WorksController < ApplicationController
         
     end
     
-    def work_log  
-        
+    def work_log 
+        work_ids = current_user.works.ids
+        @logs = WorkLog.where(work_id: work_ids)
+        puts @logs
     end
     
     def update
@@ -161,7 +163,7 @@ class WorksController < ApplicationController
             end
         end
         flash[:success] = "申請を更新しました!(残業申請)"
-        #セレクトユーザーの編集した月ページへ
+        #セレクトユーザーの編集した月��ージへ
         redirect_to  user_work_path(current_user,Date.today)
         
     end
@@ -210,8 +212,10 @@ class WorksController < ApplicationController
         update_changework_params.each do |id, item|
             work = Work.find_by(id: id)
             if item[:work_check] == "承認" && item.fetch("check_box") == "true"
-                WorkLog.create(day: work.day, start_time: work.start_time, end_time: work.end_time,
+                # 勤怠ログの作成
+                WorkLog.create!(user_id: work.user_id, work_id: work.id, day: work.day, start_time: work.start_time, end_time: work.end_time,
                                 starttime_change: work.starttime_change, endtime_change: work.endtime_change, work_check: work.work_check )
+                # 勤怠変更申請（更新）
                 work.update(work_check: item[:work_check], start_time: work.starttime_change, end_time: work.endtime_change)
             elsif item.fetch("check_box") == "true"
                 work.update(item)

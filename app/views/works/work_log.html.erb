@@ -1,7 +1,6 @@
 <% provide(:title, "勤怠ログ") %>
 <h1>勤怠ログ</h1>
 <%= current_user.name %>
-
 <table class="table table-bordered table-striped">		
         <tr>
 			<td>日付</td>
@@ -10,52 +9,31 @@
 			<td>変更後出社</td>
 			<td>変更後退社</td>
 			<td>指示者</td>
+			<td>承認日</td>
 		</tr>
-		
-    　　              <tr>
-  
-  
-                    
-                    
-    <!--曜日-->
-                    <td></td>
-            
-            
-    <!-- 出勤時間ー変更前 -->
+		    <% @logs.each do |log| %>
+    　　      　  <tr>
                     <td>
-                        
+                        <%= log.day %><!--曜日-->
                     </td>
-    <!-- 退社時間ー変更前  -->
                     <td>
-                        
+                        <%= log.start_time.strftime("%R") %><!-- 出勤時間ー変更前 -->
                     </td>
-    <!--出社時間ー変更後-->
+                    <td>
+                        <%= log.end_time.strftime("%R") %><!-- 退社時間ー変更前  -->
+                    </td>
                     <td class="center">
-                            
+                       <%= log.starttime_change.strftime("%R") %><!--出社時間ー変更後-->     
                     </td>
-    <!-- 退社時間ー変更後  -->
           　         <td>
-                      
+                       <%= log.endtime_change.strftime("%R") %><!-- 退社時間ー変更後  -->
           　         </td>
-    <!-- 指示者  -->
-          　        <td></td>
-    
-      
+                    <td>
+                        <%= log.work_check %><!-- 指示者  -->
+                    </td>
+                    <td>
+                        <%= log.created_at.strftime("%F") %><!-- 承認日時  -->  
+                    </td>
                 </tr>
-
-  
-        
-        
-        
-        
-                <tr>
-                    <td rowspan="1" colspan="2"></td><!-- 総合勤務時間の表示  -->
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td><!-- 在社時間の合計の表示  -->
-                    
-            
-                </tr>
-    
-	    </table>
+            <% end %>
+</table>
