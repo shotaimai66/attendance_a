@@ -83,6 +83,7 @@
         
         
 <!-- レコード表示部分 each文 -->
+
                 <% days = (Date.new(y,m).all_month) %>
                 <% datas = Hash[*days.zip(@work_array).flatten(1)] %>
                 <% datas.each do |key, work| %>

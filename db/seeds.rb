@@ -11,7 +11,7 @@ User.create!(name:  "admin",
              admin:     true,
              activated: true,
              activated_at: Time.zone.now)
-User.create!(name:  "上長A",
+user = User.create!(name:  "上長A",
              email: "examplea@railstutorial.org",
              team: "Aチーム",
              d_start_worktime: Time.zone.local(2018, 6, 30, 8,0),
@@ -23,6 +23,7 @@ User.create!(name:  "上長A",
              sv:     true,
              activated: true,
              activated_at: Time.zone.now)
+
 
 User.create!(name:  "上長B",
              email: "exampleb@railstutorial.org",
@@ -74,9 +75,18 @@ start_time = Time.new(2018, 5, 30, 9, 00, 00)
 end_time = Time.new(2018, 5, 30, 17, 15, 00)
   users.each do |user|
     days.each do |day|
-      user.works.create!(day: day,
-          start_time: start_time,
-          end_time: end_time)
+      work = user.works.create!(day: day,
+             start_time: start_time,
+             end_time: end_time)
+             10.times {
+          work.work_logs.create(day: day, 
+                               start_time: start_time,
+                               end_time: end_time,
+                               starttime_change: start_time,
+                               endtime_change: end_time,
+                               work_check: "上長A",
+                               user_id: user.id)
+             }
     end
   end
 

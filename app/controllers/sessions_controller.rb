@@ -13,8 +13,10 @@ class SessionsController < ApplicationController
         params[:month] = Date.today.month
         if current_user.admin?
           redirect_to root_url
+          flash[:success] = "ログインしました！（admin）"
         else
           redirect_to user_work_url(user,month)
+          flash[:success] = "ログインしました！"
         end
       else
         message  = "アカウントが有効化されていません。 "
@@ -30,6 +32,7 @@ class SessionsController < ApplicationController
 
   def destroy
     log_out if logged_in?
+    flash[:warning] = "ログアウトしました。"
     redirect_to root_url
   end
 end

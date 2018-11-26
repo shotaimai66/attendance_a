@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class WorkTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  
+  test "should not save work without user_id" do
+    work = Work.new
+    assert_not work.save
+  end
 end
