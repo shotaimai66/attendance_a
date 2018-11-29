@@ -14,7 +14,7 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_url
   end
   
-  test "should redirect update when not logged in as wrong user" do
+  test "should redirect work_update when not logged in as wrong user" do
     log_in_as(@other_user)
     patch user_work_path(@user, @time), params: { work: { day: "2018-05-31",
                                                           start_time: "2018-05-31 07:10:56",
@@ -23,6 +23,37 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
     assert_not flash.empty?
     assert_redirected_to root_url
   end
+  
+  test "should redirect work_create when not logged in as wrong user" do
+    log_in_as(@other_user)
+    post user_works_path(@user, @time), params: { work: { day: "2018-05-31",
+                                                          start_time: "2018-05-31 07:10:56",
+                                                          end_time: "2018-05-31 07:10:56",
+                                                          user_id: @user.id } }
+    assert_not flash.empty?
+    assert_redirected_to root_url
+  end
+  
+  test "should redirect work_edit when not logged in as wrong user" do
+    log_in_as(@other_user)
+    get edit_user_work_path(@user, @time)
+    assert_not flash.empty?
+    assert_redirected_to root_url
+  end
+  
+  test "should redirect work_log when not logged in as wrong user" do
+    log_in_as(@other_user)
+    get work_log_user_works_path(@user)
+    assert_not flash.empty?
+    assert_redirected_to root_url
+  end
+  
+  # test 'should redirect create_overwork when logged in wrong user' do
+  #   log_in_as(@other_user)
+  #   patch create_overwork_user_work_path(@user, @time)
+  #   assert_not flash.empty?
+  #   assert_redirected_to root_url
+  # end
   
   
    

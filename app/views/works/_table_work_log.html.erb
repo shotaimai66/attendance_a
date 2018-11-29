@@ -15,22 +15,22 @@
                         <%= log.day %><!--曜日-->
                     </td>
                     <td>
-                        <%= log.start_time.strftime("%R") %><!-- 出勤時間ー変更前 -->
+                        <%= log.start_time.strftime("%R") if log.start_time %><!-- 出勤時間ー変更前 -->
                     </td>
                     <td>
-                        <%= log.end_time.strftime("%R") %><!-- 退社時間ー変更前  -->
+                        <%= log.end_time.strftime("%R") if log.end_time %><!-- 退社時間ー変更前  -->
                     </td>
                     <td class="center">
-                       <%= log.starttime_change.strftime("%R") %><!--出社時間ー変更後-->
+                       <%= log.starttime_change.strftime("%R") if log.starttime_change %><!--出社時間ー変更後-->
                     </td>
                     <td>
-                       <%= log.endtime_change.strftime("%R") %><!-- 退社時間ー変更後  -->
+                       <%= log.endtime_change.strftime("%R") if log.endtime_change %><!-- 退社時間ー変更後  -->
                     </td>
                     <td>
-                        <%= log.work_check %><!-- 指示者  -->
+                        <%= log.work_check if log %><!-- 指示者  -->
                     </td>
                     <td>
-                        <%= log.created_at.strftime("%F") %><!-- 承認日時  -->
+                        <%= log.created_at.strftime("%F") if log.created_at %><!-- 承認日時  -->
                     </td>
                 </tr>
             <% end %>
