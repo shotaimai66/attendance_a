@@ -142,6 +142,11 @@ module WorksHelper
       (d-c)/60/60
     end
     
+    def time_change(day, time)
+      day=day.to_datetime
+      time=time.to_datetime
+      Time.new(day.year,day.month,day.day,time.hour,time.min,time.sec)
+    end
     
     
 end

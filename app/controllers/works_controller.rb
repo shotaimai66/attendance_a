@@ -1,8 +1,10 @@
 class WorksController < ApplicationController
+  
   before_action :logged_in_user, only: [:show, :edit, :create, :update, :work_log]
   before_action :aa, only: [:edit, :create, :update, :work_log]
   before_action :user_being, only: [:show, :edit, :create, :update]
   include WorksHelper
+  include Concerns::Works::Manage
   
   def show
     @shops = User.order(:id)
@@ -156,102 +158,6 @@ class WorksController < ApplicationController
   end
   
   
-  def create_overwork
-      @work=select_user.works.find_by(day: params[:work][:day])
-      if params[:work][:check_box]=="true"
-          date_tomorrow=time_change.tomorrow - 9.hours
-          @work.update_attributes(create_overwork_params)
-          @work.update(endtime_plan: date_tomorrow)
-      else
-          @work.update_attributes(create_overwork_params)
-          @work.update(endtime_plan: time_change-9.hours)
-      end
-      flash[:success] = "申請しました！"
-      redirect_to  user_work_path(select_user,Date.today)
-      
-  end
-  
-  def update_overwork
-      if params[:commit] == "確認"
-          redirect_to user_work_path(User.find_by(id: params[:user_id]), params[:id], 
-                                     authority: params[:authority], 
-                                     modal: params[:modal], 
-                                     work_day: params[:id],
-                                     status: update_overwork_params)
-          return
-      end
-      update_overwork_params.each do |id, item|
-          work = Work.find(id)
-          if item.fetch("check_box")=="true"
-              work.update_attributes(over_check: item.fetch("over_check"))  
-          end
-      end
-      flash[:success] = "申請を更新しました!(残業申請)"
-      #セレクトユーザーの編集した月��ージへ
-      redirect_to  user_work_path(current_user,Date.today)
-      
-  end
-  
-  def create_monthwork
-      if params[:work]&&!params[:work][:piyo].blank?
-          @date = params[:work][:piyo].to_datetime
-      else
-          @date = params[:id].to_datetime
-      end
-      day = Date.new(@date.year,@date.month)
-              current_user.works.find_by(day: day).update(month_check: params[:work][:month_check])
-      flash[:success] = "申請しました!(１ヶ月分)"
-      redirect_to  user_work_path(select_user,Date.today)
-  end
-  
-  def update_monthwork
-      if params[:commit] == "確認"
-          redirect_to user_work_path(User.find_by(id: params[:user_id]), params[:id], 
-                                     authority: params[:authority], 
-                                     modal: params[:modal], 
-                                     status: update_monthwork_params)
-          return
-      end
-      update_monthwork_params.each do |id, item|
-          work = Work.find(id)
-          if item.fetch("check_box")=="true"
-              work.update_attributes(month_check: item.fetch("month_check"))  
-          end
-      end
-      flash[:success] = "申請を更新しました!(１ヶ月分)"
-  #セレクトユーザーの編集した月ページへ
-  redirect_to  user_work_path(current_user,Date.today)
-  
-  end
-  
-  def update_changework
-      if params[:commit] == "確認"
-          redirect_to user_work_path(User.find_by(id: params[:user_id]), params[:id], 
-                                     authority: params[:authority], 
-                                     modal: params[:modal], 
-                                     work_day: params[:id],
-                                     status: update_changework_params)
-          return
-      end
-      update_changework_params.each do |id, item|
-          work = Work.find_by(id: id)
-          if item[:work_check] == "承認" && item.fetch("check_box") == "true"
-              # 勤怠ログの作成
-              WorkLog.create!(user_id: work.user_id, work_id: work.id, day: work.day, start_time: work.start_time, end_time: work.end_time,
-                              starttime_change: work.starttime_change, endtime_change: work.endtime_change, work_check: work.work_check )
-              # 勤怠変更申請（更新）
-              work.update(work_check: item[:work_check], start_time: work.starttime_change, end_time: work.endtime_change)
-          elsif item.fetch("check_box") == "true"
-              work.update(item)
-              work.update(check_box: "false")
-          end
-      end
-      flash[:success] = "申請を更新しました!（勤怠変更）"
-  #セレクトユーザーの編集した月ページへ
-  redirect_to  user_work_path(current_user,Date.today)
-  
-  end
-  
   
   
   
@@ -276,18 +182,6 @@ class WorksController < ApplicationController
   
   def update_changework_params
       params.permit(works: [:work_check, :check_box])[:works]
-  end
-  
-  def time_change
-      day=params[:work][:day].to_datetime
-      time=params[:work][:endtime_plan].to_datetime
-      Time.new(day.year,day.month,day.day,time.hour,time.min,time.sec)
-  end
-  
-  def time_change_work
-      day=params[:work][:day].to_datetime
-      time=params[:work][:endtime_plan].to_datetime
-      Time.new(day.year,day.month,day.day,time.hour,time.min,time.sec)
   end
   
 end
