@@ -1,7 +1,7 @@
 class WorksController < ApplicationController
   
   before_action :logged_in_user, only: [:show, :edit, :create, :update, :work_log]
-  before_action :aa, only: [:edit, :create, :update, :work_log]
+  before_action :aa, only: [:edit, :create, :update]
   before_action :user_being, only: [:show, :edit, :create, :update]
   include WorksHelper
   include Concerns::Works::Manage

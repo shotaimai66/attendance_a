@@ -4,7 +4,7 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user       = users(:michael)
     @other_user = users(:archer)
-    
+    @sv = users(:superviser)
     @time = Time.current
     
   end
@@ -48,6 +48,7 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
   end
   
+  # 違うユーザーで残業申請をするとフラッシュが出てrootへリダレクト
   # test 'should redirect create_overwork when logged in wrong user' do
   #   log_in_as(@other_user)
   #   patch create_overwork_user_work_path(@user, @time)
@@ -56,38 +57,43 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
   # end
   
   
-   
+  # 残業申請をすると勤怠が更新されて、showにリダイレクト
   # test "should redirect index when user is not admin" do
   #   log_in_as(@other_user)
   #   get users_path
   #   assert_redirected_to root_url
   # end
-
+　
+　# 残業申請を許可すると、勤怠が更新されてwork/showにリダイレクト
   # test "should get new" do
   #   get new_user_path
   #   assert_response :success
   # end
   
+  # １ヶ月勤怠申請を送信すると、その月の最初の勤怠が更新され、works/showにリダレクト
   # test "should redirect edit when not logged in" do
   #   get edit_user_path(@user)
   #   assert_not flash.empty?
   #   assert_redirected_to login_url
   # end
-   
+  
+  # １ヶ月勤怠を承認すると、その月の最初の勤怠が更新され、works/showにリダレクト
   # test "should redirect update when not logged in" do
   #     patch user_path(@user), params: { user: { name: @user.name,
   #                                               email: @user.email } }
   #     assert_not flash.empty?
   #     assert_redirected_to login_url
   # end
-   
+  
+  # 勤怠変更を申請すると、works/showにリダレクト 
   # test "should redirect edit when logged in as wrong user" do
   #     log_in_as(@user)
   #     get edit_user_path(@other_user)
   #     assert_not flash.empty?
   #     assert_redirected_to root_url
   # end
- 
+  
+  # 勤怠変更申請を承認すると、works/showにリダレクト 
   # test "should redirect update when logged in as wrong user" do
   #     log_in_as(@other_user)
   #     patch user_path(@user), params: { user: { name: @user.name,
@@ -95,6 +101,7 @@ class WorksControllerTest < ActionDispatch::IntegrationTest
   #     assert_not flash.empty?
   #     assert_redirected_to root_url
   # end
+  
   
   # test "should not allow the admin attribute to be edited via the web" do
   #     log_in_as(@other_user)

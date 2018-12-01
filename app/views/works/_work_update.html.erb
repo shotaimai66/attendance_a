@@ -63,7 +63,7 @@
     <!-- 承認確認㊞ -->
           　         <td>
                         <%= fields_for "works[]", work do |fi| %>
-                            <%= fi.select :work_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"]], {prompt: ""} %>
+                            <%= fi.collection_select :work_check, User.where(sv: true), :name, :name, :include_blank => true %>
                         <% end %>
                     </td>
       

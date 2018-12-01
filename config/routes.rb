@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   patch  '/update_basic_info' , to: 'users#update_basic_info'
   # user>workコントローラー
   get    '/users/working_users'
-  
+  get    'works/work_log' , to: 'works#work_log'
   # post   '/users/:user_id/works/:id/create_monthwork' , to: 'works#create_monthwork'
   # patch  '/users/:user_id/works/:id/update_monthwork' , to: 'works#update_monthwork'
   # patch  '/users/:user_id/works/:id/update_overwork' , to: 'works#update_overwork'
@@ -33,9 +33,6 @@ Rails.application.routes.draw do
         patch 'update_monthwork'
         patch 'update_overwork'
         patch 'update_changework'
-      end
-      collection do
-        get 'work_log'
       end
     end
   end

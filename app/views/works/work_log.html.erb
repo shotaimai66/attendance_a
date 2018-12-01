@@ -24,6 +24,7 @@
 		<ul class="dropdown-menu" id="filter-month" role="menu">
 			<li><a href="#">1</a></li>
 			<li><a href="#">2</a></li>
+			<li><a href="#">3</a></li>
 			<li><a href="#">4</a></li>
 			<li><a href="#">5</a></li>
 			<li><a href="#">6</a></li>
@@ -35,7 +36,7 @@
 			<li><a href="#">12</a></li>
 		</ul>
 	</span>
-	<input type="text" class="form-control" id="months" placeholder="テキスト入力欄" value="11" readonly>
+	<input type="text" class="form-control" id="months" placeholder="テキスト入力欄" value="<%= Time.now.month %>" readonly>
 </div>
 <div class="paginate">
     <%= render partial: 'pagenate_work_log', locals: {logs: @logs} %>
@@ -56,7 +57,7 @@ $('#filter-month >').on('click', function() {
   
   $(function ajax(){ $.ajax({
     type: 'GET',
-    url: '/users/work_log',
+    url: '/works/work_log',
     data: {
       value_year: value_year,
       value_month: value_month
@@ -81,7 +82,7 @@ $('#filter-year >').on('click', function() {
   var value_month = $('#months').val();
   $(function ajax(){ $.ajax({
     type: 'GET',
-    url: '/users/work_log',
+    url: '/works/work_log',
     data: {
       value_year: value_year,
       value_month: value_month
@@ -108,7 +109,7 @@ $('#reset-btn').on('click', function() {
   var value_month = $('#months').val()
   $(function ajax(){ $.ajax({
     type: 'GET',
-    url: '/users/work_log',
+    url: '/works/work_log',
     data: {
       value_year: value_year,
       value_month: value_month
@@ -139,7 +140,7 @@ $('.paginate').on('ajax:success', function(event){
                 
             $.ajax({
             type: 'GET',
-            url: '/users/work_log'
+            url: '/works/work_log'
               // せいこう
               }).done(function(data, status, xhr) {
                   $("paginator").trigger('ajax:success', [ data, status, xhr])  // "#paginator"の中で"ajax:success"を発火させる
