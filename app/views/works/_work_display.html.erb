@@ -41,7 +41,7 @@
                 <%= link_to "勤怠を編集", edit_user_work_path(piyo: @date), class: "btn btn-primary" %>
                 <%= link_to "csv出力",user_csv_output_path(@user, format: :csv, date: @date), class: "btn btn-primary" %>
 <!--修正ログ表示ボタン-->
-                <%= link_to "勤怠修正ログ（承認済）", works_work_log_path(@user), class: "btn btn-primary" %>
+                <%= link_to "勤怠修正ログ（承認済）", work_log_user_path(@user), class: "btn btn-primary" %>
             <% else %>
                 <%= link_to '戻る', user_work_path(current_user, @date, modal: params[:modal], status: params.permit(status: [:over_check, :month_check, :check_box, :work_check])[:status]), class: "fixed_btn square_btn" %> 
                 <h3><span class="label label-success">確認:  <%= "#{select_user.name}/#{y}年#{m}月" %></span></h3>

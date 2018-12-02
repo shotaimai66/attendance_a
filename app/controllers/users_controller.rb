@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
-  before_action :correct_user,   only: [:edit, :update]
+  before_action :correct_user,   only: [:edit, :update, :work_log]
   before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info, :index]
+  
   require 'csv'
   include StaticPagesHelper
 
@@ -90,6 +91,37 @@ class UsersController < ApplicationController
   
   def working_users
     @users = User.activated.working.paginate(page: params[:page]).search(params[:search])
+  end
+  
+  def work_log
+      work_ids = current_user.works.ids
+      if params[:value_year]
+        date = Date.new(params[:value_year].to_i, params[:value_month].to_i)
+        @logs = WorkLog.page(params[:page]).per(30)
+                        .where(work_id: work_ids)
+                        .where(day: date.beginning_of_month..date.end_of_month)
+      else
+        @logs = WorkLog.page(params[:page]).per(30).where(work_id: work_ids)
+                                                   .where(day: Time.zone.now.beginning_of_month..Time.zone.now.end_of_month)
+      end
+        # view_contextでpaginateメソッドを使いパーシャルの中身と同じものを生成
+        paginator = view_context.paginate(
+          @logs,
+          remote: true
+        )
+        
+        # render_to_stringでパーシャルの中身を生成
+        logs = render_to_string(
+          partial: 'table_work_log',
+          locals: { logs: @logs }
+        )
+      if request.xhr?  
+          render json: {
+            paginator: paginator,
+            logs: logs,
+            success: true # クライアント(js)側へsuccessを伝えるために付加
+          }
+      end
   end
   
   

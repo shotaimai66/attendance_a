@@ -1,4 +1,7 @@
 <% provide(:title, "勤怠ログ") %>
+<input name="current_user_name" type="hidden" value="<%= current_user.id %>" class='current_user_id'>
+
+
 <h1>勤怠ログ</h1>
 <button class="btn btn-default" id="reset-btn">リセット</button>
 <div class="input-group" style="width: 150px;">
@@ -49,6 +52,8 @@
 </div>
 
 <script>
+USERID = $('.current_user_id').val();
+
 $('#filter-month >').on('click', function() {
         var result = $(this).text();
   $('#months').attr('value', result);
@@ -57,7 +62,7 @@ $('#filter-month >').on('click', function() {
   
   $(function ajax(){ $.ajax({
     type: 'GET',
-    url: '/works/work_log',
+    url: '/users/${USERID}/work_log',
     data: {
       value_year: value_year,
       value_month: value_month
@@ -82,7 +87,7 @@ $('#filter-year >').on('click', function() {
   var value_month = $('#months').val();
   $(function ajax(){ $.ajax({
     type: 'GET',
-    url: '/works/work_log',
+    url: '/users/${USERID}/work_log',
     data: {
       value_year: value_year,
       value_month: value_month
@@ -109,7 +114,7 @@ $('#reset-btn').on('click', function() {
   var value_month = $('#months').val()
   $(function ajax(){ $.ajax({
     type: 'GET',
-    url: '/works/work_log',
+    url: '/users/${USERID}/work_log',
     data: {
       value_year: value_year,
       value_month: value_month
@@ -140,7 +145,7 @@ $('.paginate').on('ajax:success', function(event){
                 
             $.ajax({
             type: 'GET',
-            url: '/works/work_log'
+            url: '/users/${USERID}/work_log'
               // せいこう
               }).done(function(data, status, xhr) {
                   $("paginator").trigger('ajax:success', [ data, status, xhr])  // "#paginator"の中で"ajax:success"を発火させる

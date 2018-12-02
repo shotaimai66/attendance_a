@@ -29,5 +29,12 @@ class ApplicationController < ActionController::Base
         redirect_to root_path
       end
     end
+    
+    def correct_user
+      unless current_user == User.find(params[:user_id])
+        flash[:danger] = "他のユーザー情報は閲覧できません。"
+        redirect_to root_path
+      end
+    end
    
 end
