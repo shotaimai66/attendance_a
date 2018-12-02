@@ -6,6 +6,7 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>
+                            <input type="text" id="YearMonth" />
                             <% unless params[:authority] %>
                                 <% unless m=="4" %>
                                 <%=  link_to "←", user_work_path(piyo: @date.prev_month), { :class => "btn btn-primary" } %>
@@ -234,4 +235,15 @@
                 </table>
   
 </div>
+
+<script>
+    $('#YearMonth').datepicker({
+      format: 'yyyy/mm',
+    language: 'ja',
+    autoclose: true,
+    defaultDate: 0,
+    changeMonth: true,
+    changeYear: true,
+  });
+</script>
 

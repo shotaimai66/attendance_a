@@ -10,7 +10,9 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require rails-ujs
 //= require jquery
 //= require bootstrap
+//= require jquery-ui/widgets/datepicker
+//= require jquery-ui/i18n/datepicker-ja
+//= require rails-ujs
 //= require_tree .

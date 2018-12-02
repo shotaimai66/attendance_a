@@ -22,6 +22,7 @@ gem 'rinku'
 gem 'friendly_id'
 # bulk insert
 gem 'activerecord-import'
+gem 'jquery-ui-rails'
 
 
 
