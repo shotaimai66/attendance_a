@@ -127,7 +127,9 @@ class WorksController < ApplicationController
   redirect_to  user_work_path(select_user,params[:piyo])
   end
   
-  
+  def redirect_to_show
+    redirect_to user_work_path(current_user,Date.new(params[:select][:year].to_i, params[:select][:month].to_i))
+  end
   
   
   

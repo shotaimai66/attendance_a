@@ -6,7 +6,10 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>
-                            <input type="text" id="YearMonth" />
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                              年月を選択して移動
+                            </button>
+                            <%= render 'select_month_modal' %>
                             <% unless params[:authority] %>
                                 <% unless m=="4" %>
                                 <%=  link_to "←", user_work_path(piyo: @date.prev_month), { :class => "btn btn-primary" } %>
@@ -235,15 +238,4 @@
                 </table>
   
 </div>
-
-<script>
-    $('#YearMonth').datepicker({
-      format: 'yyyy/mm',
-    language: 'ja',
-    autoclose: true,
-    defaultDate: 0,
-    changeMonth: true,
-    changeYear: true,
-  });
-</script>
 

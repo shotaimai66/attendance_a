@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   # patch  '/users/:user_id/works/:id/update_monthwork' , to: 'works#update_monthwork'
   # patch  '/users/:user_id/works/:id/update_overwork' , to: 'works#update_overwork'
   # patch  '/users/:user_id/works/:id/update_changework' , to: 'works#update_changework'
-  
+  post '/works/redirect_to_show' , to: 'works#redirect_to_show', as: "redirect_to_show"
   
 
 

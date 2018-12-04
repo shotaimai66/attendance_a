@@ -62,7 +62,7 @@ $('#filter-month >').on('click', function() {
   
   $(function ajax(){ $.ajax({
     type: 'GET',
-    url: '/users/${USERID}/work_log',
+    url: "/users/" + USERID + "/work_log",
     data: {
       value_year: value_year,
       value_month: value_month
@@ -87,7 +87,7 @@ $('#filter-year >').on('click', function() {
   var value_month = $('#months').val();
   $(function ajax(){ $.ajax({
     type: 'GET',
-    url: '/users/${USERID}/work_log',
+    url: "/users/" + USERID + "/work_log",
     data: {
       value_year: value_year,
       value_month: value_month
@@ -114,7 +114,7 @@ $('#reset-btn').on('click', function() {
   var value_month = $('#months').val()
   $(function ajax(){ $.ajax({
     type: 'GET',
-    url: '/users/${USERID}/work_log',
+    url: "/users/" + USERID + "/work_log",
     data: {
       value_year: value_year,
       value_month: value_month
@@ -145,7 +145,7 @@ $('.paginate').on('ajax:success', function(event){
                 
             $.ajax({
             type: 'GET',
-            url: '/users/${USERID}/work_log'
+            url: "/users/" + USERID + "/work_log"
               // せいこう
               }).done(function(data, status, xhr) {
                   $("paginator").trigger('ajax:success', [ data, status, xhr])  // "#paginator"の中で"ajax:success"を発火させる
