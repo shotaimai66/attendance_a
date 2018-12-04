@@ -6,9 +6,11 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                              年月を選択して移動
-                            </button>
+                            <% unless params[:authority] %>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                  年月を選択して移動
+                                </button>
+                            <% end %>
                             <%= render 'select_month_modal' %>
                             <% unless params[:authority] %>
                                 <% unless m=="4" %>
