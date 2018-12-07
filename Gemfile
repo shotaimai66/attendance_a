@@ -32,7 +32,7 @@ group :development, :test do
   gem 'byebug',  '9.0.6', platform: :mri
   gem 'better_errors'
   gem 'binding_of_caller'
-  # gem 'rspec-rails'
+  gem 'rspec-rails'
   gem 'factory_bot_rails'
 end
 
