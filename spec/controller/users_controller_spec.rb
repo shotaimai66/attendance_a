@@ -7,6 +7,9 @@ RSpec.describe UsersController, type: :controller do
         session[:user_id] = user.id
     end
     
+
+    
+    
     before do
         @admin_user = User.create(name: "加藤純一",
                             email: "changemymind6@gmial.com",
@@ -14,9 +17,10 @@ RSpec.describe UsersController, type: :controller do
                             admin: true,
                             )
         @normal_user = User.create(name: "加藤純一",
-                            email: "changemymind6@gmial.com",
+                            email: "changemfmind6@gmial.com",
                             password: "111111",
                             admin: false,
+                            id: 2,
                             )
     end
     
@@ -37,11 +41,12 @@ RSpec.describe UsersController, type: :controller do
       end
       
       context "when normal_user" do
-        # redirectされるか？
+        # # redirectされるか？
         # it "responds successfully@normal_user@normal_user@normal_user" do
         #     log_in @normal_user
+        #     expect(subject).to receive(:admin_user).and_call_original
         #     get :index
-        #     expect(response).to redirect_to root_url
+        #     expect(response).to redirect_to "/"
         # end
         # # ２００レスポンスが帰ってきているか？
         # it "returns a 200 response" do
@@ -50,7 +55,76 @@ RSpec.describe UsersController, type: :controller do
         #     expect(response).to have_http_status "200"
         # end
       end
-      
     end
-
+    
+    describe "#new" do
+        it "ログインしてshowページに遷移" do
+            get :new
+            expect(response).to have_http_status "200"
+        end
+    end
+    
+    describe "#create" do
+        it "ユーザー登録でworks#showにリダイレクト" do
+            post :create, params: {user: {name: "加藤純一",
+                                   email: "changemymind65@gmial.com",
+                                   password: "111111",
+                                   admin: false,
+            } }
+            expect(response).to redirect_to user_work_path(3,Date.today)
+            
+        end
+        
+        it "不正ユーザー登録でuser#newにrender" do
+            post :create, params: {user: {name: "加藤純一",
+                                   email: "changemymind6@gmial.com",
+                                   password: "111111",
+                                   admin: false,
+            } }
+            expect(response).to render_template "new"
+        end
+    end
+        
+    describe "#edit" do
+        context "login_user" do
+            # レスポンス２００？
+            it "return response 200" do
+                log_in(@normal_user)
+                get :edit, params: {id: @normal_user.id}
+                expect(response).to have_http_status '200'
+            end
+        end
+        
+        context "not_correct_user" do
+            # root画面にリダイレクトしてる？
+            it "redirect_to root" do
+                log_in(@normal_user)
+                get :edit, params: {id: 1}
+                expect(response).to redirect_to root_url
+            end
+        end
+        
+        context "not_login_user" do
+            # ログイン画面にリダイレクトしてる？
+            it "redirect_to log_in?" do
+                get :edit, params: {id: 2}
+                expect(flash[:danger]).to match 'ログインしてください。'
+                expect(response).to redirect_to login_url
+            end
+        end
+    end
+    
+    describe '#update' do
+        context 'login_user' do
+            it 'redirect_to works#show after update user'
+            end
+        end
+        
+        context 'not_login_user' do
+        end
+        
+        context 'not_correct_user' do
+        end
+    end
+    
 end

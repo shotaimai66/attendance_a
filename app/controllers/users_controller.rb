@@ -21,6 +21,7 @@ class UsersController < ApplicationController
   def create
     # admin　ユーザー一覧からのCSVインポート
     if params[:commit] == "CSVをインポート"
+      
       if params[:users_file].content_type == "text/csv"
           registered_count = import_users
           unless @errors.count == 0
@@ -34,7 +35,9 @@ class UsersController < ApplicationController
         flash[:danger] = "CSVファイルのみ有効です"
         redirect_to users_url
       end
+      
     else
+      
       @user = User.new(user_params)
       if @user.save
         log_in @user
@@ -54,7 +57,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       flash[:success] = "アカウントを更新しました。"
-      redirect_to users_url
+      redirect_to user_work_path(@user,Date.today)
     else
       render 'edit'
     end
