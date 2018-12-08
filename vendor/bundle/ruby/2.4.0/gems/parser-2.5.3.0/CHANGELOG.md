@@ -280,7 +280,7 @@ v2.3.0.pre.6 (2015-12-20)
 API modifications:
  * parser/current: update 2.2 warning to 2.2.4. (whitequark)
  * ruby{22,23}.y: "1 ? p do end : 0". (whitequark)
- * lexer.rl: "{%'a':1}": %-string cannot be a label. (whitequark)
+ * lexer.rl: "{{%'a':1}}": %-string cannot be a label. (whitequark)
  * parser/current: update 2.1 warning to 2.1.8. (whitequark)
 
 Features implemented:
