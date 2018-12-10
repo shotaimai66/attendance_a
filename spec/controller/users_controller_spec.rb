@@ -11,7 +11,7 @@ RSpec.describe UsersController, type: :controller do
     
     
     before do
-        @admin_user = User.create(name: "加藤純一",
+        @admin_user = User.create(name: "今井翔太",
                             email: "changemymind6@gmial.com",
                             password: "111111",
                             admin: true,
@@ -41,19 +41,12 @@ RSpec.describe UsersController, type: :controller do
       end
       
       context "when normal_user" do
-        # # redirectされるか？
-        # it "responds successfully@normal_user@normal_user@normal_user" do
-        #     log_in @normal_user
-        #     expect(subject).to receive(:admin_user).and_call_original
-        #     get :index
-        #     expect(response).to redirect_to "/"
-        # end
-        # # ２００レスポンスが帰ってきているか？
-        # it "returns a 200 response" do
-        #     log_in @normal_user
-        #     get :index
-        #     expect(response).to have_http_status "200"
-        # end
+        # redirectされるか？
+        it "responds successfully @normal_user" do
+            log_in @normal_user
+            get :index
+            expect(response).to redirect_to "/"
+        end
       end
     end
     
@@ -116,15 +109,47 @@ RSpec.describe UsersController, type: :controller do
     
     describe '#update' do
         context 'login_user' do
-            it 'redirect_to works#show after update user'
+            it 'redirect_to works#show after update user' do
+                log_in(@normal_user)
+                patch :update, params: {id: @normal_user.id,
+                    user: {
+                        name: "imai",
+                        email: "change@gmail.com",
+                        team: "testuto",
+                    }
+                }
+                expect(@normal_user.reload.name).to eq("imai")
+                expect(response).to redirect_to user_work_path(@normal_user, Date.today)
             end
         end
         
         context 'not_login_user' do
+            it "redirect_to root_path patch update" do
+                log_in(@normal_user)
+                    patch :update, params: {id: @admin_user.id,
+                        user: {
+                            name: "imai",
+                            email: "change@gmail.com",
+                            team: "testuto",
+                        }
+                    }
+                    expect(@admin_user.reload.name).to eq("今井翔太")
+                    expect(response).to redirect_to root_path
+            end
         end
         
         context 'not_correct_user' do
+            it "redirect_to login_path patch update" do
+                    patch :update, params: {id: @admin_user.id,
+                        user: { id: 2,
+                            name: "imai",
+                            email: "change@gmail.com",
+                            team: "testuto",
+                        }
+                    }
+                    expect(response).to redirect_to login_url
+            end
         end
     end
-    
+
 end
