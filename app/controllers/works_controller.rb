@@ -19,6 +19,7 @@ class WorksController < ApplicationController
     else
       @date = params[:id].to_datetime
     end
+    
     #表示する編集ページのユーザーの一月分のレコードが存在するか検証
     #レコードが存在しない場合は新規作成（create）
     days = (Date.new(@date.year,@date.month).all_month)
@@ -43,6 +44,7 @@ class WorksController < ApplicationController
       end
       n = n+1
     end
+    
   end
   
   def create
