@@ -26,7 +26,9 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get 'work_log'
+      patch  'update_by_admin', as: "update_by_admin"
     end
+    
     get 'csv_output'
     resources :works do
       member do

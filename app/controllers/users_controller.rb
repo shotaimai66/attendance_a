@@ -57,10 +57,22 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       flash[:success] = "アカウントを更新しました。"
-      redirect_to user_work_path(@user,Date.today)
+      redirect_to users_path
     else
       render 'edit'
     end
+    
+  end
+  
+  def update_by_admin
+    @user = User.find(params[:id])
+    if @user.update_attributes(user_params)
+      flash[:success] = "アカウントを更新しました。"
+      redirect_to users_path
+    else
+      render 'edit'
+    end
+    
   end
   
   def destroy
