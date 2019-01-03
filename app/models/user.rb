@@ -19,6 +19,11 @@ class User < ApplicationRecord
   scope :activated, -> { where(activated: true) }
   scope :working, -> { where(working: "出社中") }
   
+  
+  def User.get_working_user
+    joins(:works).where(works:{day: Date.today, end_time: nil}).where.not(works: {start_time: nil})
+  end
+
 
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)

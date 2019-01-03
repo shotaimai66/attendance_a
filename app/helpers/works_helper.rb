@@ -38,7 +38,7 @@ module WorksHelper
     
     # 勤怠変更　翌日判定
     def change_tomorrow?(a)
-      if Work.find_by(user_id: select_user.id, day: a) && Work.find_by(user_id: select_user.id, day: a).endtime_change.day == a.tomorrow.day
+      if Work.find_by(user_id: select_user.id, day: a) && Work.find_by(user_id: select_user.id, day: a).endtime_change && Work.find_by(user_id: select_user.id, day: a).endtime_change.day == a.tomorrow.day
         return "(翌日)"
       end
     end

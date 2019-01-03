@@ -105,7 +105,7 @@ class UsersController < ApplicationController
   
   
   def working_users
-    @users = User.activated.working.paginate(page: params[:page]).search(params[:search])
+    @users = User.get_working_user.paginate(page: params[:page]).search(params[:search])
   end
   
   def work_log
