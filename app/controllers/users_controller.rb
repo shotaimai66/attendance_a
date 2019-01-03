@@ -86,10 +86,9 @@ class UsersController < ApplicationController
   end
   
   def update_basic_info
-   @user = User.find(1)
-    if @user.update_attributes(users_basic_params)
+    if User.update_all(basic_work_time: params[:user][:basic_work_time].to_time - 9.hours)
       flash[:success] = "基本情報を更新しました。"
-      redirect_to user_work_path(current_user,Date.today)
+      redirect_to edit_basic_info_path
     else
       render 'edit'
     end
