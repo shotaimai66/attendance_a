@@ -1,7 +1,7 @@
 class WorksController < ApplicationController
   
   before_action :logged_in_user, only: [:show, :edit, :create, :update, :work_log]
-  before_action :aa, only: [:edit, :create, :update]
+  before_action :aa, only: [:show, :edit, :create, :update]
   before_action :user_being, only: [:show, :edit, :create, :update]
   
   include WorksHelper
@@ -161,9 +161,11 @@ class WorksController < ApplicationController
     def aa
       #paramsは文字列で帰ってくることを忘れない（数値にして比較）
       if current_user.id != params[:user_id].to_i && !current_user.admin?
-        store_location
-        flash[:danger] = "他のユーザー情報は閲覧できません。"
-        redirect_to root_path
+        unless params[:authority]
+          store_location
+          flash[:danger] = "他のユーザー情報は閲覧できません。"
+          redirect_to root_path
+        end
       end
     end
     
