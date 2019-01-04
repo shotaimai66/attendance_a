@@ -6,22 +6,10 @@ RSpec.describe UsersController, type: :controller do
     def log_in(user)
         session[:user_id] = user.id
     end
-    
 
-    
-    
-    before do
-        @admin_user = User.create(name: "今井翔太",
-                            email: "changemymind6@gmial.com",
-                            password: "111111",
-                            admin: true,
-                            )
-        @normal_user = User.create(name: "加藤純一",
-                            email: "changemfmind6@gmial.com",
-                            password: "111111",
-                            admin: false,
-                            id: 2,
-                            )
+    before(:each) do
+        @admin_user = create(:admin_user)
+        @normal_user = create(:normal_user)
     end
     
     describe "#index" do

@@ -23,7 +23,7 @@
               <li><a href="#" value="2018">2018年</a></li>
             </ul>
         　</div><!-- /.input-group-btn -->
-          <%= text_field_tag 'select[year]',"", {class: 'form-control', id: 'year-select', required: "true", readonly: "true"} %>
+          <%= text_field_tag 'select[year]',"", {class: 'form-control', id: 'year-select', readonly: "true"} %>
         </div><!-- /.input-group -->
         
         <!--月の選択-->
@@ -38,9 +38,9 @@
               <% end %>
             </ul>
         　</div><!-- /.input-group-btn -->
-          <%= text_field_tag 'select[month]',"", {class: 'form-control', id: 'month-select', required: "true", readonly: "true"} %>
+          <%= text_field_tag 'select[month]',"", {class: 'form-control', id: 'month-select', readonly: "true"} %>
         </div><!-- /.input-group -->
-        <%= submit_tag "移動", {class: "btn btn-primary"} %>
+        <%= submit_tag "移動", {class: "btn btn-primary", id: "montn_submit"} %>
         <% end %> 
       </div>
       
@@ -69,4 +69,18 @@
     $("#month-select").val(getData);
   });
 });
+
+$('#montn_submit').click( function(){
+  var year = $('#year-select').val();
+  var month = $('#month-select').val()
+  if (year === ""){
+    alert("年を選択してください");
+    return false
+  }
+  if (month === ""){
+    alert("月を選択してください");
+    return false
+  }
+})
+
 </script>

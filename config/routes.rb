@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get    '/help',    to: 'static_pages#help'
   get    '/about',   to: 'static_pages#about'
   get    '/contact', to: 'static_pages#contact'
-  post   '/', to: 'static_pages#create'
+  post   '/', to: 'static_pages#create' 
   # sessionコントローラー
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'
@@ -26,7 +26,9 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get 'work_log'
+      patch  'update_by_admin', as: "update_by_admin"
     end
+    
     get 'csv_output'
     resources :works do
       member do

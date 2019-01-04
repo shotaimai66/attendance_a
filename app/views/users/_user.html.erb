@@ -15,7 +15,7 @@
 		        </div>
 		    <div id="sampleAccordionCollapse1-<%= user.id%>" class="panel-collapse collapse">
     			<div class="panel-body">
-    				<%= form_for user do |f| %>
+    				<%= form_for user, url: update_by_admin_user_path(user) do |f| %>
     				  <%= f.label :名前 %>
             <%= f.text_field :name, class: 'form-control' %>
       

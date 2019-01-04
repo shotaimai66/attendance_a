@@ -29,6 +29,9 @@
             <%= f.label :password_confirmation, "パスワード（確認）" %>
             <%= f.password_field :password_confirmation, class: 'form-control' %>
             
+            <%= f.hidden_field :d_start_worktime, value: Time.zone.local(2018,12,1,8,00) %>
+            <%= f.hidden_field :d_end_worktime, value: Time.zone.local(2018,12,1,19,00) %>
+            
         <%= f.submit "作成", class: "btn btn-primary test" %>
       <% end %>
   </div>
