@@ -138,7 +138,9 @@ class UsersController < ApplicationController
       end
   end
   
-  
+  def base_edit
+    @bases = Base.all
+  end
   
 
   private

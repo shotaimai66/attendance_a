@@ -24,6 +24,10 @@ Rails.application.routes.draw do
 
 
   resources :users do
+    collection do
+      get 'base_edit'
+    end
+    
     member do
       get 'work_log'
       patch  'update_by_admin', as: "update_by_admin"
