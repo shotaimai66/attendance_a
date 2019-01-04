@@ -25,7 +25,9 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
-      get 'base_edit'
+      get  'base_edit'
+      post 'base_add'
+      delete 'base_delete'
     end
     
     member do
@@ -43,6 +45,7 @@ Rails.application.routes.draw do
         patch 'update_changework'
       end
     end
+    
   end
   
   resources :account_activations, only: [:edit]

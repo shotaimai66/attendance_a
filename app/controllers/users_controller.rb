@@ -140,6 +140,27 @@ class UsersController < ApplicationController
   
   def base_edit
     @bases = Base.all
+    @base = Base.new
+  end
+  
+  def base_add
+    @base = Base.new(base_params)
+      if @base.save
+        flash[:success] = "拠点情報を追加しました。"
+        redirect_to base_edit_users_path
+      else
+        render 'base_edit'
+      end
+  end
+  
+  def base_delete
+    @base = Base.find(params[:id])
+      if @base.destroy
+        flash[:danger] = "拠点情報を削除しました。"
+        redirect_to base_edit_users_path
+      else
+        render 'base_edit'
+      end
   end
   
 
@@ -188,6 +209,10 @@ class UsersController < ApplicationController
     
     def users_basic_params
       params.require(:user).permit(:specified_work_time, :basic_work_time)
+    end
+    
+    def base_params
+      params.require(:base).permit(:number, :name, :kind)
     end
 
     # beforeフィルター

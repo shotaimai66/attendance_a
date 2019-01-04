@@ -93,5 +93,8 @@ end_time = Time.new(2018, 5, 30, 17, 15, 00)
              }
     end
   end
+  
+    Base.create!(number: 2, name: "拠点A", kind: "出勤")
+  
 
 
