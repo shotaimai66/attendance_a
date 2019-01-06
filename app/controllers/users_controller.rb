@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update, :work_log]
-  before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info, :index]
+  before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info, :index, :base_delete, :base_update, :base_add, :base_edit]
   
   require 'csv'
   include StaticPagesHelper
@@ -153,6 +153,16 @@ class UsersController < ApplicationController
       end
   end
   
+  def base_update
+    @base = Base.find(params[:id])
+      if @base.update(base_params)
+        flash[:success] = "拠点情報を更新しました。"
+        redirect_to base_edit_users_path
+      else
+        render 'base_edit'
+      end
+  end
+  
   def base_delete
     @base = Base.find(params[:id])
       if @base.destroy
@@ -162,6 +172,11 @@ class UsersController < ApplicationController
         render 'base_edit'
       end
   end
+  
+  def base_edit_modal
+    @base = Base.find(params[:id])
+  end
+  
   
 
   private

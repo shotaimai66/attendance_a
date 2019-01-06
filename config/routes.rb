@@ -27,7 +27,9 @@ Rails.application.routes.draw do
     collection do
       get  'base_edit'
       post 'base_add'
+      patch 'base_update'
       delete 'base_delete'
+      get 'base_edit_modal'
     end
     
     member do
