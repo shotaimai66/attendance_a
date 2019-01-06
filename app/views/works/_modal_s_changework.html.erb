@@ -69,7 +69,7 @@
             <td><%= work.end_time.min if work.end_time %></td><!--分-->
             <td><%= work.starttime_change.hour if work.starttime_change %></td><!--出社：時-->
             <td><%= work.starttime_change.min if work.starttime_change %></td><!--分-->
-            <td><%= work.endtime_change.hour if work.endtime_change %><br><%= "(翌日)" if work.endtime_change.day == work.day.tomorrow.day %></td><!--退社：時-->
+            <td><%= work.endtime_change.hour if work.endtime_change %><br><%= "(翌日)" if work.endtime_change && work.endtime_change.day == work.day.tomorrow.day %></td><!--退社：時-->
             <td><%= work.endtime_change.min if work.endtime_change %></td><!--分-->
             <td><%= work.note %></td><!--備考-->
             <td>

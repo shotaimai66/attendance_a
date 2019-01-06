@@ -22,7 +22,7 @@
                 <% datas.each do |key, work| %>
 
 	<!-- workに日付ごとのレコード情報を代入し、time_fieldsのデフォルト時間を表示させる  -->
-    　　              <tr>
+                    <tr class="date" year="<%=key.year%>" month="<%=key.month.to_i-1%>" day="<%=key.day%>">
   
   
                     <td><%=key.month%>/<%=key.day%></td>
@@ -93,6 +93,21 @@
     </div>
 <% end %>
 
+
+<script>
+    
+    $("input, select").click(function(){
+       var year = $(this).parents("tr").attr('year');
+       var month = $(this).parents("tr").attr('month');
+       var day = $(this).parents("tr").attr('day');
+    if (new Date(year, month, day) > new Date()) {
+        alert("明日以降の勤怠は変更できません。");
+        $(this).val("");
+        return false;
+    };
+    });
+
+</script>
 
 
 
