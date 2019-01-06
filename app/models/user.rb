@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include SessionsHelper
+  
   has_many :works, dependent: :destroy
   accepts_nested_attributes_for :works
   attr_accessor :remember_token, :activation_token, :reset_token
@@ -19,6 +21,13 @@ class User < ApplicationRecord
   scope :activated, -> { where(activated: true) }
   scope :working, -> { where(working: "出社中") }
   
+  def User.get_sv_user_whithout_myself(session)
+    if User.find(session[:user_id]).sv == true
+      where(sv: true).where.not(id: session[:user_id])
+    else
+      where(sv: true)
+    end
+  end
   
   def User.get_working_user
     joins(:works).where(works:{day: Date.today, end_time: nil}).where.not(works: {start_time: nil})

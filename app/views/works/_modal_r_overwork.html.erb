@@ -48,7 +48,7 @@
                         </td>
                         <td>
                             <%= fields_for @work do |fi| %>
-                                <%= fi.select :over_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"]], {prompt: ""},{required: true} %>
+                                <%= fi.collection_select(:over_check, User.get_sv_user_whithout_myself(session), :name, :name, {:include_blank => true}, {:required => "required"})%>
                             <% end %>
                         </td>
 

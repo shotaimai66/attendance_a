@@ -63,7 +63,7 @@
     <!-- 承認確認㊞ -->
           　         <td>
                         <%= fields_for "works[]", work do |fi| %>
-                            <%= fi.collection_select :work_check, User.where(sv: true), :name, :name, :include_blank => true %>
+                            <%= fi.collection_select :work_check, User.get_sv_user_whithout_myself(session), :name, :name, :include_blank => true %>
                         <% end %>
                     </td>
       

@@ -223,7 +223,7 @@
                                 <%= form_for @work, :url => { :controller => :works, :action => :create_monthwork },method: :post do %>
                                 
                                     <%= fields_for "work", @month_work do |fi| %>
-                                        <%= fi.select :month_check, [["上長A", "上長A"],["上長B", "上長B"],["上長C", "上長C"]], {prompt: ""},{required: true} %>
+                                        <%= fi.collection_select(:month_check, User.get_sv_user_whithout_myself(session), :name, :name, {:include_blank => true}, {:required => "required"})%>
                                     <% end %>
                                     
                                     <%= fields_for "work", @month_work do |fi| %>
