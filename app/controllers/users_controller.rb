@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   include StaticPagesHelper
 
   def index
-    @users = User.activated.paginate(page: params[:page]).search(params[:search])
+    @users = User.activated.paginate(page: params[:page]).search(params[:search]).order(:id)
   end
 
   def show
