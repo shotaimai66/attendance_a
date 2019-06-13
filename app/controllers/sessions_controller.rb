@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
 
   def new
+    easy_login
   end
 
   def create
@@ -35,4 +36,31 @@ class SessionsController < ApplicationController
     flash[:warning] = "ログアウトしました。"
     redirect_to root_url
   end
+  
+  
+  private
+  
+  # ポートフォリオ用のログイン機能
+    def easy_login
+      month = Date.today
+      params[:month] = Date.today.month
+      if params[:user]
+        if params[:user] == "ユーザー"
+          user = User.find_by(email: "example-1@railstutorial.org")
+          log_in user
+          flash[:success] = "ログインしました！(一般ユーザー)"
+          redirect_to user_work_url(user,month)
+        elsif  params[:user] == "上長"
+          user = User.find_by(email: "examplea@railstutorial.org")
+          log_in user
+          flash[:success] = "ログインしました！(上長ユーザー)"
+          redirect_to user_work_url(user,month)
+        else
+          user = User.find_by(email: "admin@railstutorial.org")
+          log_in user
+          flash[:success] = "ログインしました！(管理ユーザー)"
+          redirect_to root_url
+        end
+      end
+    end
 end
