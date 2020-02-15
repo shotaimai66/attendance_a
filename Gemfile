@@ -23,12 +23,12 @@ gem 'friendly_id'
 # bulk insert
 gem 'activerecord-import'
 gem 'jquery-ui-rails'
+gem 'mysql2', '~> 0.4.4'
 
 
 
 
 group :development, :test do
-  gem 'sqlite3', '1.3.13'
   gem 'byebug',  '9.0.6', platform: :mri
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -57,7 +57,6 @@ group :test do
 end
 
 group :production do
-  gem 'pg', '0.21.0'
   #gem 'fog', '1.42'
   gem 'rails_12factor'
 end
