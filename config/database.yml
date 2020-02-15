@@ -17,6 +17,6 @@ test:
 
 production:
   <<: *default
-  database: sample_production
-  username: sample_app
-  password: <%= ENV['SAMPLE_DATABASE_PASSWORD'] %>
+  database: ebdb
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
