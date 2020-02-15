@@ -17,6 +17,8 @@ test:
 
 production:
   <<: *default
+  port: <%= ENV['RDS_PORT'] %>
+  host: <%= ENV['RDS_HOSTNAME'] %>
   database: ebdb
   username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
