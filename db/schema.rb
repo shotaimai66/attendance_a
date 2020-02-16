@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20190104085156) do
 
-  create_table "bases", force: :cascade do |t|
+  create_table "bases", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "number"
     t.string "name"
     t.string "kind"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20190104085156) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "email"
     t.datetime "created_at", null: false
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20190104085156) do
     t.text "working"
   end
 
-  create_table "work_logs", force: :cascade do |t|
+  create_table "work_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "user_id"
     t.date "day"
     t.datetime "start_time"
@@ -51,17 +51,17 @@ ActiveRecord::Schema.define(version: 20190104085156) do
     t.datetime "starttime_change"
     t.datetime "endtime_change"
     t.string "work_check"
-    t.integer "work_id"
+    t.bigint "work_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["work_id"], name: "index_work_logs_on_work_id"
   end
 
-  create_table "works", force: :cascade do |t|
+  create_table "works", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.date "day"
     t.datetime "start_time"
     t.datetime "end_time"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "note"
@@ -77,4 +77,6 @@ ActiveRecord::Schema.define(version: 20190104085156) do
     t.index ["user_id"], name: "index_works_on_user_id"
   end
 
+  add_foreign_key "work_logs", "works"
+  add_foreign_key "works", "users"
 end
