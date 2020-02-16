@@ -1,7 +1,6 @@
 # ユーザー
 User.create!(name:  "admin",
              email: "admin@railstutorial.org",
-             team: "管理者",
              d_start_worktime: Time.zone.local(2018, 6, 30, 8,0),
              d_end_worktime: Time.zone.local(2018, 6, 30, 19,0),
              basic_work_time: Time.zone.local(2018, 6, 30, 7,30),
@@ -13,7 +12,6 @@ User.create!(name:  "admin",
              activated_at: Time.zone.now)
 user = User.create!(name:  "上長A",
              email: "examplea@railstutorial.org",
-             team: "Aチーム",
              d_start_worktime: Time.zone.local(2018, 6, 30, 8,0),
              d_end_worktime: Time.zone.local(2018, 6, 30, 19,0),
              basic_work_time: Time.zone.local(2018, 6, 30, 7,30),
@@ -28,7 +26,6 @@ user = User.create!(name:  "上長A",
 
 User.create!(name:  "上長B",
              email: "exampleb@railstutorial.org",
-             team: "Bチーム",
              d_start_worktime: Time.zone.local(2018, 6, 30, 8,0),
              d_end_worktime: Time.zone.local(2018, 6, 30, 19,0),
              basic_work_time: Time.zone.local(2018, 6, 30, 7,30),
@@ -42,7 +39,6 @@ User.create!(name:  "上長B",
 
 User.create!(name:  "上長C",
              email: "examplec@railstutorial.org",
-             team: "Cチーム",
              d_start_worktime: Time.zone.local(2018, 6, 30, 8,0),
              d_end_worktime: Time.zone.local(2018, 6, 30, 19,0),
              password:              "foobar",
@@ -57,11 +53,9 @@ User.create!(name:  "上長C",
 99.times do |n|
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
-  team = "syouta"
   password = "password"
   User.create!(name:  name,
                email: email,
-               team: team,
                password:              password,
                password_confirmation: password,
                activated: true,
