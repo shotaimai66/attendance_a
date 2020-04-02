@@ -76,7 +76,9 @@ Rails.application.configure do
   #   # even if they are not in your main app
   #   #Bullet.stacktrace_includes = [ 'your_gem', 'your_middleware' ]
   # end
-  config.web_console.whitelisted_ips = '14.8.138.160'
+  unless Rails.env.production?
+    config.web_console.whitelisted_ips = '14.8.138.160'
+  end
   BetterErrors::Middleware.allow_ip! "0.0.0.0/0"
   
 end
