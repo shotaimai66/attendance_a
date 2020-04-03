@@ -54,3 +54,8 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+
+if Rails.env.production?
+bind "unix:///var/run/puma/my_app.sock" 
+pidfile "/var/run/puma/my_app.sock"
+end
