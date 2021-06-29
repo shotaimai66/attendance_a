@@ -10,14 +10,30 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
-  web:
+  app:
     build: .
-    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    command: bundle exec puma -C config/puma.rb
     volumes:
       - .:/app_name
-    ports:
-      - "3000:3000"
-    links:
+      - public-data:/app_name/public
+      - tmp-data:/app_name/tmp
+      - log-data:/app_name/log
+    depends_on:
       - db
+  
+  web:
+    build:
+      context: containers/nginx
+    volumes:
+      - public-data:/app_name/public
+      - tmp-data:/app_name/tmp
+    ports:
+      - 80:80
+    depends_on:
+      - app
+
 volumes:
+  public-data:
+  tmp-data:
+  log-data:
   mysql_data:
