@@ -27,6 +27,8 @@ gem 'activerecord-import'
 gem 'jquery-ui-rails'
 gem 'mysql2', '~> 0.4.4'
 
+gem 'dotenv-rails'
+
 
 
 

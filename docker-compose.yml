@@ -18,6 +18,8 @@ services:
       - public-data:/app_name/public
       - tmp-data:/app_name/tmp
       - log-data:/app_name/log
+    env_file:
+      - .env
     depends_on:
       - db
   
