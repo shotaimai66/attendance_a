@@ -6,6 +6,8 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  config.logger = Logger.new(STDOUT)
+
   # Do not eager load code on boot.
   config.eager_load = false
 
@@ -54,7 +56,7 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-  
+
   # config.after_initialize do
   #   Bullet.enable  = true   # bullet を有効にする
 
@@ -80,5 +82,5 @@ Rails.application.configure do
     config.web_console.whitelisted_ips = '14.8.138.160'
   end
   BetterErrors::Middleware.allow_ip! "0.0.0.0/0"
-  
+
 end
