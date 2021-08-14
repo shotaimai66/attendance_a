@@ -12,11 +12,9 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling assets...
-      - echo Building the <app> Docker image..
-      - docker build -t app .
+      - echo Building the Docker image..
+      - docker-compose -f docker-compose.prod.yml build
       - docker tag app:latest 017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/app:latest
-      - echo Building the <nginx> Docker image..
-      - docker build -t nginx -f ./containers/nginx/Dockerfile .
       - docker tag nginx:latest 017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/nginx:latest
       - echo Finish build!!
   post_build:
