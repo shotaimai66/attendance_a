@@ -16,8 +16,7 @@ phases:
       - docker build -t app .
       - docker tag app:latest 017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/app:latest
       - echo Building the <nginx> Docker image..
-      - echo テスト
-      - docker build -t nginx ./containers/nginx
+      - docker build -t nginx -f ./containers/nginx/Dockerfile .
       - docker tag nginx:latest 017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/nginx:latest
       - echo Finish build!!
   post_build:
