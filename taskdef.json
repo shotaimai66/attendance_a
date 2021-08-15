@@ -62,7 +62,7 @@
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/app:latest",
+      "image": "<IMAGE_APP_NAME>",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -121,7 +121,7 @@
         }
       ],
       "stopTimeout": null,
-      "image": "017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/nginx:latest",
+      "image": "<IMAGE_NGINX_NAME>",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
