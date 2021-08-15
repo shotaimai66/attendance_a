@@ -29,9 +29,8 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo Pushing the <app> Docker image...
+      - echo Pushing the Docker image...
       - docker push 017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/app:latest
-      - echo Pushing the <nginx> Docker image...
       - docker push 017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/nginx:latest
       - echo finish image push!!
 
