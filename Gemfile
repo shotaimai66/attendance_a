@@ -25,8 +25,8 @@ gem 'friendly_id'
 # bulk insert
 gem 'activerecord-import'
 gem 'jquery-ui-rails'
-gem 'sqlite3'
-# gem 'mysql2', '~> 0.4.4'
+# gem 'sqlite3'
+gem 'mysql2', '~> 0.4.4'
 
 
 

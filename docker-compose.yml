@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    command: bundle exec puma -C config/puma.rb
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    ports:
+      - "80:3000"
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
+
