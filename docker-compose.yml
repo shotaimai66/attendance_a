@@ -1,0 +1,26 @@
+version: '3' # docker-compose.ymlのバージョン
+services: # 起動したいコンテナをサービスとして管理
+  db: # dbと言うサービス名でmysqlコンテナを立ち上げる
+    image: mysql:5.7
+    environment: # 環境変数の設定
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: root
+    ports: # ポートフォワーディングの設定
+      - "3306:3306"
+    volumes: # 名前付きボリューム（開発環境のデータ永続化の為）
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    command: bundle exec puma -C config/puma.rb # コンテナ起動時のコマンドの上書き（DockerfileのCMDコマンドを上書きできます）
+    volumes:
+      - .:/app
+    env_file: # 外部ファイルの環境変数の設定をコンテナに注入
+      - .env
+    ports:
+      - "80:3000" # pcの80ポートをコンテナの3000番に当てる
+    depends_on: # 依存関係（dbのサービスのコンテナが起動した後にappを起動）
+      - db
+
+volumes:
+  mysql_data:
