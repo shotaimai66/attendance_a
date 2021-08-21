@@ -25,44 +25,44 @@
       "command": null,
       "linuxParameters": null,
       "cpu": 0,
-      "environment": [
-        {
-          "name": "RAILS_ENV",
-          "value": "production"
-        },
-        {
-          "name": "RDS_DB_NAME",
-          "value": "test_db"
-        },
-        {
-          "name": "RDS_HOSTNAME",
-          "value": "database-1.ctuw3fp8smt1.ap-northeast-1.rds.amazonaws.com"
-        },
-        {
-          "name": "RDS_PASSWORD",
-          "value": "password"
-        },
-        {
-          "name": "RDS_PORT",
-          "value": "3306"
-        },
-        {
-          "name": "RDS_USERNAME",
-          "value": "admin"
-        }
-      ],
+      "environment": [],
       "resourceRequirements": null,
       "ulimits": null,
       "dnsServers": null,
       "mountPoints": [],
       "workingDirectory": null,
-      "secrets": null,
+      "secrets": [
+        {
+          "valueFrom": "rails-rails-env",
+          "name": "RAILS_ENV"
+        },
+        {
+          "valueFrom": "rails-rds-db-name",
+          "name": "RDS_DB_NAME"
+        },
+        {
+          "valueFrom": "rails-rds-hostname",
+          "name": "RDS_HOSTNAME"
+        },
+        {
+          "valueFrom": "rails-rds-password",
+          "name": "RDS_PASSWORD"
+        },
+        {
+          "valueFrom": "rails-rds-port",
+          "name": "RDS_PORT"
+        },
+        {
+          "valueFrom": "rails-rds-username",
+          "name": "RDS_USERNAME"
+        }
+      ],
       "dockerSecurityOptions": null,
       "memory": null,
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/rails:latest",
+      "image": "017522386375.dkr.ecr.ap-northeast-1.amazonaws.com/rails:ff5ecaf44f1cbca049e769c225d00d80322f859e",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -89,7 +89,7 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:017522386375:task-definition/rails:6",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:017522386375:task-definition/rails:8",
   "family": "rails",
   "requiresAttributes": [
     {
@@ -132,6 +132,12 @@
       "targetId": null,
       "targetType": null,
       "value": null,
+      "name": "ecs.capability.secrets.ssm.environment-variables"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
     },
     {
@@ -147,7 +153,7 @@
   ],
   "networkMode": "awsvpc",
   "cpu": "256",
-  "revision": 6,
+  "revision": 8,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
